@@ -107,10 +107,10 @@ protected:
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e);
 
-	virtual int GetAniIdRedKoopaNormal();
-	virtual int GetAniIdGreenKoopaNormal();
-	virtual int GetAniIdRedKoopaWings();
-	virtual int GetAniIdGreenKoopaWings();
+	int GetAniIdRedKoopaNormal();
+	int GetAniIdGreenKoopaNormal();
+	int GetAniIdRedKoopaWings();
+	int GetAniIdGreenKoopaWings();
 
 public:
 	CKoopa(float x, float y, int level, int color);
