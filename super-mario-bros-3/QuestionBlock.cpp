@@ -21,7 +21,10 @@ void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			vy = QUESTION_BLOCK_DEFLECT_SPEED;
 		}
 		if (GetTickCount64() - deflect_end >= QUESTION_BLOCK_DEFLECT_DURATION && y >= start_y)
+		{
+			y = start_y;
 			vy = 0;
+		}
 	}
 
 	CGameObject::Update(dt, coObjects);
