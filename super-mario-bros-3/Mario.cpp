@@ -10,6 +10,7 @@
 #include "Portal.h"
 
 #include "Collision.h"
+#include "QuestionBlock.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -65,6 +66,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
         OnCollisionWithCoin(e);
     else if (dynamic_cast<CPortal*>(e->obj))
         OnCollisionWithPortal(e);
+    else if (dynamic_cast<CQuestionBlock*>(e->obj))
+        OnCollisionWithQuestionBlock(e);
     // Collide with Piranha Plants
     // Collide with Piranha Plants bullets
 }
@@ -158,6 +161,14 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
     e->obj->Delete();
     coin++;
+}
+
+void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
+{
+    CQuestionBlock* question_block = dynamic_cast<CQuestionBlock*>(e->obj);
+
+    if (question_block->GetState() != QUESTION_BLOCK_STATE_INACTIVE && e->ny > 0)
+        question_block->SetState(QUESTION_BLOCK_STATE_INACTIVE);
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
