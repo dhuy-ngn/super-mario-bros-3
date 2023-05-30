@@ -89,7 +89,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
     {
         if (untouchable == 0)
         {
-            if (goomba->GetState() != GOOMBA_STATE_DIE )
+            if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_KNOCKED_OUT)
             {
                 switch (level) {
                 case MARIO_LEVEL_RACCOON:
