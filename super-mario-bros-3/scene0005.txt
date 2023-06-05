@@ -30,7 +30,7 @@ question_block.txt
 #For Koopas,	30000 = Normal Koopas;	30001 = Wing Koopas
 #		39998 = Green Koopas;	39999 = Red Koopas
 #type	x	y	level	color
-3	230	170	30000	39998
+#3	230	170	30000	39998
 
 #Question block
 6	183	140	0
