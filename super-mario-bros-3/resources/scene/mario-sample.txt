@@ -1,0 +1,27 @@
+[SETTINGS]
+start	1
+#id		path		type		isCameraMove
+[SCENES]
+0	resources\scene\worldscene.txt
+1	resources\scene\world1-1\scene1.txt		
+2	resources\scene\world1-1\scene1_Extra.txt		
+3	resources\scene\introscene.txt
+[TEXTURES]
+# id	file_path
+0	resources\textures\mario.png	
+1	resources\textures\mar.png	
+2	resources\textures\title.png	
+10	resources\textures\enemies.png	
+20	resources\textures\misc.png	
+21	resources\textures\misc2.png	
+30	resources\tilemap\world1-1_bank.png
+31	resources\tilemap\world1-1-1_bank.png
+40	resources\textures\enemies1.1.png
+45	resources\textures\enemies1.2.png	
+50	resources\textures\enemies-2.png	
+60	resources\textures\HUD.png	
+80	resources\textures\fonts.png	
+90	resources\textures\card.png	
+100	resources\textures\mario-left.png	
+110	resources\textures\mario-right.png
+120	resources\textures\bbox.png	
