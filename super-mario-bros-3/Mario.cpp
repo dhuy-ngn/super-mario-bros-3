@@ -26,8 +26,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         untouchable = 0;
     }
 
-    isOnPlatform = false;
-
     CGameObject::Update(dt, coObjects);
     CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -491,6 +489,7 @@ void CMario::SetState(int state)
         if (isSitting) break;
         if (isOnPlatform)
         {
+            isOnPlatform = false;
             if (abs(this->vx) == MARIO_RUNNING_SPEED)
                 vy = -MARIO_JUMP_RUN_SPEED_Y;
             else
