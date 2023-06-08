@@ -8,6 +8,7 @@
 #include "Portal.h"
 #include "Coin.h"
 #include "Platform.h"
+#include "ColorBlock.h"
 #include "QuestionBlock.h"
 #include "Koopa.h"
 
@@ -39,7 +40,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_PLATFORM 5
 #define OBJECT_TYPE_QUESTION_BLOCK 6
 #define OBJECT_TYPE_DECORATION 7
-#define OBJECT_TYPE_DECOR_PLATFORM 8
+#define OBJECT_TYPE_COLOR_BLOCK 8
 #define OBJECT_TYPE_PIRANHA_PLANT	9
 
 #define OBJECT_TYPE_PORTAL	50
@@ -166,6 +167,25 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		int isContainingPowerup = (int)atoi(tokens[3].c_str());
 		obj = new CQuestionBlock(x, y, isContainingPowerup);
+		break;
+	}
+
+	case OBJECT_TYPE_COLOR_BLOCK:
+	{
+
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int sprite_begin = atoi(tokens[6].c_str());
+		int sprite_middle = atoi(tokens[7].c_str());
+		int sprite_end = atoi(tokens[8].c_str());
+
+		obj = new CColorBlock(
+			x, y,
+			cell_width, cell_height, length,
+			sprite_begin, sprite_middle, sprite_end
+		);
+
 		break;
 	}
 

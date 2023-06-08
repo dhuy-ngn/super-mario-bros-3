@@ -11,6 +11,7 @@
 
 #include "Collision.h"
 #include "QuestionBlock.h"
+#include "ColorBlock.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -36,7 +37,6 @@ void CMario::OnNoCollision(DWORD dt)
     y += vy * dt;
 
     if (y > 200)
-        // There is nothing that states that the window height is 400 yet
         // TODO: De-hardcoding the 200
     {
         SetState(MARIO_STATE_FALL_OFF);
@@ -167,6 +167,15 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 
     if (question_block->GetState() != QUESTION_BLOCK_STATE_INACTIVE && e->ny > 0)
         question_block->SetState(QUESTION_BLOCK_STATE_INACTIVE);
+}
+
+void CMario::OnCollisionWithDecorBlock(LPCOLLISIONEVENT e)
+{
+    CColorBlock* color_block = dynamic_cast<CColorBlock*>(e->obj);
+
+    if (e->ny < 0) {
+        color_block->SetIsBlocking(1);
+    }
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
