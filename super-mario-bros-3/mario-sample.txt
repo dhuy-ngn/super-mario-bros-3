@@ -1,7 +1,5 @@
 [SETTINGS]
 start	5
-width	320
-height	240
 
 #id	type	file
 # type: 0: intro, 1: play scene 
@@ -16,7 +14,13 @@ height	240
 -100	resources\textures\bbox.png
 100	resources\textures\mario-left.png
 110	resources\textures\mario-right.png
+10	resources\textures\enemies.png
 20	resources\textures\misc.png
-30	resources\textures\tiles.png
+21	resources\textures\misc2.png
+30	resources\tilemap\world1-1_bank.png
+31	resources\textures\tiles.png
 40	resources\textures\enemies-1.png
-50	resources\textures\misc2.png
+50	resources\textures\enemies-2.png
+60	resources\textures\HUD.png
+80	resources\textures\fonts.png
+90	resources\textures\card.png
