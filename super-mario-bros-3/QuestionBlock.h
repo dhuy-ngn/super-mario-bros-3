@@ -22,7 +22,8 @@
 class CQuestionBlock : public CGameObject
 {
 protected:
-	BOOLEAN isContainingPowerup;
+	BOOLEAN isContainingLeaf;
+	BOOLEAN isContainingPButton;
 	BOOLEAN isExhausted;
 
 	ULONGLONG deflect_start;
@@ -37,13 +38,11 @@ public:
 		this->x = x;
 		this->y = y;
 		this->start_y = y;
-		this->isContainingPowerup = isContainingPowerup;
 		this->isExhausted = false;
 		this->deflect_start = -1;
 		this->deflect_end = -1;
 		this->vy = 0;
 	}
-	int IsContainingPowerup() { return isContainingPowerup; };
 	int IsExhausted() { return isExhausted; };
 
 	void Render();
