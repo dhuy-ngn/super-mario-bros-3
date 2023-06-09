@@ -45,12 +45,6 @@ void CColorBlock::Render()
 	//RenderBoundingBox();
 }
 
-void CColorBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	CGameObject::Update(dt, coObjects);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
-}
-
 void CColorBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	float cellWidth_div_2 = this->cellWidth / 2;

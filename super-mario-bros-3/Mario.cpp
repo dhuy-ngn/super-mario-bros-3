@@ -66,6 +66,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
         OnCollisionWithPortal(e);
     else if (dynamic_cast<CQuestionBlock*>(e->obj))
         OnCollisionWithQuestionBlock(e);
+    else if (dynamic_cast<CColorBlock*>(e->obj))
+        OnCollisionWithDecorBlock(e);
     // Collide with Piranha Plants
     // Collide with Piranha Plants bullets
 }
@@ -173,7 +175,7 @@ void CMario::OnCollisionWithDecorBlock(LPCOLLISIONEVENT e)
 {
     CColorBlock* color_block = dynamic_cast<CColorBlock*>(e->obj);
 
-    if (e->ny < 0) {
+    if (e->ny > 0) {
         color_block->SetIsBlocking(1);
     }
 }
