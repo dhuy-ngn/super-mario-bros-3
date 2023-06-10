@@ -270,10 +270,6 @@ int CMario::GetAniIdBig()
     int aniId = -1;
     if (!isOnPlatform)
     {
-        if (isSpinning) {
-            aniId = ID_ANI_MARIO_SPIN;
-        }
-        else
             if (abs(vx) == MARIO_RUNNING_SPEED)
             {
                 if (nx >= 0)
@@ -288,9 +284,6 @@ int CMario::GetAniIdBig()
                 else
                     aniId = ID_ANI_MARIO_JUMP_WALK_LEFT;
             }
-    }
-    else if (isSpinning) {
-        aniId = ID_ANI_MARIO_SPIN;
     }
     else if (isSitting)
     {
@@ -455,25 +448,25 @@ void CMario::SetState(int state)
     switch (state)
     {
     case MARIO_STATE_RUNNING_RIGHT:
-        if (isSitting||isSpinning) break;
+        if (isSitting || isSpinning) break;
         maxVx = MARIO_RUNNING_SPEED;
         ax = MARIO_ACCEL_RUN_X;
         nx = 1;
         break;
     case MARIO_STATE_RUNNING_LEFT:
-        if (isSitting||isSpinning) break;
+        if (isSitting || isSpinning) break;
         maxVx = -MARIO_RUNNING_SPEED;
         ax = -MARIO_ACCEL_RUN_X;
         nx = -1;
         break;
     case MARIO_STATE_WALKING_RIGHT:
-        if (isSitting||isSpinning) break;
+        if (isSitting || isSpinning) break;
         maxVx = MARIO_WALKING_SPEED;
         ax = MARIO_ACCEL_WALK_X;
         nx = 1;
         break;
     case MARIO_STATE_WALKING_LEFT:
-        if (isSitting||isSpinning) break;
+        if (isSitting || isSpinning) break;
         maxVx = -MARIO_WALKING_SPEED;
         ax = -MARIO_ACCEL_WALK_X;
         nx = -1;
