@@ -6,6 +6,7 @@
 #define DEFAULT_TIME						300
 
 #define SPRITE_HUD_ID						99999
+#define SPRITE_ICONMARIO_ID					99998
 
 #define SPRITE_FONT_0_ID				50013
 #define SPRITE_FONT_1_ID				50014
@@ -72,8 +73,31 @@ class CHud
 	int marioLife = 4;
 	int score = 0;
 
+	LPSPRITE playerSprite = NULL;
+	vector<LPSPRITE> moneySprites;
+	vector<LPSPRITE> remainTimeSprites;
+	vector<LPSPRITE> mariolifeSprites;
+	vector<LPSPRITE> scoreSprites;
+	vector<LPSPRITE> powerMelterSprite;
+
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
-	CHud();
+	CHud()
+	{
+		initFonts();
+		playerSprite = CSprites::GetInstance()->Get(SPRITE_ICONMARIO_ID);
+		CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+			this->marioLife = 4;
+			this->score = 0;
+			this->money = 0;
+			mariolifeSprites = StringToSprite(to_string(marioLife));
+			moneySprites = StringToSprite(to_string(money));
+			string score_str = to_string(score);
+			while (score_str.length() < HUD_SCORE_MAX) score_str = "0" + score_str;
+			scoreSprites = StringToSprite(score_str);
+			string time_str = to_string(DEFAULT_TIME);
+			while (time_str.length() < HUD_TIME_MAX) time_str = "0" + time_str;
+			remainTimeSprites = StringToSprite(time_str);
+	}
 	virtual void Render();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) {};
 	void AddSpeedStack();
