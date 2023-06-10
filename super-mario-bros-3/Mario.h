@@ -50,9 +50,7 @@
 #define MARIO_STATE_LAND_RIGHT	801
 #define MARIO_STATE_LAND_LEFT	802
 
-#define MARIO_STATE_SPIN 900
-#define MARIO_STATE_SPIN_RIGHT 901
-#define MARIO_STATE_SPIN_LEFT 902
+#define MARIO_STATE_ATTACK 900
 
 
 #pragma region ANIMATION_ID
@@ -157,6 +155,7 @@
 #define MARIO_RACCOON_SITTING_BBOX_HEIGHT 16
 
 #define MARIO_UNTOUCHABLE_TIME 2500
+#define MARIO_SPINNING_TIME 100
 
 class CMario : public CGameObject
 {
@@ -170,6 +169,7 @@ class CMario : public CGameObject
 	int level;
 	int untouchable;
 	ULONGLONG untouchable_start;
+	ULONGLONG spinning_start;
 	BOOLEAN isOnPlatform;
 	int coin;
 
