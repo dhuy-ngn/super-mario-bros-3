@@ -455,41 +455,25 @@ void CMario::SetState(int state)
     switch (state)
     {
     case MARIO_STATE_RUNNING_RIGHT:
-        if (isSitting) break;
-        if (isSpinning) {
-            state = MARIO_STATE_SPIN_RIGHT;
-            break;
-        }
+        if (isSitting||isSpinning) break;
         maxVx = MARIO_RUNNING_SPEED;
         ax = MARIO_ACCEL_RUN_X;
         nx = 1;
         break;
     case MARIO_STATE_RUNNING_LEFT:
-        if (isSitting) break;
-        if (isSpinning) {
-            state = MARIO_STATE_SPIN_LEFT;
-            break;
-        }
+        if (isSitting||isSpinning) break;
         maxVx = -MARIO_RUNNING_SPEED;
         ax = -MARIO_ACCEL_RUN_X;
         nx = -1;
         break;
     case MARIO_STATE_WALKING_RIGHT:
-        if (isSitting) break;
-        if (isSpinning) {
-            state = MARIO_STATE_SPIN_RIGHT;
-            break;
-        }
+        if (isSitting||isSpinning) break;
         maxVx = MARIO_WALKING_SPEED;
         ax = MARIO_ACCEL_WALK_X;
         nx = 1;
         break;
     case MARIO_STATE_WALKING_LEFT:
-        if (isSitting) break;
-        if (isSpinning) {
-            state = MARIO_STATE_SPIN_LEFT;
-            break;
-        }
+        if (isSitting||isSpinning) break;
         maxVx = -MARIO_WALKING_SPEED;
         ax = -MARIO_ACCEL_WALK_X;
         nx = -1;
@@ -497,7 +481,7 @@ void CMario::SetState(int state)
 
         // MARIO JUMPING
     case MARIO_STATE_JUMP:
-        if (isSitting) break;
+        if (isSitting || isSpinning) break;
         if (isOnPlatform)
         {
             isOnPlatform = false;
@@ -597,23 +581,11 @@ void CMario::SetState(int state)
         break;
 
         // RACCOON MARIO SPINNING 
-    case MARIO_STATE_SPIN:
+    case MARIO_STATE_ATTACK:
         if (isSitting) break;
         ax = 0.0f;
         vx = 0.0f;
         isSpinning = true;
-        break;
-    case MARIO_STATE_SPIN_LEFT:
-        if (isSitting) break;
-        isSpinning = true;
-        maxVx = -MARIO_RUNNING_SPEED;
-        ax = -MARIO_ACCEL_SPINNING_X;
-        break;
-    case MARIO_STATE_SPIN_RIGHT:
-        if (isSitting) break;
-        isSpinning = true;
-        maxVx = MARIO_RUNNING_SPEED;
-        ax = MARIO_ACCEL_SPINNING_X;
         break;
 
         // IDLE
