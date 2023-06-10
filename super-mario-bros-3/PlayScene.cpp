@@ -11,6 +11,7 @@
 #include "ColorBlock.h"
 #include "QuestionBlock.h"
 #include "Koopa.h"
+#include "HUD.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -311,7 +312,7 @@ void CPlayScene::Update(DWORD dt)
 	if (cx < 0) cx = 0;
 	if (cy > 0) cy = 0;
 
-	CGame::GetInstance()->SetCamPos(cx, cy + 30 /*cy*/);
+	CGame::GetInstance()->SetCamPos(cx, cy + HUD_HEIGHT);
 
 	PurgeDeletedObjects();
 }

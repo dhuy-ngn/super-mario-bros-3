@@ -44,6 +44,22 @@
 #define SPRITE_FONT_Y_ID				50047
 #define SPRITE_FONT_Z_ID				50048
 
+#define HUD_DIFF_P				15
+#define HUD_DIFF_ROW			4	
+#define HUD_DIFF_METTER			68
+#define HUD_DIFF_FIRST_ROW		8
+#define HUD_DIFF_SECOND_ROW		16
+#define HUD_DIFF_PLAYER			110
+#define HUD_DIFF_TIME			5
+#define HUD_DIFF_MONEY			12
+#define HUD_DIFF_LIFE			93
+#define HUD_DIFF_SCORE			60
+
+#define HUD_TIME_MAX	3
+#define HUD_SCORE_MAX	7
+
+#define HUD_HEIGHT 32
+
 #pragma once
 class CHud
 {
