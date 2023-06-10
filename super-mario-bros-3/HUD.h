@@ -1,3 +1,5 @@
+#pragma once
+
 #include "GameObject.h"
 #include "Mario.h"
 #include <map>
@@ -62,8 +64,9 @@
 #define HUD_HEIGHT 32
 
 #pragma once
-class CHud
+class CHud : public CGameObject
 {
+public:
 	CMario* mario;
 	std::map<char, LPSPRITE> fonts;
 	int speedStack = 0;
@@ -81,23 +84,7 @@ class CHud
 	vector<LPSPRITE> powerMelterSprite;
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
-	CHud()
-	{
-		initFonts();
-		playerSprite = CSprites::GetInstance()->Get(SPRITE_ICONMARIO_ID);
-		CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
-			this->marioLife = 4;
-			this->score = 0;
-			this->money = 0;
-			mariolifeSprites = StringToSprite(to_string(marioLife));
-			moneySprites = StringToSprite(to_string(money));
-			string score_str = to_string(score);
-			while (score_str.length() < HUD_SCORE_MAX) score_str = "0" + score_str;
-			scoreSprites = StringToSprite(score_str);
-			string time_str = to_string(DEFAULT_TIME);
-			while (time_str.length() < HUD_TIME_MAX) time_str = "0" + time_str;
-			remainTimeSprites = StringToSprite(time_str);
-	}
+	CHud();
 	virtual void Render();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) {};
 	void AddSpeedStack();

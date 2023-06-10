@@ -3,6 +3,71 @@
 #include <string>
 #include "PlayScene.h"
 
+CHud::CHud()
+{
+	initFonts();
+	playerSprite = CSprites::GetInstance()->Get(SPRITE_ICONMARIO_ID);
+	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	this->marioLife = 4;
+	this->score = 0;
+	this->money = 0;
+	mariolifeSprites = StringToSprite(to_string(marioLife));
+	moneySprites = StringToSprite(to_string(money));
+	string score_str = to_string(score);
+	while (score_str.length() < HUD_SCORE_MAX) score_str = "0" + score_str;
+	scoreSprites = StringToSprite(score_str);
+	string time_str = to_string(DEFAULT_TIME);
+	while (time_str.length() < HUD_TIME_MAX) time_str = "0" + time_str;
+	remainTimeSprites = StringToSprite(time_str);
+
+}
+
+void CHud::Render() {
+	CSprites::GetInstance()->Get(SPRITE_HUD_ID)->Draw(x, y);
+	// for coin
+	for (unsigned int i = 0; i < moneySprites.size(); i++) {
+		moneySprites[i]->Draw(x + FONT_BBOX_WIDTH * i + HUD_DIFF_MONEY, y - HUD_DIFF_ROW);
+	}
+
+	// for time
+	for (unsigned int i = 0; i < remainTimeSprites.size(); i++) {
+		remainTimeSprites[i]->Draw(x + FONT_BBOX_WIDTH * i + HUD_DIFF_TIME, y + HUD_DIFF_ROW);
+	}
+
+	// for mario life
+	for (unsigned int i = 0; i < mariolifeSprites.size(); i++)
+		mariolifeSprites[i]->Draw(x + FONT_BBOX_WIDTH * i - HUD_DIFF_LIFE, y + HUD_DIFF_ROW);
+
+	// for mario sprite
+	playerSprite->Draw(x - HUD_DIFF_PLAYER, y + 4);
+
+	// for score
+	for (unsigned int i = 0; i < scoreSprites.size(); i++) {
+		scoreSprites[i]->Draw(x + FONT_BBOX_WIDTH * i - HUD_DIFF_SCORE - 7, y + HUD_DIFF_ROW);
+	}
+}
+
+void CHud::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+		AddCoin();
+	// for mario life
+	mariolifeSprites = StringToSprite(to_string(marioLife));
+
+	// for coin
+	moneySprites = StringToSprite(to_string(money));
+
+	// for time
+	time += dt;
+	remainTime = DEFAULT_TIME - time / 1000;
+	string time_str = to_string(remainTime);
+	while (time_str.length() < HUD_TIME_MAX) time_str = "0" + time_str;
+	remainTimeSprites = StringToSprite(time_str);
+
+	// for score
+	string score_str = to_string(score);
+	while (score_str.length() < HUD_SCORE_MAX) score_str = "0" + score_str;
+	scoreSprites = StringToSprite(score_str);
+}
+
 void CHud::initFonts() {
 	CSprites* sprites = CSprites::GetInstance();
 	fonts.insert(make_pair('0', sprites->Get(SPRITE_FONT_0_ID)));
@@ -63,4 +128,9 @@ vector<LPSPRITE> CHud::StringToSprite(string str)
 			sprites.push_back(sprite);
 	}
 	return sprites;
+}
+
+void CHud::AddCoin() {
+	if (mario != NULL)
+		this->money = mario->GetCoin();
 }
