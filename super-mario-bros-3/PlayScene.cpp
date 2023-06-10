@@ -316,7 +316,7 @@ void CPlayScene::Update(DWORD dt)
 
 	CGame::GetInstance()->SetCamPos(cx, cy + HUD_HEIGHT);
 
-	hud->SetPosition(320, 120);
+	hud->SetPosition(cx+160, cy+219);
 	hud->Update(dt, &coObjects);
 	PurgeDeletedObjects();
 }
