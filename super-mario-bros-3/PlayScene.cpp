@@ -21,6 +21,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
 	player = NULL;
+	hud = NULL;
 	key_handler = new CSampleKeyHandler(this);
 }
 
@@ -243,6 +244,7 @@ void CPlayScene::LoadAssets(LPCWSTR assetFile)
 	}
 
 	f.close();
+	hud = new CHud();
 
 	DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
 }
@@ -314,6 +316,8 @@ void CPlayScene::Update(DWORD dt)
 
 	CGame::GetInstance()->SetCamPos(cx, cy + HUD_HEIGHT);
 
+	hud->SetPosition(320, 120);
+	hud->Update(dt, &coObjects);
 	PurgeDeletedObjects();
 }
 
@@ -321,6 +325,7 @@ void CPlayScene::Render()
 {
 	for (unsigned i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+	hud->Render();
 }
 
 /*

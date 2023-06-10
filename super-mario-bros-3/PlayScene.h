@@ -6,6 +6,7 @@
 #include "Brick.h"
 #include "Mario.h"
 #include "Goomba.h"
+#include "HUD.h"
 //#include "Koopas.h"
 
 
@@ -13,7 +14,8 @@ class CPlayScene: public CScene
 {
 protected: 
 	// A play scene has to have player, right? 
-	LPGAMEOBJECT player;					
+	LPGAMEOBJECT player;		
+	CHud* hud;
 
 	vector<LPGAMEOBJECT> objects;
 
