@@ -41,7 +41,7 @@
 #Top right
 90118	128	48	143	63	30
 #Middle left
-90119	48	48	63	63	30
+90119	64	64	79	79	30
 #Middle right
 90120	0	96	15	111	30
 #Middle left most
