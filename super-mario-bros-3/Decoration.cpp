@@ -34,7 +34,7 @@ void CDecoration::Render()
 
 	s->Get(this->spriteId)->Draw(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CDecoration::GetBoundingBox(float& l, float& t, float& r, float& b)
