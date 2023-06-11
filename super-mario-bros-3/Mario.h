@@ -182,7 +182,6 @@ class CMario : public CGameObject
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
-	void OnCollisionWithDecoration(LPCOLLISIONEVENT e);
 	void OnCollisionWithDecorBlock(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
@@ -232,4 +231,6 @@ public:
 	int GetCoin() { return this->coin; }
 	float GetX() { return this->x; }
 	float GetY() { return this->y; }
+	float GetVx() { return this->vx; }
+	float GetVy() { return this->vy; }
 };

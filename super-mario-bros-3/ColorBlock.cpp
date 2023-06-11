@@ -55,6 +55,10 @@ void CColorBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		SetIsBlocking(0);
 	}
+	if (mario->GetVy() > 0)
+	{
+		SetIsBlocking(1);
+	}
 }
 
 void CColorBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
