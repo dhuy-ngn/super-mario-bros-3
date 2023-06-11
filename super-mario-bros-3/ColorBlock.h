@@ -25,6 +25,7 @@ public:
 		this->isBlocking = 0;
 	}
 
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void RenderBoundingBox();

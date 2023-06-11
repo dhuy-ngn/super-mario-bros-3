@@ -1,6 +1,7 @@
 #include "ColorBlock.h"
 #include "Textures.h"
 #include "Mario.h"
+#include "PlayScene.h"
 
 
 void CColorBlock::RenderBoundingBox()
@@ -43,6 +44,17 @@ void CColorBlock::Render()
 		s->Get(this->spriteIdEnd)->Draw(xx, y);
 
 	//RenderBoundingBox();
+}
+
+void CColorBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+
+	if ((mario->GetY() > this->y + MARIO_SMALL_BBOX_HEIGHT && mario->GetLevel() == MARIO_LEVEL_SMALL)
+		|| (mario->GetY() > this->y + MARIO_BIG_BBOX_HEIGHT && mario->GetLevel() != MARIO_LEVEL_SMALL))
+	{
+		SetIsBlocking(0);
+	}
 }
 
 void CColorBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
