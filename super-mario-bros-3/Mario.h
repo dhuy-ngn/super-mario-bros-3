@@ -174,8 +174,8 @@ class CMario : public CGameObject
 
 	int level;
 	int untouchable;
-	ULONGLONG untouchable_start;
-	ULONGLONG spinning_start;
+	ULONGLONG untouchable_start = 0;
+	ULONGLONG spinning_start = 0;
 	BOOLEAN isOnPlatform;
 	int coin;
 
@@ -230,4 +230,6 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	int GetLevel() { return this->level; }
 	int GetCoin() { return this->coin; }
+	float GetX() { return this->x; }
+	float GetY() { return this->y; }
 };
