@@ -13,11 +13,10 @@
 #define FIRETRAP_STATE_DEATH				200
 #define FIRETRAP_STATE_INACTIVE				300
 
-#define FIRETRAP_ANI_RIGHT_UP			71000
-#define FIRETRAP_ANI_RIGHT_DOWN			71001
-#define FIRETRAP_ANI_LEFT_UP			71010
-#define FIRETRAP_ANI_LEFT_DOWN			71011
-#define FIRETRAP_ANI_DEATH				4
+#define FIRETRAP_ANI_RIGHT_UP			7100
+#define FIRETRAP_ANI_RIGHT_DOWN			7101
+#define FIRETRAP_ANI_LEFT_UP			7110
+#define FIRETRAP_ANI_LEFT_DOWN			7111
 
 #define FIRETRAP_DELAY_TIME			750
 #define FIRETRAP_DELAY_STOP_TIME	3000
@@ -42,11 +41,14 @@ public:
 	CFireTrap(float x, float y) {
 		this->maxY = y - FIRETRAP_BBOX_HEIGHT;
 		this->height = FIRETRAP_BBOX_HEIGHT;
+
+		SetState(FIRETRAP_STATE_DARTING);
 	}
-	virtual void SetState(int state);
-	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-	virtual void Render();
+
+	void SetState(int state);
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void Render();
 
 	int IsCollidable() { return 1; }
 	int IsBlocking() { return 0; }

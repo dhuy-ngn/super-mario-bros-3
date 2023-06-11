@@ -13,6 +13,7 @@ platform.txt
 #ENEMIES
 goomba.txt
 koopa.txt
+piranha_and_firetrap.txt
 #
 question_block.txt
 #
@@ -37,6 +38,9 @@ decoration.txt
 4	1149	42
 4	1171	10
 4	1203	-22
+
+#FIRETRAP
+10	352	153
 
 #Decoration
 #Overlapping
@@ -125,6 +129,7 @@ decoration.txt
 6	190	130	0
 6	218	85	0
 6	233	85	0
+6	416	98	0
 
 #Platform
 #Pipe
