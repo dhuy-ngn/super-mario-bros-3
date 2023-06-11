@@ -316,11 +316,6 @@ void CPlayScene::Update(DWORD dt)
 		coObjects.push_back(objects[i]);
 	}
 
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		objects[i]->Update(dt, &coObjects);
-	}
-
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 
@@ -329,6 +324,15 @@ void CPlayScene::Update(DWORD dt)
 	player->GetPosition(cx, cy);
 
 	CGame* game = CGame::GetInstance();
+
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		// TODO: apply this Update logic to Koopa, FireTrap, Piranha plant etc
+		if (player->GetX() + game->GetBackBufferWidth() /2 < objects[i]->GetX() - GOOMBA_BBOX_WIDTH && dynamic_cast<CGoomba*>(objects[i])) {}
+		else
+			objects[i]->Update(dt, &coObjects);
+	}
+
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
 
