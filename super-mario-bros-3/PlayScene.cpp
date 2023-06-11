@@ -10,6 +10,7 @@
 #include "Platform.h"
 #include "ColorBlock.h"
 #include "QuestionBlock.h"
+#include "Decoration.h"
 #include "Koopa.h"
 #include "HUD.h"
 
@@ -187,6 +188,21 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			x, y,
 			cell_width, cell_height, length,
 			sprite_begin, sprite_middle, sprite_end
+		);
+
+		break;
+	}
+
+	case OBJECT_TYPE_DECORATION:
+	{
+
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int spriteId = atoi(tokens[5].c_str());
+
+		obj = new CDecoration(
+			x, y,
+			cell_width, cell_height, spriteId
 		);
 
 		break;
