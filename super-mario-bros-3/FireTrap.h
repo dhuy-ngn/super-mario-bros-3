@@ -13,10 +13,10 @@
 #define FIRETRAP_STATE_DEATH				200
 #define FIRETRAP_STATE_INACTIVE				300
 
-#define FIRETRAP_ANI_RIGHT_UP			0
-#define FIRETRAP_ANI_RIGHT_DOWN			1
-#define FIRETRAP_ANI_LEFT_UP			2
-#define FIRETRAP_ANI_LEFT_DOWN			3
+#define FIRETRAP_ANI_RIGHT_UP			71000
+#define FIRETRAP_ANI_RIGHT_DOWN			71001
+#define FIRETRAP_ANI_LEFT_UP			71010
+#define FIRETRAP_ANI_LEFT_DOWN			71011
 #define FIRETRAP_ANI_DEATH				4
 
 #define FIRETRAP_DELAY_TIME			750
@@ -29,16 +29,33 @@
 class CFireTrap:public CGameObject
 {
 protected:
-	ULONGLONG delay_start;
-	ULONGLONG delay_stop;
+	ULONGLONG delay_start = 0;
+	ULONGLONG delay_stop = 0;
+	ULONGLONG dying_start = 0;
+	ULONGLONG shooting_start = 0;
+	ULONGLONG aim_start = 0;
+	float maxY = 0;
+	float height = 0;
+	BOOLEAN isUpward = false;
+	BOOLEAN isForward = false;
+public:
+	CFireTrap(float x, float y) {
+		this->maxY = y - FIRETRAP_BBOX_HEIGHT;
+		this->height = FIRETRAP_BBOX_HEIGHT;
+	}
+	virtual void SetState(int state);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 
 	int IsCollidable() { return 1; }
 	int IsBlocking() { return 0; }
-	virtual void OnNoCollision(DWORD dt);
-public:
+
 	void GetDirection();
+	void StartDelay() { delay_start = GetTickCount64(); }
+	void StartDelayStop() { delay_stop = GetTickCount64(); }
+	void StartDying() { dying_start = GetTickCount64(); }
+	void StartShooting() { shooting_start = GetTickCount64(); }
+	void StartAiming() { aim_start = GetTickCount64(); }
 };
 
