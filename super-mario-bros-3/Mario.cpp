@@ -12,6 +12,7 @@
 #include "Collision.h"
 #include "QuestionBlock.h"
 #include "ColorBlock.h"
+#include "FireTrap.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -69,6 +70,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
     else if (dynamic_cast<CColorBlock*>(e->obj))
         OnCollisionWithDecorBlock(e);
     // Collide with Piranha Plants
+    else if (dynamic_cast<CFireTrap*>(e->obj))
+        OnCollisionWithFireTrap(e);
     // Collide with Piranha Plants bullets
 }
 
@@ -177,6 +180,31 @@ void CMario::OnCollisionWithDecorBlock(LPCOLLISIONEVENT e)
 
     if (e->ny > 0) {
         color_block->SetIsBlocking(1);
+    }
+}
+
+void CMario::OnCollisionWithFireTrap(LPCOLLISIONEVENT e) 
+{
+    CFireTrap* fire_trap = dynamic_cast<CFireTrap*>(e->obj);
+
+    if (untouchable == 0)
+    {
+        if (fire_trap->GetState() != FIRETRAP_STATE_DEATH)
+        {
+            switch (level) {
+            case MARIO_LEVEL_RACCOON:
+                level = MARIO_LEVEL_BIG;
+                StartUntouchable();
+                break;
+            case MARIO_LEVEL_BIG:
+                level = MARIO_LEVEL_SMALL;
+                StartUntouchable();
+                break;
+            default:
+                DebugOut(L">>> Mario DIE >>> \n");
+                SetState(MARIO_STATE_DIE);
+            }
+        }
     }
 }
 
