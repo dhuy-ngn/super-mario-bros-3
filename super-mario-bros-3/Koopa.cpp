@@ -1,6 +1,7 @@
 #include "Koopa.h"
 #include "debug.h"
 #include "QuestionBlock.h"
+#include "ColorBlock.h"
 
 void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
@@ -81,6 +82,8 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CQuestionBlock*>(e->obj))
 		OnCollisionWithQuestionBlock(e);
 	// collide with piranha plant
+	if (dynamic_cast<CPlatform*>(e->obj))
+		OnCollisionWithPlatform(e);
 
 	if (e->ny != 0)
 	{
@@ -238,18 +241,6 @@ void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 	}
 }
 
-void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
-{
-	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
-
-	if (koopa->IsSpinning()) {
-		vx = KOOPA_SPINNING_SPEED / 2;
-		SetState(KOOPA_STATE_KNOCKED_OUT);
-	}
-	else
-		vx = -vx;
-}
-
 void CKoopa::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 {
 	CQuestionBlock* question_block = dynamic_cast<CQuestionBlock*>(e->obj);
@@ -257,4 +248,15 @@ void CKoopa::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 	if (question_block->GetState() != QUESTION_BLOCK_STATE_INACTIVE && IsSpinning())
 		question_block->SetState(QUESTION_BLOCK_STATE_INACTIVE);
 	else return;
+}
+
+void CKoopa::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
+{
+	if (state == KOOPA_STATE_WALKING && IsRedKoopa())
+	{
+		if (vx > 0 && x >= e->obj->GetX() + 4)
+			vx = -vx;
+		if (vx < 0 && x <= e->obj->GetX() - 4)
+			vx = -vx;
+	}
 }

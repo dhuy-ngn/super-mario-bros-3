@@ -226,7 +226,7 @@ decoration.txt
 
 
 #KOOPA
-3	576	148	1	0
+3	576	100	1	0
 
 #GOOMBA
 2	218	179

@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Platform.h"
 
 #define KOOPA_GRAVITY 0.002f
 #define KOOPA_WALKING_SPEED 0.03f
@@ -15,13 +16,13 @@
 
 #define KOOPA_SHAKING_WIDTH	10
 
-#define KOOPA_LEVEL_NORMAL 30000
-#define KOOPA_LEVEL_WINGS	30001
+#define KOOPA_LEVEL_NORMAL 1
+#define KOOPA_LEVEL_WINGS	0
 
-#define KOOPA_COLOR_GREEN	39998
-#define KOOPA_COLOR_RED 39999
+#define KOOPA_COLOR_GREEN	1
+#define KOOPA_COLOR_RED 0
 
-#define KOOPA_INACTIVE_DURATION 5000
+#define KOOPA_INACTIVE_DURATION		5000
 #define KOOPA_WAKING_UP_DURATION	1000
 
 #define KOOPA_STATE_WALKING	100
@@ -104,8 +105,8 @@ protected:
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
-	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e);
+	void OnCollisionWithPlatform(LPCOLLISIONEVENT e);
 
 	int GetAniIdRedKoopaNormal();
 	int GetAniIdGreenKoopaNormal();
