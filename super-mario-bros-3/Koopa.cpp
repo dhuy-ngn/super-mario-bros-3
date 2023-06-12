@@ -238,6 +238,18 @@ void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 	}
 }
 
+void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
+{
+	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+
+	if (koopa->IsSpinning()) {
+		vx = KOOPA_SPINNING_SPEED / 2;
+		SetState(KOOPA_STATE_KNOCKED_OUT);
+	}
+	else
+		vx = -vx;
+}
+
 void CKoopa::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 {
 	CQuestionBlock* question_block = dynamic_cast<CQuestionBlock*>(e->obj);

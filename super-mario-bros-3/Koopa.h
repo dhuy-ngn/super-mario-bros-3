@@ -90,8 +90,8 @@ protected:
 	ULONGLONG die_start;
 	ULONGLONG wake_up_start;
 
-	int level;
-	int color;
+	int level; // 1: para; 0: normal
+	int color; // 1: green koopa; 0: red koopa
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -120,5 +120,6 @@ public:
 	void SetState(int state);
 	void SetLevel(int l);
 	int GetLevel() { return this->level; };
+	int GetColor() { return this->color; }
 	BOOLEAN IsRedKoopa() { return color == KOOPA_COLOR_RED; };
 };
