@@ -8,11 +8,8 @@
 #define BULLET_SPEED_X	0.05f
 #define BULLET_SPEED_Y	0.03f
 
-
 #define BULLET_ANI_RIGHT		7120
 #define BULLET_ANI_LEFT			7121	
-
-#define STOP_TIME	3000
 
 class CFireBullet : public CGameObject
 {
@@ -20,8 +17,7 @@ class CFireBullet : public CGameObject
     virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 public:
     CFireBullet(float bx, float by, bool up, bool right);
-    virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
-    virtual int IsCollidable() { return 1; };
-    virtual int IsBlocking() { return 0; }
+    void GetBoundingBox(float& l, float& t, float& r, float& b);
+    int IsCollidable() { return 1; };
+    int IsBlocking() { return 0; }
 };
-

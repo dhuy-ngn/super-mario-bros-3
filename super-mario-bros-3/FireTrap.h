@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameObject.h"
+#include "FireBullet.h"
 
 #define FIRETRAP_BBOX_WIDTH					16
 #define FIRETRAP_BBOX_HEIGHT				32
@@ -37,6 +38,7 @@ protected:
 	float height = 0;
 	BOOLEAN isUpward = false;
 	BOOLEAN isForward = false;
+	CFireBullet* bullet = NULL;
 public:
 	CFireTrap(float x, float y) {
 		this->maxY = y - FIRETRAP_BBOX_HEIGHT;
@@ -59,5 +61,6 @@ public:
 	void StartDying() { dying_start = GetTickCount64(); }
 	void StartShooting() { shooting_start = GetTickCount64(); }
 	void StartAiming() { aim_start = GetTickCount64(); }
+	void ShootBullet();
 };
 

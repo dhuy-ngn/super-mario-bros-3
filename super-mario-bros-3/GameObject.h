@@ -21,6 +21,8 @@ protected:
 	float x; 
 	float y;
 
+	float start_x = x;
+
 	float vx;
 	float vy;
 
@@ -37,13 +39,15 @@ public:
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
 
 	int GetState() { return this->state; }
+	float GetX() { return this->x; }
+	float GetStartX() { return this->start_x; }
 	virtual void Delete() { isDeleted = true;  }
 	bool IsDeleted() { return isDeleted; }
 
 	void RenderBoundingBox();
 
 	CGameObject();
-	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; }
+	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; this->start_x = x; }
 
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;

@@ -1,6 +1,7 @@
 #include "FireTrap.h"
 #include "Mario.h"
 #include "PlayScene.h"
+#include "FireBullet.h"
 
 
 void CFireTrap::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -95,6 +96,14 @@ void CFireTrap::GetDirection()
 	}
 }
 
+void CFireTrap::ShootBullet()
+{
+	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	this->bullet = new CFireBullet(x, y, isUpward, isForward);
+
+	currentScene->PushObject(bullet);
+}
+
 void CFireTrap::SetState(int state)
 {
 	CGameObject::SetState(state);
@@ -106,6 +115,7 @@ void CFireTrap::SetState(int state)
 		break;
 	case FIRETRAP_STATE_SHOOTING:
 		vy = 0;
+		ShootBullet();
 		break;
 	case FIRETRAP_STATE_INACTIVE:
 		vy = 0;

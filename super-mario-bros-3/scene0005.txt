@@ -165,4 +165,5 @@ decoration.txt
 #Portal 
 
 # MARIO
-0	1312	-230
+0	40	170
+#0	1312	-230
