@@ -24,7 +24,7 @@
 #define MARIO_GRAVITY			0.001f
 #define MARIO_RACCOON_GRAVITY	0.0007f
 
-#define MARIO_JUMP_DEFLECT_SPEED  0.5f
+#define MARIO_JUMP_DEFLECT_SPEED  0.25f
 
 #define MARIO_STATE_DIE				-10
 #define MARIO_STATE_FALL_OFF	-99
@@ -186,6 +186,10 @@ class CMario : public CGameObject
 	void OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithFireTrap(LPCOLLISIONEVENT e);
+	void OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e);
+	void OnCollisionWithFireBullet(LPCOLLISIONEVENT e);
+	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
+	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();

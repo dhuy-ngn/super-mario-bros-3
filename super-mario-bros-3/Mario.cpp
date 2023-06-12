@@ -72,7 +72,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
     // Collide with Piranha Plants
     else if (dynamic_cast<CFireTrap*>(e->obj))
         OnCollisionWithFireTrap(e);
-    // Collide with Piranha Plants bullets
+    else if (dynamic_cast<CFireBullet*>(e->obj))
+        OnCollisionWithFireBullet(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -171,7 +172,10 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
     CQuestionBlock* question_block = dynamic_cast<CQuestionBlock*>(e->obj);
 
     if (question_block->GetState() != QUESTION_BLOCK_STATE_INACTIVE && e->ny > 0)
+    {
         question_block->SetState(QUESTION_BLOCK_STATE_INACTIVE);
+        coin++;
+    }
 }
 
 void CMario::OnCollisionWithDecorBlock(LPCOLLISIONEVENT e)
@@ -208,6 +212,26 @@ void CMario::OnCollisionWithFireTrap(LPCOLLISIONEVENT e)
     }
 }
 
+void CMario::OnCollisionWithFireBullet(LPCOLLISIONEVENT e)
+{
+    if (untouchable == 0)
+    {
+        switch (level) {
+        case MARIO_LEVEL_RACCOON:
+            level = MARIO_LEVEL_BIG;
+            StartUntouchable();
+            break;
+        case MARIO_LEVEL_BIG:
+            level = MARIO_LEVEL_SMALL;
+            StartUntouchable();
+            break;
+        default:
+            DebugOut(L">>> Mario DIE >>> \n");
+            SetState(MARIO_STATE_DIE);
+        }
+    }
+}
+
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
     CPortal* p = (CPortal*)e->obj;
@@ -220,7 +244,7 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 int CMario::GetAniIdSmall()
 {
     int aniId = -1;
-    if (!isOnPlatform)
+    if (!isOnPlatform || vy < 0)
     {
         if (isSpinning) {
             aniId = ID_ANI_MARIO_SMALL_SPIN;
@@ -476,25 +500,25 @@ void CMario::SetState(int state)
     switch (state)
     {
     case MARIO_STATE_RUNNING_RIGHT:
-        if (isSitting || isSpinning) break;
+        if (isSitting) break;
         maxVx = MARIO_RUNNING_SPEED;
         ax = MARIO_ACCEL_RUN_X;
         nx = 1;
         break;
     case MARIO_STATE_RUNNING_LEFT:
-        if (isSitting || isSpinning) break;
+        if (isSitting) break;
         maxVx = -MARIO_RUNNING_SPEED;
         ax = -MARIO_ACCEL_RUN_X;
         nx = -1;
         break;
     case MARIO_STATE_WALKING_RIGHT:
-        if (isSitting || isSpinning) break;
+        if (isSitting) break;
         maxVx = MARIO_WALKING_SPEED;
         ax = MARIO_ACCEL_WALK_X;
         nx = 1;
         break;
     case MARIO_STATE_WALKING_LEFT:
-        if (isSitting || isSpinning) break;
+        if (isSitting) break;
         maxVx = -MARIO_WALKING_SPEED;
         ax = -MARIO_ACCEL_WALK_X;
         nx = -1;
@@ -502,7 +526,7 @@ void CMario::SetState(int state)
 
         // MARIO JUMPING
     case MARIO_STATE_JUMP:
-        if (isSitting || isSpinning) break;
+        if (isSitting) break;
         if (isOnPlatform)
         {
             isOnPlatform = false;
@@ -514,7 +538,7 @@ void CMario::SetState(int state)
         break;
 
     case MARIO_STATE_RELEASE_JUMP:
-        if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
+        ay = MARIO_GRAVITY;
         break;
 
         // BIG & RACCOON MARIO SITTING

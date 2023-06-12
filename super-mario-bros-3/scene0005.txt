@@ -224,6 +224,13 @@ decoration.txt
 
 #Portal 
 
+
+#KOOPA
+3	576	148	1	0
+
+#GOOMBA
+2	218	179
+
 # MARIO
 0	40	170
 #0	1312	-230
