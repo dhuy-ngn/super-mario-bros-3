@@ -50,8 +50,7 @@ void CColorBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
 
-	if ((mario->GetY() > this->y + MARIO_SMALL_BBOX_HEIGHT && mario->GetLevel() == MARIO_LEVEL_SMALL)
-		|| (mario->GetY() > this->y + MARIO_BIG_BBOX_HEIGHT && mario->GetLevel() != MARIO_LEVEL_SMALL))
+	if (mario->GetY() > this->y)
 	{
 		SetIsBlocking(0);
 	}

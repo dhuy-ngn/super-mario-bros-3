@@ -183,7 +183,7 @@ void CMario::OnCollisionWithDecorBlock(LPCOLLISIONEVENT e)
     CColorBlock* color_block = dynamic_cast<CColorBlock*>(e->obj);
 
     if (e->ny > 0) {
-        color_block->SetIsBlocking(1);
+        this->isOnPlatform = true;
     }
 }
 
