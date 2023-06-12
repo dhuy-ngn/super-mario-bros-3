@@ -2,7 +2,7 @@
 #include "FireTrap.h"
 #include "Mario.h"
 
-FireBullet::FireBullet(float bx, float by, bool up, bool right) {
+CFireBullet::CFireBullet(float bx, float by, bool up, bool right) {
 	if (up) {
 		y = by;
 		vy = -BULLET_SPEED_Y;
@@ -24,14 +24,14 @@ FireBullet::FireBullet(float bx, float by, bool up, bool right) {
 	}
 }
 
-void FireBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+void CFireBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt, coObjects);
 
 	x += vx * dt;
 	y += vy * dt;
 }
 
-void FireBullet::Render()
+void CFireBullet::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 
@@ -44,7 +44,7 @@ void FireBullet::Render()
 	animations->Get(aniId)->Render(x, y);
 }
 
-void FireBullet::GetBoundingBox(float& l, float& t, float& r, float& b)
+void CFireBullet::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x - BULLET_BBOX_WIDTH / 2;
 	t = y - BULLET_BBOX_HEIGHT / 2;

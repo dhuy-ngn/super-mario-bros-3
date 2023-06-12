@@ -14,12 +14,12 @@
 
 #define STOP_TIME	3000
 
-class FireBullet : public CGameObject
+class CFireBullet : public CGameObject
 {
     virtual void Render();
     virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 public:
-    FireBullet(float bx, float by, bool up, bool right);
+    CFireBullet(float bx, float by, bool up, bool right);
     virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
     virtual int IsCollidable() { return 1; };
     virtual int IsBlocking() { return 0; }
