@@ -6,7 +6,8 @@
 #define BULLET_BBOX_HEIGHT	9
 
 #define BULLET_SPEED_X	0.05f
-#define BULLET_SPEED_Y	0.03f
+#define BULLET_SPEED_Y	0.04f
+#define BULLET_SPEED_Y_MAX  0.03f
 
 #define BULLET_ANI_RIGHT		7120
 #define BULLET_ANI_LEFT			7121	
