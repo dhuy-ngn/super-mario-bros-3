@@ -76,6 +76,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
         OnCollisionWithFireBullet(e);
     else if (dynamic_cast<CMushroom*>(e->obj))
         OnCollisionWithMushroom(e);
+    else if (dynamic_cast<CLeaf*>(e->obj))
+        OnCollisionWithLeaf(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -241,6 +243,15 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
     if (level == MARIO_LEVEL_SMALL)
     {
         SetLevel(MARIO_LEVEL_BIG);
+        e->obj->Delete();
+    }
+}
+
+void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
+{
+    if (level == MARIO_LEVEL_BIG)
+    {
+        SetLevel(MARIO_LEVEL_RACCOON);
         e->obj->Delete();
     }
 }
