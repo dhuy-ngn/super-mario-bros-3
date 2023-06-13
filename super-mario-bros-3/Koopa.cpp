@@ -81,7 +81,8 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		//OnCollisionWithGoomba(e);
 	if (dynamic_cast<CQuestionBlock*>(e->obj))
 		OnCollisionWithQuestionBlock(e);
-	// collide with piranha plant
+	if (dynamic_cast<CFireTrap*>(e->obj))
+		OnCollisionWithFireTrap(e);
 	if (dynamic_cast<CPlatform*>(e->obj))
 		OnCollisionWithPlatform(e);
 
@@ -258,5 +259,13 @@ void CKoopa::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 			vx = -vx;
 		if (vx < 0 && x <= e->obj->GetX() - 4)
 			vx = -vx;
+	}
+}
+
+void CKoopa::OnCollisionWithFireTrap(LPCOLLISIONEVENT e)
+{
+	if (state == KOOPA_STATE_SPINNING_LEFT || state == KOOPA_STATE_SPINNING_RIGHT || state == KOOPA_STATE_HIDING)
+	{
+		e->obj->Delete();
 	}
 }

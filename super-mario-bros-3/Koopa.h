@@ -107,6 +107,7 @@ protected:
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e);
 	void OnCollisionWithPlatform(LPCOLLISIONEVENT e);
+	void OnCollisionWithFireTrap(LPCOLLISIONEVENT e);
 
 	int GetAniIdRedKoopaNormal();
 	int GetAniIdGreenKoopaNormal();
