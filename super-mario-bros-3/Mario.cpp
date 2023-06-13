@@ -19,13 +19,26 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     vy += ay * dt;
     vx += ax * dt;
 
-    if (abs(vx) > abs(maxVx)) vx = maxVx;
+    if (abs(vx) > abs(maxVx))
+    {
+        vx = maxVx;
+        if (this->GetLevel() == MARIO_LEVEL_RACCOON)
+            canFly = true;
+    }
+
+    if (abs(vy) > abs(maxVy)) vy = maxVy;
 
     // reset untouchable timer if untouchable time has passed
     if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
     {
         untouchable_start = 0;
         untouchable = 0;
+    }
+
+    if (GetTickCount64() - fly_up_start_time > MARIO_MAX_FLY_TIME && fly_up_start_time > 0)
+    {
+        canFly = false;
+        fly_up_start_time = -1;
     }
 
     CGameObject::Update(dt, coObjects);
@@ -563,6 +576,7 @@ void CMario::SetState(int state)
 
     case MARIO_STATE_RELEASE_JUMP:
         ay = MARIO_GRAVITY;
+        maxVy = 999.0f;
         break;
 
         // BIG & RACCOON MARIO SITTING
@@ -626,6 +640,24 @@ void CMario::SetState(int state)
     //    if (level != MARIO_LEVEL_RACCOON) break;
     //    ay = MARIO_RACCOON_GRAVITY;
     //    break;
+
+    case MARIO_STATE_FLY:
+        isFlying = true;
+        ay = -MARIO_ACCEL_FLYING_Y;
+        maxVy = -MARIO_FLYING_SPEED;
+        break;
+
+    case MARIO_STATE_FLY_LEFT:
+        isFlying = true;
+        ay = -MARIO_ACCEL_FLYING_Y;
+        maxVy = -MARIO_FLYING_SPEED;
+        break;
+
+    case MARIO_STATE_FLY_RIGHT:
+        isFlying = true;
+        ay = -MARIO_ACCEL_FLYING_Y;
+        maxVy = -MARIO_FLYING_SPEED;
+        break;
 
         // IDLE
     case MARIO_STATE_IDLE:

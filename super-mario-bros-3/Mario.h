@@ -8,7 +8,7 @@
 
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
-#define MARIO_FLYING_SPEED	0.08f
+#define MARIO_FLYING_SPEED	0.1f
 #define	MARIO_FALLING_SPEED	0.1f
 #define	MARIO_RACCOON_FALLING_SPEED	0.03f
 #define MARIO_SPINNING_SPEED	0.08f
@@ -20,11 +20,14 @@
 
 #define MARIO_JUMP_SPEED_Y		0.36f
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
+#define MARIO_ACCEL_FLYING_Y 0.1f
 
 #define MARIO_GRAVITY			0.001f
 #define MARIO_LANDING_SPEED	0.0007f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.25f
+
+#define MARIO_MAX_FLY_TIME	5000
 
 #define MARIO_STATE_DIE				-10
 #define MARIO_STATE_FALL_OFF	-99
@@ -168,7 +171,10 @@ class CMario : public CGameObject
 	BOOLEAN isSitting;
 	BOOLEAN isSpinning;
 	BOOLEAN isFlying;
+	BOOLEAN canFly;
+	ULONGLONG fly_up_start_time = -1;
 	float maxVx;
+	float maxVy;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
 
@@ -201,7 +207,9 @@ public:
 		isSitting = false;
 		isSpinning = false;
 		isFlying = false;
+		canFly = false;
 		maxVx = 0.0f;
+		maxVy = 999.0f;
 		ax = 0.0f;
 		if (level != MARIO_LEVEL_RACCOON)
 			ay = MARIO_GRAVITY;
@@ -238,4 +246,7 @@ public:
 	float GetY() { return this->y; }
 	float GetVx() { return this->vx; }
 	float GetVy() { return this->vy; }
+	BOOLEAN IsFlying() { return this->isFlying; }
+	BOOLEAN CanFly() { return this->canFly; }
+	void StartFlying() { fly_up_start_time = GetTickCount64(); }
 };
