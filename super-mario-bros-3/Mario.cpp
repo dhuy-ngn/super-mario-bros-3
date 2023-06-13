@@ -586,76 +586,46 @@ void CMario::SetState(int state)
         }
         break;
 
-        // RACCOON MARIO FLYING
-    case MARIO_STATE_FLY:
+        // RACCOON MARIO LAND
+    case MARIO_STATE_LAND:
         if (isSitting) break;
+        if (isOnPlatform) break;
         if (level != MARIO_LEVEL_RACCOON) break;
         isFlying = true;
-        if (vy < 0)
-            vy += MARIO_RACCOON_GRAVITY;
-        else {
-            vy = 0.0f;
-            vx = 0;
-            ax = 0;
-            state = MARIO_STATE_IDLE;
-            break;
-        }
+        vy = MARIO_LANDING_SPEED;
+
         ax = 0.0f;
         vx = 0.0f;
         break;
 
-    case MARIO_STATE_FLY_RIGHT:
+    case MARIO_STATE_LAND_RIGHT:
         if (isSitting) break;
+        if (isOnPlatform) break;
         if (level != MARIO_LEVEL_RACCOON) break;
         isFlying = true;
-        if (vy < 0)
-            vy += MARIO_RACCOON_GRAVITY;
-        else {
-            vy = 0.0f;
-            vx = MARIO_WALKING_SPEED;
-            ax = MARIO_ACCEL_WALK_X;
-            state = MARIO_STATE_WALKING_RIGHT;
-            break;
-        }
+        vy = MARIO_LANDING_SPEED;
         maxVx = MARIO_FLYING_SPEED;
         ax = MARIO_ACCEL_FLYING_X;
         nx = 1;
         break;
 
-    case MARIO_STATE_FLY_LEFT:
+    case MARIO_STATE_LAND_LEFT:
         if (isSitting) break;
+        if (isOnPlatform) break;
         if (level != MARIO_LEVEL_RACCOON) break;
         isFlying = true;
-        if (vy < 0)
-            vy += MARIO_RACCOON_GRAVITY;
-        else {
-            vy = 0.0f;
-            vx = -MARIO_WALKING_SPEED;
-            ax = -MARIO_ACCEL_WALK_X;
-            state = MARIO_STATE_WALKING_LEFT;
-            break;
-        }
+        vy = MARIO_LANDING_SPEED;
         maxVx = -MARIO_FLYING_SPEED;
         ax = -MARIO_ACCEL_FLYING_X;
         nx = -1;
         break;
 
         // RACCOON MARIO LANDING
-    case MARIO_STATE_LAND:
-        if (isSitting) break;
-        if (level != MARIO_LEVEL_RACCOON) break;
-        if (vy < 0)
-            vy += MARIO_JUMP_SPEED_Y / 2;
-        else vy = 0.0f;
-        break;
-
-        // RACCOON MARIO SPINNING 
-    case MARIO_STATE_ATTACK:
-        if (isSitting) break;
-        ax = 0.0f;
-        vx = 0.0f;
-        isSpinning = true;
-        break;
+    //case MARIO_STATE_LAND:
+    //    if (isSitting) break;
+    //    if (level != MARIO_LEVEL_RACCOON) break;
+    //    ay = MARIO_RACCOON_GRAVITY;
+    //    break;
 
         // IDLE
     case MARIO_STATE_IDLE:

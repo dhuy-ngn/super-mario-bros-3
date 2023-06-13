@@ -22,7 +22,7 @@
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
 
 #define MARIO_GRAVITY			0.001f
-#define MARIO_RACCOON_GRAVITY	0.0007f
+#define MARIO_LANDING_SPEED	0.0007f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.25f
 
@@ -206,7 +206,7 @@ public:
 		if (level != MARIO_LEVEL_RACCOON)
 			ay = MARIO_GRAVITY;
 		else
-			ay = MARIO_RACCOON_GRAVITY;
+			ay = 0;
 
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
