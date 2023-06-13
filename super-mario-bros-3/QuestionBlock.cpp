@@ -66,10 +66,19 @@ void CQuestionBlock::ReleaseItem()
 	case QUESTION_BLOCK_CONTAINS_COIN:
 		break;
 	case QUESTION_BLOCK_CONTAINS_MUSHROOM:
-		this->mushroom = new CMushroom(x, y);
-		mushroom->SetState(MUSHROOM_STATE_IDLE);
-		current_scene->UnshiftObject(mushroom);
-		break;
+		switch (mario->GetLevel())
+		{
+		case MARIO_LEVEL_SMALL:
+			mushroom = new CMushroom(x, y);
+			current_scene->UnshiftObject(mushroom);
+			mushroom->SetState(MUSHROOM_STATE_IDLE);
+			break;
+		default:
+			leaf = new CLeaf(x, y);
+			current_scene->UnshiftObject(leaf);
+			leaf->SetState(LEAF_STATE_UP);
+			break;
+		}
 	default:
 		break;
 	}

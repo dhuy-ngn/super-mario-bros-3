@@ -7,6 +7,7 @@
 #include "debug.h"
 #include "Mushroom.h"
 #include "Coin.h"
+#include "Leaf.h"
 
 #define QUESTION_BLOCK_BBOX_WIDTH	15
 #define	QUESTION_BLOCK_BBOX_HEIGHT 15
@@ -41,6 +42,7 @@ protected:
 
 	CCoin* coin = NULL;
 	CMushroom* mushroom = NULL;
+	CLeaf* leaf = NULL;
 
 public:
 	CQuestionBlock(float x, float y, int contain) : CGameObject(x, y)
