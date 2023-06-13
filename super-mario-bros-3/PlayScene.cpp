@@ -169,8 +169,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case OBJECT_TYPE_QUESTION_BLOCK:
 	{
-		int isContainingPowerup = (int)atoi(tokens[3].c_str());
-		obj = new CQuestionBlock(x, y, isContainingPowerup);
+		int contain = (int)atoi(tokens[3].c_str());
+		obj = new CQuestionBlock(x, y, contain);
 		break;
 	}
 

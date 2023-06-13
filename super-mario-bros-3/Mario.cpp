@@ -174,7 +174,9 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
     if (question_block->GetState() != QUESTION_BLOCK_STATE_INACTIVE && e->ny > 0)
     {
         question_block->SetState(QUESTION_BLOCK_STATE_INACTIVE);
-        coin++;
+        if (question_block->GetContain() == QUESTION_BLOCK_CONTAINS_COIN)
+            coin++;
+        question_block->ReleaseItem();
     }
 }
 

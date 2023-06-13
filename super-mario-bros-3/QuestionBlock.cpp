@@ -1,4 +1,5 @@
 #include "QuestionBlock.h"
+#include "PlayScene.h"
 
 void CQuestionBlock::Render()
 {
@@ -53,4 +54,22 @@ void CQuestionBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
 	t = y - QUESTION_BLOCK_BBOX_HEIGHT / 2;
 	r = l + QUESTION_BLOCK_BBOX_WIDTH;
 	b = t + QUESTION_BLOCK_BBOX_HEIGHT;
+}
+
+void CQuestionBlock::ReleaseItem()
+{
+	CPlayScene* current_scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CMario* mario = dynamic_cast<CMario*>(current_scene->GetPlayer());
+
+	switch (contain)
+	{
+	case QUESTION_BLOCK_CONTAINS_COIN:
+		break;
+	case QUESTION_BLOCK_CONTAINS_MUSHROOM:
+		this->mushroom = new CMushroom(x, y);
+		current_scene->UnshiftObject(mushroom);
+		break;
+	default:
+		break;
+	}
 }

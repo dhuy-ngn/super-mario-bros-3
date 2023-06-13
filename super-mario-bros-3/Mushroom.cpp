@@ -52,7 +52,7 @@ void CMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 void CMushroom::SetState(int state)
 {
 	CGameObject::SetState(state);
-	CMario* mario = dynamic_cast<CMario*>((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
 	switch (state)
 	{
 	case MUSHROOM_STATE_IDLE:
@@ -61,7 +61,7 @@ void CMushroom::SetState(int state)
 
 	case MUSHROOM_STATE_MOVE:
 		this->vy = MUSHROOM_GRAVITY;
-		vx = -mario->GetVx() * MUSHROOM_MOVING_SPEED;
+		vx = -mario->GetVx() / mario->GetVx() * MUSHROOM_MOVING_SPEED;
 		break;
 	case MUSHROOM_STATE_DELETED:
 		this->Delete();

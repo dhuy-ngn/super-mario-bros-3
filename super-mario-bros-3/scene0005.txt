@@ -20,6 +20,8 @@ question_block.txt
 HUD.txt
 #
 decoration.txt
+#
+powerup.txt
 [OBJECTS]
 # type	x	y	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
@@ -185,7 +187,7 @@ decoration.txt
 
 #Question block
 6	175	130	0
-6	190	130	0
+6	190	130	1
 6	218	85	0
 6	233	85	0
 6	416	98	0

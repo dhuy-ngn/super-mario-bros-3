@@ -43,6 +43,7 @@ public:
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
 
 	void PushObject(LPGAMEOBJECT obj) { this->objects.insert(objects.end() - 1, obj); }
+	void UnshiftObject(LPGAMEOBJECT obj) { this->objects.insert(objects.begin(), obj); }
 };
 
 typedef CPlayScene* LPPLAYSCENE;
