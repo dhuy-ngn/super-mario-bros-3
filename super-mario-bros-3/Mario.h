@@ -6,7 +6,7 @@
 
 #include "debug.h"
 
-#define MARIO_WALKING_SPEED		0.07f
+#define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.25f
 #define MARIO_FLYING_SPEED	0.1f
 #define	MARIO_FALLING_SPEED	0.1f

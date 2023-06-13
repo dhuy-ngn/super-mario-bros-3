@@ -39,12 +39,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         untouchable = 0;
     }
 
-    //if (GetTickCount64() - fly_up_start > MARIO_MAX_FLY_TIME && fly_up_start > 0)
-    //{
-    //    canFly = false;
-    //    fly_up_start = -1;
-    //}
-
     CGameObject::Update(dt, coObjects);
     CCollision::GetInstance()->Process(this, dt, coObjects);
 }
