@@ -34,9 +34,6 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_R: // reset
 		//Reload();
 		break;
-	case DIK_LSHIFT:
-		mario->SetState(MARIO_STATE_KICK);
-		break;
 	}
 }
 
@@ -55,9 +52,6 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 		break;
 	case DIK_X:
 		mario->SetState(MARIO_STATE_LAND);
-		break;
-	case DIK_LSHIFT:
-		mario->SetState(MARIO_STATE_IDLE);
 		break;
 	}
 }
