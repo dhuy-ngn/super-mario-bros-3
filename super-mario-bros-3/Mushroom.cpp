@@ -13,10 +13,10 @@ void CMushroom::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
-	if (state == MUSHROOM_STATE_MOVE) {
+	if (state == MUSHROOM_STATE_MOVE)
+	{
 		vy = MUSHROOM_GRAVITY;
 	}
-
 };
 
 void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -61,7 +61,7 @@ void CMushroom::SetState(int state)
 
 	case MUSHROOM_STATE_MOVE:
 		this->vy = MUSHROOM_GRAVITY;
-		vx = -mario->GetVx() / mario->GetVx() * MUSHROOM_MOVING_SPEED;
+		vx = -mario->GetNx() * MUSHROOM_MOVING_SPEED;
 		break;
 	case MUSHROOM_STATE_DELETED:
 		this->Delete();

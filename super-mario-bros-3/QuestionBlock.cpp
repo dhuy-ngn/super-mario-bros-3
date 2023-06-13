@@ -67,6 +67,7 @@ void CQuestionBlock::ReleaseItem()
 		break;
 	case QUESTION_BLOCK_CONTAINS_MUSHROOM:
 		this->mushroom = new CMushroom(x, y);
+		mushroom->SetState(MUSHROOM_STATE_IDLE);
 		current_scene->UnshiftObject(mushroom);
 		break;
 	default:
