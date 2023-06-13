@@ -74,6 +74,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
         OnCollisionWithFireTrap(e);
     else if (dynamic_cast<CFireBullet*>(e->obj))
         OnCollisionWithFireBullet(e);
+    else if (dynamic_cast<CMushroom*>(e->obj))
+        OnCollisionWithMushroom(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -231,6 +233,15 @@ void CMario::OnCollisionWithFireBullet(LPCOLLISIONEVENT e)
             DebugOut(L">>> Mario DIE >>> \n");
             SetState(MARIO_STATE_DIE);
         }
+    }
+}
+
+void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
+{
+    if (level == MARIO_LEVEL_SMALL)
+    {
+        SetLevel(MARIO_LEVEL_BIG);
+        e->obj->Delete();
     }
 }
 
