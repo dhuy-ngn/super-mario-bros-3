@@ -6,8 +6,8 @@
 
 #include "debug.h"
 
-#define MARIO_WALKING_SPEED		0.1f
-#define MARIO_RUNNING_SPEED		0.2f
+#define MARIO_WALKING_SPEED		0.07f
+#define MARIO_RUNNING_SPEED		0.25f
 #define MARIO_FLYING_SPEED	0.1f
 #define	MARIO_FALLING_SPEED	0.1f
 #define	MARIO_RACCOON_FALLING_SPEED	0.03f
@@ -172,7 +172,7 @@ class CMario : public CGameObject
 	BOOLEAN isSpinning;
 	BOOLEAN isFlying;
 	BOOLEAN canFly;
-	ULONGLONG fly_up_start_time = -1;
+
 	float maxVx;
 	float maxVy;
 	float ax;				// acceleration on x 
@@ -181,6 +181,7 @@ class CMario : public CGameObject
 	int level;
 	int untouchable;
 	ULONGLONG untouchable_start = 0;
+	ULONGLONG fly_up_start = 0;
 	ULONGLONG spinning_start = 0;
 	BOOLEAN isOnPlatform;
 	int coin;
@@ -221,6 +222,7 @@ public:
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+		fly_up_start = -1;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -248,5 +250,5 @@ public:
 	float GetVy() { return this->vy; }
 	BOOLEAN IsFlying() { return this->isFlying; }
 	BOOLEAN CanFly() { return this->canFly; }
-	void StartFlying() { fly_up_start_time = GetTickCount64(); }
+	void StartFlying() { fly_up_start = GetTickCount64(); }
 };

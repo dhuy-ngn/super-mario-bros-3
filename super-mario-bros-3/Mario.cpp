@@ -19,14 +19,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     vy += ay * dt;
     vx += ax * dt;
 
-    if (abs(vx) > abs(maxVx))
-    {
-        vx = maxVx;
-        if (this->GetLevel() == MARIO_LEVEL_RACCOON)
-            canFly = true;
-    }
-
+    if (abs(vx) > abs(maxVx)) vx = maxVx;
+    
     if (abs(vy) > abs(maxVy)) vy = maxVy;
+
+    if (abs(vx) == MARIO_RUNNING_SPEED)
+    {
+        canFly = true;
+    }
+    if (abs(vx) < MARIO_RUNNING_SPEED && !isFlying)
+    {
+        canFly = false;
+    }
 
     // reset untouchable timer if untouchable time has passed
     if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
@@ -35,11 +39,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         untouchable = 0;
     }
 
-    if (GetTickCount64() - fly_up_start_time > MARIO_MAX_FLY_TIME && fly_up_start_time > 0)
-    {
-        canFly = false;
-        fly_up_start_time = -1;
-    }
+    //if (GetTickCount64() - fly_up_start > MARIO_MAX_FLY_TIME && fly_up_start > 0)
+    //{
+    //    canFly = false;
+    //    fly_up_start = -1;
+    //}
 
     CGameObject::Update(dt, coObjects);
     CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -526,7 +530,7 @@ void CMario::Render()
 
     //RenderBoundingBox();
 
-    DebugOutTitle(L"Coins: %d", coin);
+    DebugOutTitle(L"Mario can fly: %d", canFly);
 }
 
 void CMario::SetState(int state)
@@ -607,7 +611,6 @@ void CMario::SetState(int state)
         if (level != MARIO_LEVEL_RACCOON) break;
         isFlying = true;
         vy = MARIO_LANDING_SPEED;
-
         ax = 0.0f;
         vx = 0.0f;
         break;
@@ -642,21 +645,32 @@ void CMario::SetState(int state)
     //    break;
 
     case MARIO_STATE_FLY:
+        if (isSitting) break;
+        if (isOnPlatform) break;
+        if (level != MARIO_LEVEL_RACCOON) break;
         isFlying = true;
         ay = -MARIO_ACCEL_FLYING_Y;
         maxVy = -MARIO_FLYING_SPEED;
         break;
 
     case MARIO_STATE_FLY_LEFT:
+        if (isSitting) break;
+        if (isOnPlatform) break;
+        if (level != MARIO_LEVEL_RACCOON) break;
         isFlying = true;
         ay = -MARIO_ACCEL_FLYING_Y;
         maxVy = -MARIO_FLYING_SPEED;
+        nx = -1;
         break;
 
     case MARIO_STATE_FLY_RIGHT:
+        if (isSitting) break;
+        if (isOnPlatform) break;
+        if (level != MARIO_LEVEL_RACCOON) break;
         isFlying = true;
         ay = -MARIO_ACCEL_FLYING_Y;
         maxVy = -MARIO_FLYING_SPEED;
+        nx = 1;
         break;
 
         // IDLE

@@ -85,7 +85,7 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 	}
 	else if (game->IsKeyDown(DIK_S))
 	{
-		if (mario->CanFly() || mario->IsFlying())
+		if (mario->CanFly())
 		{
 			if (!mario->IsFlying())
 				mario->StartFlying();
