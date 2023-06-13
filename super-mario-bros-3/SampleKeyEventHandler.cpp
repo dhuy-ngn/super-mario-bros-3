@@ -53,9 +53,6 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT_RELEASE);
 		break;
-	case DIK_Z:
-		mario->SetState(MARIO_STATE_IDLE);
-		break;
 	case DIK_X:
 		mario->SetState(MARIO_STATE_LAND);
 		break;
@@ -75,16 +72,13 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 			mario->SetState(MARIO_STATE_RUNNING_RIGHT);
 		else
 			mario->SetState(MARIO_STATE_WALKING_RIGHT);
+			mario->SetState(MARIO_STATE_LAND_RIGHT)
 	}
 	else if (game->IsKeyDown(DIK_LEFT))
 	{if (game->IsKeyDown(DIK_A))
 			mario->SetState(MARIO_STATE_RUNNING_LEFT);
 		else
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
-	}
-	else if (game->IsKeyDown(DIK_Z)) {
-		if (mario->GetLevel() == MARIO_LEVEL_RACCOON)
-			mario->SetState(MARIO_STATE_ATTACK);
 	}
 	else if (game->IsKeyDown(DIK_X)) {
 		mario->SetState(MARIO_STATE_FLY);
