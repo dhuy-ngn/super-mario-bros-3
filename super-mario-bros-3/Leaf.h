@@ -7,17 +7,17 @@
 #define LEAF_ANI_RIGHT		8004
 #define LEAF_ANI_LEFT		8003
 
-#define LEAF_UP_HEIGHT	 50
+#define LEAF_UP_HEIGHT	 40
 
-#define LEAF_GRAVITY		0.02f
-#define LEAF_SPEED			0.08f
-#define LEAF_SPEED_UP		0.05f
+#define LEAF_GRAVITY		0.025f
+#define LEAF_SPEED			0.06f
+#define LEAF_SPEED_UP		0.08f
 
 #define LEAF_STATE_IDLE		0
 #define LEAF_STATE_UP		100
 #define LEAF_STATE_FALLING	200
 
-#define LEAF_MAX_FLOATING_TIME	500
+#define LEAF_MAX_FLOATING_TIME	600
 
 
 class CLeaf:public CGameObject
