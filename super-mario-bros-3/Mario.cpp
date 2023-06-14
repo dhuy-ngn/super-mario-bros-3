@@ -199,9 +199,10 @@ void CMario::OnCollisionWithColorBlock(LPCOLLISIONEVENT e)
 {
     CColorBlock* color_block = dynamic_cast<CColorBlock*>(e->obj);
 
-    if (e->ny  < 0)
+    if (e->ny < 0)
     {
-        color_block->SetIsBlocking(1);
+        isOnPlatform = true;
+        vy = 0;
     }
 }
 
