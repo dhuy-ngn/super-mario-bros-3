@@ -2,6 +2,7 @@
 #include "debug.h"
 #include "QuestionBlock.h"
 #include "ColorBlock.h"
+#include "FireTrap.h"
 
 void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
@@ -67,14 +68,23 @@ void CKoopa::Render()
 	RenderBoundingBox();
 }
 
-void CKoopa::OnNoCollision(DWORD dt) {
+void CKoopa::OnNoCollision(DWORD dt) 
+{
 	x += vx * dt;
 	y += vy * dt;
 }
 
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return;
+	if (e->ny != 0 && e->obj->IsBlocking())
+	{
+		vy = 0;
+	}
+	else
+		if (e->nx != 0 && e->obj->IsBlocking())
+		{
+			vx = -vx;
+		}
 	if (dynamic_cast<CKoopa*>(e->obj))
 		OnCollisionWithKoopa(e);
 	//if (dynamic_cast<CGoomba*>(e->obj))
@@ -85,15 +95,6 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFireTrap(e);
 	if (dynamic_cast<CPlatform*>(e->obj))
 		OnCollisionWithPlatform(e);
-
-	if (e->ny != 0)
-	{
-		vy = 0;
-	}
-	else if (e->nx != 0)
-	{
-		vx = -vx;
-	}
 }
 
 int CKoopa::GetAniIdGreenKoopaNormal() {
@@ -253,6 +254,8 @@ void CKoopa::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 
 void CKoopa::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 {
+	CPlatform* platform = dynamic_cast <CPlatform*>(e->obj);
+
 	if (state == KOOPA_STATE_WALKING && IsRedKoopa())
 	{
 		if (vx > 0 && x >= e->obj->GetX() + 4)
