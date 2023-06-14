@@ -2,6 +2,8 @@
 #include "GameObject.h"
 
 #include "debug.h"
+#include "Mario.h"
+#include "ColorBlock.h"
 
 #define BLOCK_PUSH_FACTOR 0.4f
 
@@ -334,6 +336,28 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 				x += dx;
 				y += dy;
 			}
+
+	// Since collisions against color blocks use a different logic than the usual
+		for (UINT i = 0; i < coEvents.size(); i++) 
+		{
+			float sl, st, sr, sb;		// static object bbox
+			float ml, mt, mr, mb;		// moving object bbox
+			LPCOLLISIONEVENT e = coEvents[i];
+			if (dynamic_cast<CMario*>(e->src_obj))
+			{
+				CMario* mario = dynamic_cast<CMario*>(e->src_obj);
+				e->src_obj->GetBoundingBox(ml, mt, mr, mb);
+				if (dynamic_cast<CColorBlock*>(e->obj)) 
+				{
+					CColorBlock* color_block = dynamic_cast<CColorBlock*>(e->obj);
+					e->obj->GetBoundingBox(sl, st, sr, sb);
+					if (e->nx != 0)
+					{
+						x += dx;
+					}
+				}
+			}
+		}
 
 		objSrc->SetPosition(x, y);
 	}
