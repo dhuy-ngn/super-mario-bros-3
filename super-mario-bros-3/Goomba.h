@@ -65,4 +65,6 @@ public:
 	virtual void SetState(int state);
 	int GetAniIdRedGoomba();
 	int GetAniIdYellowGoomba();
+	int GetLevel() { return this->level; }
+	void SetLevel(int level) { this->level = level; }
 };
