@@ -351,8 +351,9 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 				if (e->nx != 0)
 				{
 					x += dx;
+					e->src_obj->SetSpeed(vx, vy);
 				}
-				if (e->ny > 0 )
+				if (e->ny > 0)
 				{
 					y += dy;
 					e->src_obj->SetSpeed(vx, vy);
