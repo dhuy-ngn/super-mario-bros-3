@@ -1,14 +1,6 @@
 #include "Goomba.h"
 #include "Koopa.h"
 
-CGoomba::CGoomba(float x, float y) :CGameObject(x, y)
-{
-	this->ax = 0;
-	this->ay = GOOMBA_GRAVITY;
-	die_start = -1;
-	SetState(GOOMBA_STATE_WALKING);
-}
-
 void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	if (state == GOOMBA_STATE_DIE)
@@ -68,11 +60,11 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CGoomba::Render()
 {
-	int aniId = ID_ANI_GOOMBA_WALKING;
-	if (state == GOOMBA_STATE_DIE)
-	{
-		aniId = ID_ANI_GOOMBA_DIE;
-	}
+	int aniId = -1;
+	if (color == GOOMBA_COLOR_RED)
+		aniId = GetAniIdRedGoomba();
+	else
+		aniId = GetAniIdYellowGoomba();
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
@@ -108,4 +100,46 @@ void CGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e) {
 		SetState(GOOMBA_STATE_KNOCKED_OUT);
 	}
 	else return;
+}
+
+int CGoomba::GetAniIdRedGoomba()
+{
+	int aniId = -1;
+	if (level == GOOMBA_LEVEL_PARA)
+	{
+		aniId = ID_ANI_RED_PARAGOOMBA_SKIPPING;
+	}
+	else
+	{
+		switch (state)
+		{
+		case GOOMBA_STATE_WALKING:
+			aniId = ID_ANI_RED_GOOMBA_WALKING;
+			break;
+		case GOOMBA_STATE_DIE:
+		case GOOMBA_STATE_KNOCKED_OUT:
+			aniId = ID_ANI_RED_GOOMBA_DIE;
+			break;
+		}
+	}
+
+	if (aniId == -1) aniId = ID_ANI_RED_GOOMBA_WALKING;
+	return aniId;
+}
+
+int CGoomba::GetAniIdYellowGoomba()
+{
+	int aniId = -1;
+	switch (state)
+	{
+	case GOOMBA_STATE_WALKING:
+		aniId = ID_ANI_YELLOW_GOOMBA_WALKING;
+		break;
+	case GOOMBA_STATE_DIE:
+	case GOOMBA_STATE_KNOCKED_OUT:
+		aniId = ID_ANI_YELLOW_GOOMBA_DIE;
+		break;
+	}
+	if (aniId == -1) aniId = ID_ANI_YELLOW_GOOMBA_WALKING;
+	return aniId;
 }
