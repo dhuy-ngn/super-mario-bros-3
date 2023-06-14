@@ -30,6 +30,9 @@ public:
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void RenderBoundingBox();
+
+	float GetTotalWidth() { return this->length * this->cellWidth; }
+	BOOLEAN IsDeadEnd();
 };
 
 typedef CPlatform* LPPLATFORM;

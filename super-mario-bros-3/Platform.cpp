@@ -28,6 +28,26 @@ void CPlatform::RenderBoundingBox()
 	CGame::GetInstance()->Draw(xx - cx, y - cy, bbox, nullptr, BBOX_ALPHA, rect.right - 1, rect.bottom - 1);
 }
 
+BOOLEAN CPlatform::IsDeadEnd()
+{
+	vector<LPGAMEOBJECT> coObjects;
+	for (size_t i = 0; i < coObjects.size(); i++)
+	{
+		if (dynamic_cast<CPlatform*>(coObjects[i]))
+		{
+			float l1, t1, r1, b1;
+			float l2, t2, r2, b2;
+
+			this->GetBoundingBox(l1, t1, r1, b1);
+			coObjects[i]->GetBoundingBox(l2, t2, r2, b2);
+
+			if ((t1 == t2) && (l2 <= r1 || l1 <= r2))
+				return false;
+		}
+	}
+	return true;
+}
+
 void CPlatform::Render()
 {
 	if (this->length <= 0) return; 
