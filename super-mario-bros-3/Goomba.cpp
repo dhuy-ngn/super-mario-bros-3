@@ -11,12 +11,20 @@ void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& botto
 		bottom = top + GOOMBA_BBOX_HEIGHT_DIE;
 	}
 	else
+		if (level == GOOMBA_LEVEL_NORMAL)
 	{
 		left = x - GOOMBA_BBOX_WIDTH / 2;
 		top = y - GOOMBA_BBOX_HEIGHT / 2;
 		right = left + GOOMBA_BBOX_WIDTH;
 		bottom = top + GOOMBA_BBOX_HEIGHT;
 	}
+		else
+		{
+			left = x - GOOMBA_PARA_BBOX_WIDTH / 2;
+			top = y - GOOMBA_PARA_BBOX_HEIGHT / 2;
+			right = left + GOOMBA_PARA_BBOX_WIDTH;
+			bottom = top + GOOMBA_PARA_BBOX_HEIGHT;
+		}
 }
 
 void CGoomba::OnNoCollision(DWORD dt)
