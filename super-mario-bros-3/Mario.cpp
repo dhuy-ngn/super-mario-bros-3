@@ -79,7 +79,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
     else if (dynamic_cast<CQuestionBlock*>(e->obj))
         OnCollisionWithQuestionBlock(e);
     else if (dynamic_cast<CColorBlock*>(e->obj))
-        OnCollisionWithDecorBlock(e);
+        OnCollisionWithColorBlock(e);
     // Collide with Piranha Plants
     else if (dynamic_cast<CFireTrap*>(e->obj))
         OnCollisionWithFireTrap(e);
@@ -195,12 +195,19 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
     }
 }
 
-void CMario::OnCollisionWithDecorBlock(LPCOLLISIONEVENT e)
+void CMario::OnCollisionWithColorBlock(LPCOLLISIONEVENT e)
 {
     CColorBlock* color_block = dynamic_cast<CColorBlock*>(e->obj);
 
-    if (e->ny > 0) {
-        this->isOnPlatform = true;
+    if (e->ny < 0)
+    {
+        vy = 0;
+        ay = 0;
+        isOnPlatform = true;
+    }
+    else
+    {
+        ay = MARIO_GRAVITY;
     }
 }
 

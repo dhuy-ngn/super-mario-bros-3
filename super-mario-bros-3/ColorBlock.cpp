@@ -46,19 +46,19 @@ void CColorBlock::Render()
 	//RenderBoundingBox();
 }
 
-void CColorBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
-
-	if (mario->GetY() > this->y)
-	{
-		SetIsBlocking(0);
-	}
-	if (mario->GetVy() > 0)
-	{
-		SetIsBlocking(1);
-	}
-}
+//void CColorBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+//{
+//	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+//
+//	if (mario->GetY() > this->y)
+//	{
+//		SetIsBlocking(0);
+//	}
+//	if (mario->GetVy() > 0)
+//	{
+//		SetIsBlocking(1);
+//	}
+//}
 
 void CColorBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
 {

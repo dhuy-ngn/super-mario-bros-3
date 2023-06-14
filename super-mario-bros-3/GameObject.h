@@ -38,6 +38,7 @@ public:
 
 	int GetState() { return this->state; }
 	float GetX() { return this->x; }
+	float GetY() { return this->y; }
 	virtual void Delete() { isDeleted = true;  }
 	bool IsDeleted() { return isDeleted; }
 	int GetNx() { return this->nx; }
