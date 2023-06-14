@@ -32,7 +32,11 @@ public:
 	void RenderBoundingBox();
 
 	float GetTotalWidth() { return this->length * this->cellWidth; }
-	BOOLEAN IsDeadEnd();
+	BOOLEAN IsDeadEndLeft();
+	BOOLEAN IsDeadEndRight();
+
+	float GetX() { return this->x; }
+	float GetMaxX() { return this->x + this->cellWidth * this->length; }
 };
 
 typedef CPlatform* LPPLATFORM;

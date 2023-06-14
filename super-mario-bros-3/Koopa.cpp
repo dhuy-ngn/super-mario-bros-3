@@ -258,9 +258,9 @@ void CKoopa::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 
 	if (state == KOOPA_STATE_WALKING && IsRedKoopa())
 	{
-		if (vx > 0 && x >= e->obj->GetX() + 4)
+		if (vx > 0 && x >= platform->GetX() + KOOPA_BBOX_WIDTH)
 			vx = -vx;
-		if (vx < 0 && x <= e->obj->GetX() - 4)
+		if (vx < 0 && x <= platform->GetMaxX() - KOOPA_BBOX_WIDTH)
 			vx = -vx;
 	}
 }
