@@ -184,14 +184,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float cell_width = (float)atof(tokens[3].c_str());
 		float cell_height = (float)atof(tokens[4].c_str());
 		int length = atoi(tokens[5].c_str());
-		int sprite_begin = atoi(tokens[6].c_str());
-		int sprite_middle = atoi(tokens[7].c_str());
-		int sprite_end = atoi(tokens[8].c_str());
 
 		obj = new CColorBlock(
 			x, y,
-			cell_width, cell_height, length,
-			sprite_begin, sprite_middle, sprite_end
+			cell_width, cell_height, length
 		);
 
 		break;
@@ -234,7 +230,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	// General object setup
 	obj->SetPosition(x, y);
-
 
 	objects.push_back(obj);
 }
@@ -328,12 +323,27 @@ void CPlayScene::Update(DWORD dt)
 	float cx, cy;
 	player->GetPosition(cx, cy);
 
+	float minCamX, maxCamX;
+
 	CGame* game = CGame::GetInstance();
+
+	minCamX = cx - game->GetBackBufferWidth() / 2;
+	if (minCamX < 0) minCamX = 0;
+	maxCamX = minCamX + game->GetBackBufferWidth();
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
+		float ox, oy;
+		objects[i]->GetPosition(ox, oy);
 		// TODO: apply this Update logic to Koopa, FireTrap, Piranha plant etc
-		if (player->GetX() + game->GetBackBufferWidth() /2 < objects[i]->GetX() - GOOMBA_BBOX_WIDTH && dynamic_cast<CGoomba*>(objects[i])) {}
+		if (dynamic_cast<CGoomba*>(objects[i])
+			|| dynamic_cast<CKoopa*>(objects[i])
+			|| dynamic_cast<CFireTrap*>(objects[i])
+			|| dynamic_cast<CFireBullet*>(objects[i]))
+		{
+			if (minCamX < ox && ox < maxCamX)
+				objects[i]->Update(dt, &coObjects);
+		}
 		else
 			objects[i]->Update(dt, &coObjects);
 	}
