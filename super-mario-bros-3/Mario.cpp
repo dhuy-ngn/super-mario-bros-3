@@ -101,6 +101,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
         if (goomba->GetState() != GOOMBA_STATE_DIE)
         {
             if (goomba->GetLevel() == GOOMBA_LEVEL_PARA)
+            {
                 goomba->SetLevel(GOOMBA_LEVEL_NORMAL);
                 goomba->SetState(GOOMBA_STATE_WALKING);
             }

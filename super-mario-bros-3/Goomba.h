@@ -3,6 +3,8 @@
 
 #define GOOMBA_GRAVITY 0.002f
 #define GOOMBA_WALKING_SPEED 0.05f
+#define GOOMBA_SKIP_SPEED			0.2f
+#define GOOMBA_HIGHSKIP_SPEED		0.4f
 
 
 #define GOOMBA_BBOX_WIDTH 16
@@ -63,7 +65,10 @@ public:
 		this->ax = 0;
 		this->ay = GOOMBA_GRAVITY;
 		die_start = -1;
-		SetState(GOOMBA_STATE_WALKING);
+		if (this->level == GOOMBA_LEVEL_PARA)
+			SetState(GOOMBA_STATE_SKIP);
+		else
+			SetState(GOOMBA_STATE_WALKING);
 		this->paragoomba_jump_stack = 0;
 	};
 	virtual void SetState(int state);

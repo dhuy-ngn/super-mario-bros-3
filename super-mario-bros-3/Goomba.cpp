@@ -1,5 +1,6 @@
 #include "Goomba.h"
 #include "Koopa.h"
+#include "PlayScene.h"
 
 void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
@@ -12,12 +13,12 @@ void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& botto
 	}
 	else
 		if (level == GOOMBA_LEVEL_NORMAL)
-	{
-		left = x - GOOMBA_BBOX_WIDTH / 2;
-		top = y - GOOMBA_BBOX_HEIGHT / 2;
-		right = left + GOOMBA_BBOX_WIDTH;
-		bottom = top + GOOMBA_BBOX_HEIGHT;
-	}
+		{
+			left = x - GOOMBA_BBOX_WIDTH / 2;
+			top = y - GOOMBA_BBOX_HEIGHT / 2;
+			right = left + GOOMBA_BBOX_WIDTH;
+			bottom = top + GOOMBA_BBOX_HEIGHT;
+		}
 		else
 		{
 			left = x - GOOMBA_PARA_BBOX_WIDTH / 2;
@@ -43,6 +44,19 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (e->ny != 0)
 	{
 		vy = 0;
+		if (e->ny < 0 && level == GOOMBA_LEVEL_PARA && state != GOOMBA_STATE_DIE)
+		{
+			if (paragoomba_jump_stack == 3)
+			{
+				SetState(GOOMBA_STATE_HIGH_SKIP);
+			}
+			else
+			{
+				SetState(GOOMBA_STATE_SKIP);
+			}
+		}
+		else
+			ay = GOOMBA_GRAVITY;
 	}
 	else if (e->nx != 0)
 	{
@@ -96,6 +110,19 @@ void CGoomba::SetState(int state)
 	case GOOMBA_STATE_KNOCKED_OUT:
 		die_start = GetTickCount64();
 		vy = -0.7f;
+		break;
+	case GOOMBA_STATE_SKIP:
+		ay = GOOMBA_GRAVITY;
+		vy = -GOOMBA_SKIP_SPEED;
+		vx = -GOOMBA_WALKING_SPEED;
+		paragoomba_jump_stack++;
+		break;
+	case GOOMBA_STATE_HIGH_SKIP:
+		vy = -GOOMBA_HIGHSKIP_SPEED;
+		ay = GOOMBA_GRAVITY;
+		vx = -GOOMBA_WALKING_SPEED;
+		paragoomba_jump_stack = 0;
+		break;
 	}
 }
 
@@ -125,8 +152,13 @@ int CGoomba::GetAniIdRedGoomba()
 			aniId = ID_ANI_RED_GOOMBA_WALKING;
 			break;
 		case GOOMBA_STATE_DIE:
-		case GOOMBA_STATE_KNOCKED_OUT:
 			aniId = ID_ANI_RED_GOOMBA_DIE;
+			break;
+		case GOOMBA_STATE_HIGH_SKIP:
+			aniId = ID_ANI_RED_PARAGOOMBA_HIGH_SKIPPING;
+			break;
+		case GOOMBA_STATE_SKIP:
+			aniId = ID_ANI_RED_PARAGOOMBA_SKIPPING;
 			break;
 		}
 	}
@@ -144,7 +176,6 @@ int CGoomba::GetAniIdYellowGoomba()
 		aniId = ID_ANI_YELLOW_GOOMBA_WALKING;
 		break;
 	case GOOMBA_STATE_DIE:
-	case GOOMBA_STATE_KNOCKED_OUT:
 		aniId = ID_ANI_YELLOW_GOOMBA_DIE;
 		break;
 	}
