@@ -3,6 +3,7 @@
 #include "QuestionBlock.h"
 #include "ColorBlock.h"
 #include "FireTrap.h"
+#include "PlayScene.h"
 
 void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
@@ -246,10 +247,15 @@ void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 void CKoopa::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 {
 	CQuestionBlock* question_block = dynamic_cast<CQuestionBlock*>(e->obj);
+	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
 
 	if (question_block->GetState() != QUESTION_BLOCK_STATE_INACTIVE && IsSpinning())
+	{
 		question_block->SetState(QUESTION_BLOCK_STATE_INACTIVE);
-	else return;
+		if (question_block->GetContain() == QUESTION_BLOCK_CONTAINS_COIN)
+			mario->GainCoin();
+		question_block->ReleaseItem();
+	}
 }
 
 void CKoopa::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
