@@ -251,4 +251,5 @@ public:
 	BOOLEAN IsFlying() { return this->isFlying; }
 	BOOLEAN CanFly() { return this->canFly; }
 	void StartFlying() { fly_up_start = GetTickCount64(); }
+	void GainCoin() { this->coin++; }
 };
