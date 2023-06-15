@@ -18,6 +18,7 @@ start	5
 10	resources\textures\enemies.png
 20	resources\textures\misc.png
 21	resources\textures\misc2.png
+22	resources\textures\misc-3.png
 30	resources\tilemap\world1-1_bank.png
 31	resources\textures\tiles.png
 40	resources\textures\enemies-1.png
