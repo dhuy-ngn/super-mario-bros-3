@@ -102,6 +102,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
         {
             if (goomba->GetLevel() == GOOMBA_LEVEL_PARA)
                 goomba->SetLevel(GOOMBA_LEVEL_NORMAL);
+                goomba->SetState(GOOMBA_STATE_WALKING);
+            }
             else
                 goomba->SetState(GOOMBA_STATE_DIE);
             vy = -MARIO_JUMP_DEFLECT_SPEED;
