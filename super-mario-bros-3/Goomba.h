@@ -76,4 +76,5 @@ public:
 	int GetAniIdYellowGoomba();
 	int GetLevel() { return this->level; }
 	void SetLevel(int level) { this->level = level; }
+	int GetMarioDirection();
 };

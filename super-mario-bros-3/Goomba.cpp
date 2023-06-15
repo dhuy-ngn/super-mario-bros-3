@@ -95,6 +95,7 @@ void CGoomba::Render()
 void CGoomba::SetState(int state)
 {
 	CGameObject::SetState(state);
+
 	switch (state)
 	{
 	case GOOMBA_STATE_DIE:
@@ -114,13 +115,13 @@ void CGoomba::SetState(int state)
 	case GOOMBA_STATE_SKIP:
 		ay = GOOMBA_GRAVITY;
 		vy = -GOOMBA_SKIP_SPEED;
-		vx = -GOOMBA_WALKING_SPEED;
+		vx = -GOOMBA_WALKING_SPEED * GetMarioDirection();
 		paragoomba_jump_stack++;
 		break;
 	case GOOMBA_STATE_HIGH_SKIP:
 		vy = -GOOMBA_HIGHSKIP_SPEED;
 		ay = GOOMBA_GRAVITY;
-		vx = -GOOMBA_WALKING_SPEED;
+		vx = -GOOMBA_WALKING_SPEED * GetMarioDirection();
 		paragoomba_jump_stack = 0;
 		break;
 	}
@@ -181,4 +182,16 @@ int CGoomba::GetAniIdYellowGoomba()
 	}
 	if (aniId == -1) aniId = ID_ANI_YELLOW_GOOMBA_WALKING;
 	return aniId;
+}
+
+int CGoomba::GetMarioDirection()
+{
+	float x, y;
+	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+	if (mario != NULL)
+	{
+		mario->GetPosition(x, y);
+		return this->x >= x ? 1 : -1;
+	}
+	return NULL;
 }
