@@ -235,7 +235,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	// General object setup
 	obj->SetPosition(x, y);
 
-
 	objects.push_back(obj);
 }
 
@@ -333,6 +332,7 @@ void CPlayScene::Update(DWORD dt)
 	CGame* game = CGame::GetInstance();
 
 	minCamX = cx - game->GetBackBufferWidth() / 2;
+	if (minCamX < 0) minCamX = 0;
 	maxCamX = minCamX + game->GetBackBufferWidth();
 
 	for (size_t i = 0; i < objects.size(); i++)
@@ -340,11 +340,13 @@ void CPlayScene::Update(DWORD dt)
 		float ox, oy;
 		objects[i]->GetPosition(ox, oy);
 		// TODO: apply this Update logic to Koopa, FireTrap, Piranha plant etc
-		if (dynamic_cast<CGoomba*>(objects[i])) 
+		if (dynamic_cast<CGoomba*>(objects[i])
+			|| dynamic_cast<CKoopa*>(objects[i])
+			|| dynamic_cast<CFireTrap*>(objects[i])
+			|| dynamic_cast<CFireBullet*>(objects[i]))
 		{
 			if (minCamX < ox && ox < maxCamX)
 				objects[i]->Update(dt, &coObjects);
-			
 		}
 		else
 			objects[i]->Update(dt, &coObjects);
