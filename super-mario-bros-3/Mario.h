@@ -55,8 +55,9 @@
 #define MARIO_STATE_LAND_LEFT	802
 
 #define MARIO_STATE_ATTACK 900
+#define MARIO_STATE_ATTACK_RELEASE 901
 
-#define MARIO_STATE_KICK 901
+#define MARIO_STATE_KICK 910
 
 
 #pragma region ANIMATION_ID
@@ -139,7 +140,7 @@
 #define ID_ANI_MARIO_RACCOON_LANDING_RIGHT 3100
 #define ID_ANI_MARIO_RACCOON_LANDING_LEFT 3101
 
-#define ID_ANI_MARIO_RACCOON_SPIN 3300
+#define ID_ANI_MARIO_RACCOON_ATTACK 3300
 
 #pragma endregion
 
@@ -166,14 +167,14 @@
 #define MARIO_RACCOON_SITTING_BBOX_HEIGHT 16
 
 #define MARIO_UNTOUCHABLE_TIME 2500
-#define MARIO_SPINNING_TIME 100
+#define MARIO_ATTACKING_DURATION 300
 
 class CMario : public CGameObject
 {
 	CMarioTail* tail;
 
 	BOOLEAN isSitting;
-	BOOLEAN isSpinning;
+	BOOLEAN isAttacking;
 	BOOLEAN isFlying;
 	BOOLEAN canFly;
 
@@ -186,7 +187,7 @@ class CMario : public CGameObject
 	int untouchable;
 	ULONGLONG untouchable_start = 0;
 	ULONGLONG fly_up_start = 0;
-	ULONGLONG spinning_start = 0;
+	ULONGLONG attacking_start = 0;
 	BOOLEAN isOnPlatform;
 	int coin;
 
@@ -211,7 +212,7 @@ public:
 	{
 		tail = NULL;
 		isSitting = false;
-		isSpinning = false;
+		isAttacking = false;
 		isFlying = false;
 		canFly = false;
 		maxVx = 0.0f;
@@ -249,9 +250,11 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	int GetLevel() { return this->level; }
 	int GetCoin() { return this->coin; }
+	BOOLEAN IsAttacking() { return this->isAttacking; }
 	BOOLEAN IsFlying() { return this->isFlying; }
 	BOOLEAN CanFly() { return this->canFly; }
 	BOOLEAN ShouldTurnOnCamY() { return this->isFlying || y < 0; }
 	void StartFlying() { fly_up_start = GetTickCount64(); }
+	void StartAttacking() { attacking_start = GetTickCount64(); }
 	void GainCoin() { this->coin++; }
 };
