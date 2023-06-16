@@ -531,7 +531,7 @@ void CMario::Render()
 
     animations->Get(aniId)->Render(x, y);
 
-    //RenderBoundingBox();
+    RenderBoundingBox();
 
     DebugOutTitle(L"Mario can fly: %d", canFly);
 }
@@ -769,6 +769,7 @@ void CMario::SetLevel(int l)
     }
     else
     {
+        // Clear the tail if Mario's level is set from Raccoon to Big
         if (tail != NULL)
             tail->Delete();
     }

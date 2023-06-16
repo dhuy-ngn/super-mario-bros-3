@@ -354,9 +354,19 @@ void CPlayScene::Update(DWORD dt)
 	if (cx < 0) cx = 0;
 	if (cy > 0) cy = 0;
 
-	CGame::GetInstance()->SetCamPos(cx, cy + HUD_HEIGHT);
+	if (cy < -500 /*max cam Y height*/) cy = -500;
 
-	hud->SetPosition(cx+160, cy+219);
+	if (dynamic_cast<CMario*>(player)->ShouldTurnOnCamY())
+	{
+		CGame::GetInstance()->SetCamPos(cx, cy + HUD_HEIGHT);
+		hud->SetPosition(cx + 160, cy + 219);
+	}
+	else
+	{
+		CGame::GetInstance()->SetCamPos(cx, HUD_HEIGHT);
+		hud->SetPosition(cx + 160, 219);
+	}
+
 	hud->Update(dt, &coObjects);
 	PurgeDeletedObjects();
 }

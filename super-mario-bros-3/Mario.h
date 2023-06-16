@@ -249,12 +249,9 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	int GetLevel() { return this->level; }
 	int GetCoin() { return this->coin; }
-	float GetX() { return this->x; }
-	float GetY() { return this->y; }
-	float GetVx() { return this->vx; }
-	float GetVy() { return this->vy; }
 	BOOLEAN IsFlying() { return this->isFlying; }
 	BOOLEAN CanFly() { return this->canFly; }
+	BOOLEAN ShouldTurnOnCamY() { return this->isFlying || y < 0; }
 	void StartFlying() { fly_up_start = GetTickCount64(); }
 	void GainCoin() { this->coin++; }
 };
