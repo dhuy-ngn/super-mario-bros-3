@@ -354,7 +354,7 @@ void CPlayScene::Update(DWORD dt)
 	if (cx < 0) cx = 0;
 	if (cy > 0) cy = 0;
 
-	if (cy < -500 /*max cam Y height*/) cy = -500;
+	if (cy < -400 /*max cam Y height*/) cy = -400;
 
 	if (dynamic_cast<CMario*>(player)->ShouldTurnOnCamY())
 	{
