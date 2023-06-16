@@ -167,7 +167,7 @@
 #define MARIO_RACCOON_SITTING_BBOX_HEIGHT 16
 
 #define MARIO_UNTOUCHABLE_TIME 2500
-#define MARIO_ATTACKING_DURATION 300
+#define MARIO_ATTACKING_DURATION 150
 
 class CMario : public CGameObject
 {
@@ -175,6 +175,7 @@ class CMario : public CGameObject
 
 	BOOLEAN isSitting;
 	BOOLEAN isAttacking;
+	BOOLEAN isLanding;
 	BOOLEAN isFlying;
 	BOOLEAN canFly;
 
@@ -252,6 +253,7 @@ public:
 	int GetCoin() { return this->coin; }
 	BOOLEAN IsAttacking() { return this->isAttacking; }
 	BOOLEAN IsFlying() { return this->isFlying; }
+	BOOLEAN IsLanding() { return this->isLanding; }
 	BOOLEAN CanFly() { return this->canFly; }
 	BOOLEAN ShouldTurnOnCamY() { return this->isFlying || y < 0; }
 	void StartFlying() { fly_up_start = GetTickCount64(); }

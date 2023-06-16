@@ -368,7 +368,7 @@ int CMario::GetAniIdRaccoon()
     int aniId = -1;
     if (!isOnPlatform)
     {
-        if (vy >= 0 && !isFlying)
+        if(!isFlying && !isLanding)
             if (abs(ax) == MARIO_ACCEL_RUN_X)
             {
                 if (abs(vx) == MARIO_RUNNING_SPEED)
@@ -390,16 +390,18 @@ int CMario::GetAniIdRaccoon()
                     aniId = ID_ANI_MARIO_RACCOON_JUMP_WALK_LEFT;
             }
         else
+        {
             if (isFlying)
                 if (nx >= 0)
                     aniId = ID_ANI_MARIO_RACCOON_FLYING_RIGHT;
                 else
                     aniId = ID_ANI_MARIO_RACCOON_FLYING_LEFT;
-            else
+            if (isLanding)
                 if (nx >= 0)
                     aniId = ID_ANI_MARIO_RACCOON_LANDING_RIGHT;
                 else
                     aniId = ID_ANI_MARIO_RACCOON_LANDING_LEFT;
+        }
 
     }
     else
@@ -506,6 +508,8 @@ void CMario::SetState(int state)
         // MARIO JUMPING
     case MARIO_STATE_JUMP:
         if (isSitting) break;
+        if (isAttacking) break;
+        if (isLanding) break;
         if (isOnPlatform)
         {
             isOnPlatform = false;
@@ -553,7 +557,8 @@ void CMario::SetState(int state)
         if (isSitting) break;
         if (isOnPlatform) break;
         if (level != MARIO_LEVEL_RACCOON) break;
-        isFlying = true;
+        isLanding = true;
+        isFlying = false;
         vy = MARIO_LANDING_SPEED;
         ax = 0.0f;
         vx = 0.0f;
@@ -563,7 +568,8 @@ void CMario::SetState(int state)
         if (isSitting) break;
         if (isOnPlatform) break;
         if (level != MARIO_LEVEL_RACCOON) break;
-        isFlying = true;
+        isLanding = true;
+        isFlying = false;
         vy = MARIO_LANDING_SPEED;
         maxVx = MARIO_FLYING_SPEED;
         ax = MARIO_ACCEL_FLYING_X;
@@ -574,7 +580,8 @@ void CMario::SetState(int state)
         if (isSitting) break;
         if (isOnPlatform) break;
         if (level != MARIO_LEVEL_RACCOON) break;
-        isFlying = true;
+        isLanding = true;
+        isFlying = false;
         vy = MARIO_LANDING_SPEED;
         maxVx = -MARIO_FLYING_SPEED;
         ax = -MARIO_ACCEL_FLYING_X;
@@ -592,6 +599,7 @@ void CMario::SetState(int state)
         if (isSitting) break;
         if (isOnPlatform) break;
         if (level != MARIO_LEVEL_RACCOON) break;
+        isLanding = false;
         isFlying = true;
         ay = -MARIO_ACCEL_FLYING_Y;
         maxVy = -MARIO_FLYING_SPEED;
@@ -601,6 +609,7 @@ void CMario::SetState(int state)
         if (isSitting) break;
         if (isOnPlatform) break;
         if (level != MARIO_LEVEL_RACCOON) break;
+        isLanding = false;
         isFlying = true;
         ay = -MARIO_ACCEL_FLYING_Y;
         maxVy = -MARIO_FLYING_SPEED;
@@ -611,6 +620,7 @@ void CMario::SetState(int state)
         if (isSitting) break;
         if (isOnPlatform) break;
         if (level != MARIO_LEVEL_RACCOON) break;
+        isLanding = false;
         isFlying = true;
         ay = -MARIO_ACCEL_FLYING_Y;
         maxVy = -MARIO_FLYING_SPEED;
@@ -622,7 +632,6 @@ void CMario::SetState(int state)
         if (!isOnPlatform) break;
         if (level != MARIO_LEVEL_RACCOON) break;
         isAttacking = true;
-        DebugOut(L"Mario ATTACK\n");
         if (GetTickCount64() - attacking_start > MARIO_ATTACKING_DURATION)
         {
             state = MARIO_STATE_ATTACK_RELEASE;
@@ -630,8 +639,8 @@ void CMario::SetState(int state)
         break;
 
     case MARIO_STATE_ATTACK_RELEASE:
+        if (!isOnPlatform)  break;
         if (isSitting) break;
-        DebugOut(L"Mario ATTACK release\n");
         isAttacking = false;
         state = MARIO_STATE_IDLE;
         break;
@@ -642,6 +651,8 @@ void CMario::SetState(int state)
         vx = 0.0f;
         attacking_start = 0;
         isFlying = false;
+        isLanding = false;
+        isAttacking = false;
         break;
 
     case MARIO_STATE_DIE:
@@ -690,7 +701,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
         if (isSitting)
         {
             // shift the bbox left to the same direction of where mario is facing a bit so the tail has nothing to do with mario
-            left = x - MARIO_RACCOON_SITTING_BBOX_WIDTH / 2 + 2 * nx;
+            left = x - MARIO_RACCOON_SITTING_BBOX_WIDTH / 2 + 4 * nx;
             top = y - MARIO_RACCOON_SITTING_BBOX_HEIGHT / 2;
             right = left + MARIO_RACCOON_SITTING_BBOX_WIDTH;
             bottom = top + MARIO_RACCOON_SITTING_BBOX_HEIGHT;
@@ -698,7 +709,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
         else
         {
             // shift the bbox left to the same direction of where mario is facing a bit so the tail has nothing to do with mario
-            left = x - MARIO_RACCOON_BBOX_WIDTH / 2 + 2 * nx;
+            left = x - MARIO_RACCOON_BBOX_WIDTH / 2 + 4 * nx;
             top = y - MARIO_RACCOON_BBOX_HEIGHT / 2;
             right = left + MARIO_RACCOON_BBOX_WIDTH;
             bottom = top + MARIO_RACCOON_BBOX_HEIGHT;
