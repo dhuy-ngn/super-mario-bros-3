@@ -26,6 +26,10 @@ void CColorBlock::RenderBoundingBox()
 
 	CGame::GetInstance()->Draw(xx - cx, y - cy, bbox, nullptr, BBOX_ALPHA, rect.right - 1, rect.bottom - 1);
 }
+void CColorBlock::Render()
+{
+	//RenderBoundingBox();
+}
 
 void CColorBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
