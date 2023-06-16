@@ -119,24 +119,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
     else // hit by Goomba
     {
         if (untouchable == 0)
-        {
             if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_KNOCKED_OUT)
-            {
-                switch (level) {
-                case MARIO_LEVEL_RACCOON:
-                    level = MARIO_LEVEL_BIG;
-                    StartUntouchable();
-                    break;
-                case MARIO_LEVEL_BIG:
-                    level = MARIO_LEVEL_SMALL;
-                    StartUntouchable();
-                    break;
-                default:
-                    DebugOut(L">>> Mario DIE >>> \n");
-                    SetState(MARIO_STATE_DIE);
-                }
-            }
-        }
+                LevelDown();
     }
 }
 
@@ -166,22 +150,8 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
             else
                 koopa->SetState(KOOPA_STATE_SPINNING_LEFT);
         else {
-            if (!untouchable)
-            {
-                switch (level) {
-                case MARIO_LEVEL_RACCOON:
-                    level = MARIO_LEVEL_BIG;
-                    StartUntouchable();
-                    break;
-                case MARIO_LEVEL_BIG:
-                    level = MARIO_LEVEL_SMALL;
-                    StartUntouchable();
-                    break;
-                default:
-                    DebugOut(L">>> Mario DIE >>> \n");
-                    SetState(MARIO_STATE_DIE);
-                }
-            }
+            if (untouchable == 0)
+                LevelDown();
         }
     }
 
@@ -225,42 +195,14 @@ void CMario::OnCollisionWithFireTrap(LPCOLLISIONEVENT e)
     if (untouchable == 0)
     {
         if (fire_trap->GetState() != FIRETRAP_STATE_DEATH)
-        {
-            switch (level) {
-            case MARIO_LEVEL_RACCOON:
-                level = MARIO_LEVEL_BIG;
-                StartUntouchable();
-                break;
-            case MARIO_LEVEL_BIG:
-                level = MARIO_LEVEL_SMALL;
-                StartUntouchable();
-                break;
-            default:
-                DebugOut(L">>> Mario DIE >>> \n");
-                SetState(MARIO_STATE_DIE);
-            }
-        }
+            LevelDown();
     }
 }
 
 void CMario::OnCollisionWithFireBullet(LPCOLLISIONEVENT e)
 {
     if (untouchable == 0)
-    {
-        switch (level) {
-        case MARIO_LEVEL_RACCOON:
-            level = MARIO_LEVEL_BIG;
-            StartUntouchable();
-            break;
-        case MARIO_LEVEL_BIG:
-            level = MARIO_LEVEL_SMALL;
-            StartUntouchable();
-            break;
-        default:
-            DebugOut(L">>> Mario DIE >>> \n");
-            SetState(MARIO_STATE_DIE);
-        }
-    }
+        LevelDown();
 }
 
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
@@ -763,6 +705,23 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
     }
 }
 
+void CMario::LevelDown()
+{
+    switch (level) {
+    case MARIO_LEVEL_RACCOON:
+        SetLevel(MARIO_LEVEL_BIG);
+        StartUntouchable();
+        break;
+    case MARIO_LEVEL_BIG:
+        SetLevel(MARIO_LEVEL_SMALL);
+        StartUntouchable();
+        break;
+    default:
+        DebugOut(L">>> Mario DIE >>> \n");
+        SetState(MARIO_STATE_DIE);
+    }
+}
+
 void CMario::SetLevel(int l)
 {
     // Adjust position to avoid falling off platform
@@ -774,7 +733,8 @@ void CMario::SetLevel(int l)
     {
         y -= (MARIO_RACCOON_BBOX_HEIGHT - MARIO_BIG_BBOX_HEIGHT) / 2;
     }
-    if (l == MARIO_LEVEL_RACCOON)
+    level = l;
+    if (level == MARIO_LEVEL_RACCOON)
     {
         CPlayScene* current_scene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
         this->tail = new CMarioTail(x - MARIO_TAIL_BBOX_WIDTH / 2 * nx, y + 6);
@@ -784,7 +744,8 @@ void CMario::SetLevel(int l)
     {
         // Clear the tail if Mario's level is set from Raccoon to Big
         if (tail != NULL)
-            tail->Delete();
+            if (!tail->IsDeleted())
+                tail->Delete();
+            else return;
     }
-    level = l;
 }
