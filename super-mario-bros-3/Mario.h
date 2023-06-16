@@ -257,5 +257,6 @@ public:
 	void StartFlying() { fly_up_start = GetTickCount64(); }
 	void StartAttacking() { attacking_start = GetTickCount64(); }
 	void LevelDown();
+	void LevelUp();
 	void GainCoin() { this->coin++; }
 };

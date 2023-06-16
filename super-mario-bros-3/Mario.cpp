@@ -168,7 +168,7 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 {
     CQuestionBlock* question_block = dynamic_cast<CQuestionBlock*>(e->obj);
 
-    if (question_block->GetState() != QUESTION_BLOCK_STATE_INACTIVE && e->ny > 0)
+    if ((question_block->GetState() != QUESTION_BLOCK_STATE_INACTIVE && e->ny > 0) || (IsAttacking() && e->nx != 0))
     {
         question_block->SetState(QUESTION_BLOCK_STATE_INACTIVE);
         if (question_block->GetContain() == QUESTION_BLOCK_CONTAINS_COIN)
@@ -622,16 +622,18 @@ void CMario::SetState(int state)
         if (!isOnPlatform) break;
         if (level != MARIO_LEVEL_RACCOON) break;
         isAttacking = true;
-        StartAttacking();
+        DebugOut(L"Mario ATTACK\n");
+        if (GetTickCount64() - attacking_start > MARIO_ATTACKING_DURATION)
+        {
+            state = MARIO_STATE_ATTACK_RELEASE;
+        }
         break;
 
     case MARIO_STATE_ATTACK_RELEASE:
         if (isSitting) break;
-        if (GetTickCount64() - attacking_start > MARIO_ATTACKING_DURATION)
-        {
-            isAttacking = false;
-            state = MARIO_STATE_IDLE;
-        }
+        DebugOut(L"Mario ATTACK release\n");
+        isAttacking = false;
+        state = MARIO_STATE_IDLE;
         break;
 
         // IDLE
@@ -639,7 +641,6 @@ void CMario::SetState(int state)
         ax = 0.0f;
         vx = 0.0f;
         attacking_start = 0;
-        isAttacking = false;
         isFlying = false;
         break;
 
@@ -689,7 +690,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
         if (isSitting)
         {
             // shift the bbox left to the same direction of where mario is facing a bit so the tail has nothing to do with mario
-            left = x - MARIO_RACCOON_SITTING_BBOX_WIDTH / 2 + 3 * nx;
+            left = x - MARIO_RACCOON_SITTING_BBOX_WIDTH / 2 + 2 * nx;
             top = y - MARIO_RACCOON_SITTING_BBOX_HEIGHT / 2;
             right = left + MARIO_RACCOON_SITTING_BBOX_WIDTH;
             bottom = top + MARIO_RACCOON_SITTING_BBOX_HEIGHT;
@@ -697,7 +698,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
         else
         {
             // shift the bbox left to the same direction of where mario is facing a bit so the tail has nothing to do with mario
-            left = x - MARIO_RACCOON_BBOX_WIDTH / 2 + 3 * nx;
+            left = x - MARIO_RACCOON_BBOX_WIDTH / 2 + 2 * nx;
             top = y - MARIO_RACCOON_BBOX_HEIGHT / 2;
             right = left + MARIO_RACCOON_BBOX_WIDTH;
             bottom = top + MARIO_RACCOON_BBOX_HEIGHT;
@@ -719,6 +720,20 @@ void CMario::LevelDown()
     default:
         DebugOut(L">>> Mario DIE >>> \n");
         SetState(MARIO_STATE_DIE);
+    }
+}
+
+void CMario::LevelUp()
+{
+    switch (level) {
+    case MARIO_LEVEL_SMALL:
+        SetLevel(MARIO_LEVEL_BIG);
+        break;
+    case MARIO_LEVEL_BIG:
+        SetLevel(MARIO_LEVEL_RACCOON);
+        break;
+    default:
+        break;
     }
 }
 
