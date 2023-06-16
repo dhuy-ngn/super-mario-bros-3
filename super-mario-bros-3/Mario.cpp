@@ -13,6 +13,7 @@
 #include "QuestionBlock.h"
 #include "ColorBlock.h"
 #include "FireTrap.h"
+#include "PlayScene.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -271,8 +272,8 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
     if (level == MARIO_LEVEL_BIG)
     {
         SetLevel(MARIO_LEVEL_RACCOON);
-        e->obj->Delete();
     }
+    e->obj->Delete();
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -530,7 +531,7 @@ void CMario::Render()
 
     animations->Get(aniId)->Render(x, y);
 
-    RenderBoundingBox();
+    //RenderBoundingBox();
 
     DebugOutTitle(L"Mario can fly: %d", canFly);
 }
@@ -760,6 +761,16 @@ void CMario::SetLevel(int l)
     {
         y -= (MARIO_RACCOON_BBOX_HEIGHT - MARIO_BIG_BBOX_HEIGHT) / 2;
     }
+    if (l == MARIO_LEVEL_RACCOON)
+    {
+        CPlayScene* current_scene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+        this->tail = new CMarioTail(x - 5 * nx, y + 6);
+        current_scene->PushObject(this->tail);
+    }
+    else
+    {
+        if (tail != NULL)
+            tail->Delete();
+    }
     level = l;
 }
-

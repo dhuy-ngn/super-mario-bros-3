@@ -5,6 +5,7 @@
 #include "Animations.h"
 
 #include "debug.h"
+#include "MarioTail.h"
 
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.25f
@@ -169,6 +170,8 @@
 
 class CMario : public CGameObject
 {
+	CMarioTail* tail;
+
 	BOOLEAN isSitting;
 	BOOLEAN isSpinning;
 	BOOLEAN isFlying;
@@ -206,6 +209,7 @@ class CMario : public CGameObject
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
+		tail = NULL;
 		isSitting = false;
 		isSpinning = false;
 		isFlying = false;

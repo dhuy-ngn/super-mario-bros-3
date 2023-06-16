@@ -3,7 +3,7 @@
 #include "GameObject.h"
 
 #define MARIO_TAIL_BBOX_WIDTH 10
-#define MARIO_TAIL_BBOX_HEIGHT 10
+#define MARIO_TAIL_BBOX_HEIGHT 8
 
 class CMarioTail : public CGameObject
 {
