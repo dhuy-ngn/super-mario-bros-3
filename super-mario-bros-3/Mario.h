@@ -257,7 +257,7 @@ public:
 	BOOLEAN CanFly() { return this->canFly; }
 	BOOLEAN ShouldTurnOnCamY()
 	{
-		if (this->isFlying || this->isLanding || y < 100) return true;
+		if (this->isFlying || this->isLanding || y < 0 ) return true;
 		else return false;
 	}
 	void StartFlying() { fly_up_start = GetTickCount64(); }
