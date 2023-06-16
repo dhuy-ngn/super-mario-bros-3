@@ -11,7 +11,7 @@ void CMarioTail::GetBoundingBox(float& left, float& top, float& right, float& bo
 
 void CMarioTail::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CMarioTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

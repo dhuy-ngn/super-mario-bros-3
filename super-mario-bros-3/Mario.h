@@ -161,8 +161,8 @@
 #define MARIO_SMALL_BBOX_WIDTH  10
 #define MARIO_SMALL_BBOX_HEIGHT 14
 
-#define MARIO_RACCOON_BBOX_WIDTH	14
-#define MARIO_RACCOON_BBOX_HEIGHT 24
+#define MARIO_RACCOON_BBOX_WIDTH	16
+#define MARIO_RACCOON_BBOX_HEIGHT	24
 #define MARIO_RACCOON_SITTING_BBOX_WIDTH  14
 #define MARIO_RACCOON_SITTING_BBOX_HEIGHT 16
 
@@ -255,7 +255,11 @@ public:
 	BOOLEAN IsFlying() { return this->isFlying; }
 	BOOLEAN IsLanding() { return this->isLanding; }
 	BOOLEAN CanFly() { return this->canFly; }
-	BOOLEAN ShouldTurnOnCamY() { return this->isFlying || y < 0; }
+	BOOLEAN ShouldTurnOnCamY()
+	{
+		if (this->isFlying || this->isLanding || y < 100) return true;
+		else return false;
+	}
 	void StartFlying() { fly_up_start = GetTickCount64(); }
 	void StartAttacking() { attacking_start = GetTickCount64(); }
 	void LevelDown();
