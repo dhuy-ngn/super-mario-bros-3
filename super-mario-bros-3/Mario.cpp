@@ -466,7 +466,7 @@ void CMario::Render()
 
     animations->Get(aniId)->Render(x, y);
 
-    RenderBoundingBox();
+    // RenderBoundingBox();
 
     DebugOutTitle(L"Mario can fly: %d", canFly);
 }
@@ -689,7 +689,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
         if (isSitting)
         {
             // shift the bbox left to the same direction of where mario is facing a bit so the tail has nothing to do with mario
-            left = x - MARIO_RACCOON_SITTING_BBOX_WIDTH / 2 + MARIO_TAIL_BBOX_WIDTH / 2 * nx;
+            left = x - MARIO_RACCOON_SITTING_BBOX_WIDTH / 2 + 3 * nx;
             top = y - MARIO_RACCOON_SITTING_BBOX_HEIGHT / 2;
             right = left + MARIO_RACCOON_SITTING_BBOX_WIDTH;
             bottom = top + MARIO_RACCOON_SITTING_BBOX_HEIGHT;
@@ -697,7 +697,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
         else
         {
             // shift the bbox left to the same direction of where mario is facing a bit so the tail has nothing to do with mario
-            left = x - MARIO_RACCOON_BBOX_WIDTH / 2 + MARIO_TAIL_BBOX_WIDTH / 2 * nx;
+            left = x - MARIO_RACCOON_BBOX_WIDTH / 2 + 3 * nx;
             top = y - MARIO_RACCOON_BBOX_HEIGHT / 2;
             right = left + MARIO_RACCOON_BBOX_WIDTH;
             bottom = top + MARIO_RACCOON_BBOX_HEIGHT;
