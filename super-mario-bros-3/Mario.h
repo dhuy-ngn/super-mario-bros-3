@@ -57,7 +57,10 @@
 #define MARIO_STATE_ATTACK 900
 #define MARIO_STATE_ATTACK_RELEASE 901
 
-#define MARIO_STATE_KICK 910
+#define MARIO_STATE_HOLD_KOOPA_SHELL 1000
+#define MARIO_STATE_HOLD_WALK_KOOPA_SHELL	1001
+#define	MARIO_STATE_HOLD_JUMP_KOOPA_SHELL	1002
+#define	MARIO_STATE_KICK_KOOPA_SHELL	1003
 
 
 #pragma region ANIMATION_ID
@@ -205,6 +208,7 @@ class CMario : public CGameObject
 	BOOLEAN isAttacking;
 	BOOLEAN isLanding;
 	BOOLEAN isFlying;
+	BOOLEAN isHoldingKoopaShell;
 	BOOLEAN canFly;
 
 	float maxVx;
@@ -240,6 +244,7 @@ public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		tail = NULL;
+		isHoldingKoopaShell = false;
 		isSitting = false;
 		isAttacking = false;
 		isFlying = false;
@@ -274,7 +279,11 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	void SetLevel(int l);
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
+	void StartUntouchable()
+	{
+		untouchable = 1;
+		untouchable_start = GetTickCount64();
+	}
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	int GetLevel() { return this->level; }
@@ -283,6 +292,7 @@ public:
 	BOOLEAN IsFlying() { return this->isFlying; }
 	BOOLEAN IsLanding() { return this->isLanding; }
 	BOOLEAN CanFly() { return this->canFly; }
+	BOOLEAN IsHoldingKoopaShell() { return this->isHoldingKoopaShell; }
 	BOOLEAN ShouldTurnOnCamY()
 	{
 		if (this->isFlying || this->isLanding || y < 0 ) return true;
