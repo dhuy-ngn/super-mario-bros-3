@@ -127,6 +127,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 {
     CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+    CGame* game = CGame::GetInstance();
 
     // jump on top
     if (e->ny < 0)
@@ -145,18 +146,23 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
     else // hit by Koopa
     {
         if (koopa->GetState() == KOOPA_STATE_HIDING && koopa->GetState() != KOOPA_STATE_KNOCKED_OUT)
-            if (ax >= 0)
-                koopa->SetState(KOOPA_STATE_SPINNING_RIGHT);
+            if (game->IsKeyDown(DIK_A))
+            {
+                SetState(MARIO_STATE_HOLD_KOOPA_SHELL);
+                isHoldingKoopaShell = true;
+                koopa->SetIsBeingHeld(true);
+            }
             else
-                koopa->SetState(KOOPA_STATE_SPINNING_LEFT);
-        else 
+                if (ax >= 0)
+                    koopa->SetState(KOOPA_STATE_SPINNING_RIGHT);
+                else
+                    koopa->SetState(KOOPA_STATE_SPINNING_LEFT);
+        else
         {
             if (untouchable == 0)
                 LevelDown();
         }
     }
-
-    // TODO: Mario holding Koopa's shell
 }
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
@@ -594,6 +600,9 @@ void CMario::SetState(int state)
         // BIG & RACCOON MARIO SITTING
     case MARIO_STATE_SIT:
         if (isAttacking) break;
+        if (isHoldingKoopaShell) break;
+        if (isFlying) break;
+        if (isLanding) break;
         if (isOnPlatform && level != MARIO_LEVEL_SMALL)
         {
             state = MARIO_STATE_IDLE;
@@ -605,8 +614,8 @@ void CMario::SetState(int state)
                 y += MARIO_RACCOON_SIT_HEIGHT_ADJUST;
         }
         break;
+
     case MARIO_STATE_SIT_RELEASE:
-        if (isAttacking) break;
         if (isSitting)
         {
             isSitting = false;
@@ -653,13 +662,6 @@ void CMario::SetState(int state)
         ax = -MARIO_ACCEL_FLYING_X;
         nx = -1;
         break;
-
-        // RACCOON MARIO LANDING
-    //case MARIO_STATE_LAND:
-    //    if (isSitting) break;
-    //    if (level != MARIO_LEVEL_RACCOON) break;
-    //    ay = MARIO_RACCOON_GRAVITY;
-    //    break;
 
     case MARIO_STATE_FLY:
         if (isSitting) break;
@@ -711,6 +713,35 @@ void CMario::SetState(int state)
         state = MARIO_STATE_IDLE;
         break;
 
+    case MARIO_STATE_HOLD_KOOPA_SHELL:
+        if (isSitting) break;
+        ax = 0.0f;
+        vx = 0.0f;
+        isHoldingKoopaShell = true;
+        isFlying = false;
+        isLanding = false;
+        isAttacking = false;
+        break;
+
+    case MARIO_STATE_HOLD_WALK_KOOPA_SHELL_RIGHT:
+        maxVx = MARIO_WALKING_SPEED;
+        ax = MARIO_ACCEL_WALK_X;
+        nx = 1;
+        isHoldingKoopaShell = true;
+        break;
+
+    case MARIO_STATE_HOLD_WALK_KOOPA_SHELL_LEFT:
+        maxVx = -MARIO_WALKING_SPEED;
+        ax = -MARIO_ACCEL_WALK_X;
+        nx = -1;
+        isHoldingKoopaShell = true;
+        break;
+
+    case MARIO_STATE_KICK_KOOPA_SHELL:
+        isHoldingKoopaShell = false;
+        state = MARIO_STATE_IDLE;
+        break;
+
         // IDLE
     case MARIO_STATE_IDLE:
         ax = 0.0f;
@@ -719,6 +750,7 @@ void CMario::SetState(int state)
         isFlying = false;
         isLanding = false;
         isAttacking = false;
+        isHoldingKoopaShell = false;
         break;
 
     case MARIO_STATE_DIE:

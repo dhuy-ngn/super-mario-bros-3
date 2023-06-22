@@ -176,6 +176,7 @@ CKoopa::CKoopa(float x, float y, int level, int color) : CGameObject(x, y)
 	this->color = color;
 	inactive_start = -1;
 	die_start = -1;
+	isBeingHeld = false;
 	SetState(KOOPA_STATE_WALKING);
 }
 

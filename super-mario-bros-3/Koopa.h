@@ -91,6 +91,8 @@ protected:
 	ULONGLONG die_start;
 	ULONGLONG wake_up_start;
 
+	BOOLEAN isBeingHeld;
+
 	int level; // 1: para; 0: normal
 	int color; // 1: green koopa; 0: red koopa
 
@@ -124,4 +126,6 @@ public:
 	int GetLevel() { return this->level; };
 	int GetColor() { return this->color; }
 	BOOLEAN IsRedKoopa() { return color == KOOPA_COLOR_RED; };
+	BOOLEAN IsBeingHeld() { return this->isBeingHeld; }
+	void SetIsBeingHeld(BOOLEAN value) { this->isBeingHeld = value; }
 };
