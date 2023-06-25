@@ -7,10 +7,20 @@
 
 void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x - KOOPA_BBOX_WIDTH / 2;
-	top = y - KOOPA_BBOX_HEIGHT / 2;
-	right = left + KOOPA_BBOX_WIDTH;
-	bottom = top + KOOPA_BBOX_HEIGHT;
+	if (!IsHiding() && !IsSpinning())
+	{
+		left = x - KOOPA_BBOX_WIDTH / 2;
+		top = y - KOOPA_BBOX_HEIGHT / 2;
+		right = left + KOOPA_BBOX_WIDTH;
+		bottom = top + KOOPA_BBOX_HEIGHT;
+	}
+	else
+	{
+		left = x - KOOPA_BBOX_WIDTH / 2;
+		top = y - KOOPA_SHELL_BBOX_HEIGHT / 2;
+		right = left + KOOPA_BBOX_WIDTH;
+		bottom = top + KOOPA_SHELL_BBOX_HEIGHT;
+	}
 }
 
 void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -30,6 +40,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	if (((state == KOOPA_STATE_SHAKING) || (state == KOOPA_STATE_SHAKING_UPSIDE_DOWN)) && (GetTickCount64() - inactive_start > KOOPA_WAKING_UP_DURATION))
 	{
+		y -= (KOOPA_BBOX_HEIGHT - KOOPA_SHELL_BBOX_HEIGHT) / 2;
 		SetState(KOOPA_STATE_WALKING);
 		return;
 	}
@@ -69,7 +80,7 @@ void CKoopa::Render()
 	RenderBoundingBox();
 }
 
-void CKoopa::OnNoCollision(DWORD dt) 
+void CKoopa::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
@@ -88,8 +99,6 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		}
 	if (dynamic_cast<CKoopa*>(e->obj))
 		OnCollisionWithKoopa(e);
-	//if (dynamic_cast<CGoomba*>(e->obj))
-		//OnCollisionWithGoomba(e);
 	if (dynamic_cast<CQuestionBlock*>(e->obj))
 		OnCollisionWithQuestionBlock(e);
 	if (dynamic_cast<CFireTrap*>(e->obj))
@@ -100,58 +109,35 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 
 int CKoopa::GetAniIdGreenKoopaNormal() {
 	int aniId = ID_ANI_KOOPA_GREEN_WALKING_LEFT;
-	if (vx >= 0)
-		aniId = ID_ANI_KOOPA_GREEN_WALKING_RIGHT;
-	switch (state) {
-	case KOOPA_STATE_HIDING:
+	if (isHiding)
 		aniId = ID_ANI_KOOPA_GREEN_SHELL;
-		break;
-	case KOOPA_STATE_UPSIDE_DOWN:
-		aniId = ID_ANI_KOOPA_GREEN_SHELL_UPSIDE_DOWN;
-		break;
-	case KOOPA_STATE_SPINNING_LEFT:
-		aniId = ID_ANI_KOOPA_GREEN_SPINNING_LEFT;
-		break;
-	case KOOPA_STATE_SPINNING_RIGHT:
-		aniId = ID_ANI_KOOPA_GREEN_SPINNING_RIGHT;
-		break;
-	case KOOPA_STATE_SHAKING:
-		aniId = ID_ANI_KOOPA_GREEN_SHAKING;
-		break;
-	case KOOPA_STATE_SHAKING_UPSIDE_DOWN:
-		aniId = ID_ANI_KOOPA_GREEN_SHAKING_UPSIDE_DOWN;
-		break;
-	case KOOPA_STATE_KNOCKED_OUT:
-		aniId = ID_ANI_KOOPA_GREEN_SHELL_UPSIDE_DOWN;
-		break;
-	}
+	else if (isSpinning)
+		if (vx > 0)
+			aniId = ID_ANI_KOOPA_GREEN_SPINNING_RIGHT;
+		else
+			aniId = ID_ANI_KOOPA_GREEN_SPINNING_LEFT;
+	else
+		if (vx >= 0)
+			aniId = ID_ANI_KOOPA_GREEN_WALKING_RIGHT;
+		else
+			aniId = ID_ANI_KOOPA_GREEN_WALKING_LEFT;
 	return aniId;
 }
 
 int CKoopa::GetAniIdRedKoopaNormal() {
 	int aniId = ID_ANI_KOOPA_RED_WALKING_LEFT;
-	if (vx >= 0)
-		aniId = ID_ANI_KOOPA_RED_WALKING_RIGHT;
-	switch (state) {
-	case KOOPA_STATE_HIDING:
+	if (isHiding)
 		aniId = ID_ANI_KOOPA_RED_SHELL;
-		break;
-	case KOOPA_STATE_UPSIDE_DOWN:
-		aniId = ID_ANI_KOOPA_RED_SHELL_UPSIDE_DOWN;
-		break;
-	case KOOPA_STATE_SPINNING_LEFT:
-		aniId = ID_ANI_KOOPA_RED_SPINNING_LEFT;
-		break;
-	case KOOPA_STATE_SPINNING_RIGHT:
-		aniId = ID_ANI_KOOPA_RED_SPINNING_RIGHT;
-		break;
-	case KOOPA_STATE_SHAKING:
-		aniId = ID_ANI_KOOPA_RED_SHAKING;
-		break;
-	case KOOPA_STATE_SHAKING_UPSIDE_DOWN:
-		aniId = ID_ANI_KOOPA_RED_SHAKING_UPSIDE_DOWN;
-		break;
-	}
+	else if (isSpinning)
+		if (vx > 0)
+			aniId = ID_ANI_KOOPA_RED_SPINNING_RIGHT;
+		else
+			aniId = ID_ANI_KOOPA_RED_SPINNING_LEFT;
+	else
+		if (vx >= 0)
+			aniId = ID_ANI_KOOPA_RED_WALKING_RIGHT;
+		else
+			aniId = ID_ANI_KOOPA_RED_WALKING_LEFT;
 	return aniId;
 }
 
@@ -187,22 +173,40 @@ void CKoopa::SetState(int state)
 
 	switch (state) {
 	case KOOPA_STATE_WALKING:
+		isHiding = false;
+		isSpinning = false;
 		wake_up_start = -1;
 		inactive_start = -1;	// Reset inactive counter for Koopa
+		isBeingHeld = false;
 		vx = -KOOPA_WALKING_SPEED;
 		break;
 	case KOOPA_STATE_HIDING:
+		isHiding = true;
 		inactive_start = GetTickCount64();
 		vx = 0.0f;
 		break;
 	case KOOPA_STATE_SPINNING_LEFT:
+		isHiding = false;
+		isSpinning = true;
 		vx = -KOOPA_SPINNING_SPEED;
 		break;
 	case KOOPA_STATE_SPINNING_RIGHT:
+		isHiding = false;
+		isSpinning = true;
 		vx = KOOPA_SPINNING_SPEED;
 		break;
 	case KOOPA_STATE_SHAKING:
+		isHiding = true;
 		wake_up_start = GetTickCount64();
+		break;
+
+	case KOOPA_STATE_HELD_BY_MARIO:
+		isBeingHeld = true;
+		vx = 0;
+		vy = 0;
+		ax = 0;
+		ay = 0;
+		inactive_start = GetTickCount64();
 		break;
 
 		// Flying Koopas
@@ -253,8 +257,6 @@ void CKoopa::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 	if (question_block->GetState() != QUESTION_BLOCK_STATE_INACTIVE && IsSpinning())
 	{
 		question_block->SetState(QUESTION_BLOCK_STATE_INACTIVE);
-		if (question_block->GetContain() == QUESTION_BLOCK_CONTAINS_COIN)
-			mario->GainCoin();
 		question_block->ReleaseItem();
 	}
 }

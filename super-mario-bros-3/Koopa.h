@@ -12,7 +12,8 @@
 #define KOOPA_BOUNCING_SPEED_Y	0.8f
 
 #define KOOPA_BBOX_WIDTH 16
-#define KOOPA_BBOX_HEIGHT 20
+#define KOOPA_BBOX_HEIGHT 26
+#define KOOPA_SHELL_BBOX_HEIGHT 16
 
 #define KOOPA_SHAKING_WIDTH	10
 
@@ -41,6 +42,8 @@
 
 #define KOOPA_STATE_SHAKING	600
 #define	KOOPA_STATE_SHAKING_UPSIDE_DOWN 601
+
+#define KOOPA_STATE_HELD_BY_MARIO	602
 
 #define KOOPA_STATE_KNOCKED_OUT	700
 
@@ -92,6 +95,8 @@ protected:
 	ULONGLONG wake_up_start;
 
 	BOOLEAN isBeingHeld;
+	BOOLEAN isHiding;
+	BOOLEAN isSpinning;
 
 	int level; // 1: para; 0: normal
 	int color; // 1: green koopa; 0: red koopa
@@ -101,7 +106,6 @@ protected:
 	virtual void Render();
 
 	int IsCollidable() { return state != KOOPA_STATE_KNOCKED_OUT; };
-	int IsHiding() { return state == KOOPA_STATE_HIDING; };
 	int IsBlocking() { return state != KOOPA_STATE_KNOCKED_OUT; };
 
 	void OnNoCollision(DWORD dt);
@@ -119,7 +123,8 @@ protected:
 public:
 	CKoopa(float x, float y, int level, int color);
 
-	int IsSpinning() { return state == KOOPA_STATE_SPINNING_LEFT || state == KOOPA_STATE_SPINNING_RIGHT; };
+	BOOLEAN IsHiding() { return this->isHiding; };
+	BOOLEAN IsSpinning() { return this->isSpinning; };
 
 	void SetState(int state);
 	void SetLevel(int l);
