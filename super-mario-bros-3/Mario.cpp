@@ -114,6 +114,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
             else
                 goomba->SetState(GOOMBA_STATE_DIE);
             vy = -MARIO_JUMP_DEFLECT_SPEED;
+            isOnPlatform = false;
         }
     }
     else // hit by Goomba
@@ -142,6 +143,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
         else
             koopa->SetState(KOOPA_STATE_HIDING);
         vy = -MARIO_JUMP_DEFLECT_SPEED;
+        isOnPlatform = false;
     }
     else // hit by Koopa
     {
@@ -150,7 +152,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
             {
                 SetState(MARIO_STATE_HOLD_KOOPA_SHELL);
                 isHoldingKoopaShell = true;
-                koopa->SetIsBeingHeld(true);
+                koopa->SetState(KOOPA_STATE_HELD_BY_MARIO);
             }
             else
                 if (ax >= 0)
@@ -830,21 +832,6 @@ void CMario::LevelDown()
     default:
         DebugOut(L">>> Mario DIE >>> \n");
         SetState(MARIO_STATE_DIE);
-    }
-}
-
-void CMario::LevelUp()
-{
-    switch (level) 
-    {
-    case MARIO_LEVEL_SMALL:
-        SetLevel(MARIO_LEVEL_BIG);
-        break;
-    case MARIO_LEVEL_BIG:
-        SetLevel(MARIO_LEVEL_RACCOON);
-        break;
-    default:
-        break;
     }
 }
 
