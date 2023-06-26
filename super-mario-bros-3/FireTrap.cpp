@@ -73,12 +73,14 @@ void CFireTrap::GetDirection()
 {
 	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
 	float mario_height;
+	float mx, my;
+	mario->GetPosition(mx, my);
 	if (mario->GetLevel() == MARIO_LEVEL_SMALL)
 		mario_height = MARIO_SMALL_BBOX_HEIGHT;
 	else
 		mario_height = MARIO_BIG_BBOX_HEIGHT;
 
-	if (mario->GetY() + mario_height < maxY + height)
+	if (my + mario_height < maxY + height)
 	{
 		isUpward = true;
 	}
@@ -86,7 +88,7 @@ void CFireTrap::GetDirection()
 	{
 		isUpward = false;
 	}
-	if (mario->GetX() < x)
+	if (mx < x)
 	{
 		isForward = false;
 	}
@@ -94,12 +96,20 @@ void CFireTrap::GetDirection()
 	{
 		isForward = true;
 	}
+	if (abs(mx - x) >= 100)
+	{
+		isNearby = false;
+	}
+	else
+	{
+		isNearby = true;
+	}
 }
 
 void CFireTrap::ShootBullet()
 {
 	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
-	this->bullet = new CFireBullet(x, y, isUpward, isForward);
+	this->bullet = new CFireBullet(x, y, isUpward, isForward, isNearby);
 
 	currentScene->PushObject(bullet);
 }

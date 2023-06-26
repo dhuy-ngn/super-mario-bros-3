@@ -17,7 +17,7 @@ class CFireBullet : public CGameObject
     virtual void Render();
     virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 public:
-    CFireBullet(float bx, float by, bool up, bool right);
+    CFireBullet(float bx, float by, bool isUpward, bool isForward, bool isNearby);
     void GetBoundingBox(float& l, float& t, float& r, float& b);
     int IsCollidable() { return 1; };
     int IsBlocking() { return 0; }

@@ -2,17 +2,25 @@
 #include "FireTrap.h"
 #include "Mario.h"
 
-CFireBullet::CFireBullet(float bx, float by, bool up, bool right) {
-	if (up) {
+CFireBullet::CFireBullet(float bx, float by, bool isUpward, bool isForward, bool isNearby) {
+	if (isUpward) 
+	{
 		y = by;
-		vy = -BULLET_SPEED_Y;
+		if (isNearby)
+			vy = -BULLET_SPEED_Y;
+		else
+			vy = -BULLET_SPEED_Y_MAX;
 	}
-	else {
+	else
+	{
 		y = by;
-		vy = BULLET_SPEED_Y;
+		if (isNearby)
+			vy = BULLET_SPEED_Y;
+		else
+			vy = BULLET_SPEED_Y_MAX;
 	}
 
-	if (right)
+	if (isForward)
 	{
 		x = bx;
 		vx = BULLET_SPEED_X;

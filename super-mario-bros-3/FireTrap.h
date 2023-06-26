@@ -38,6 +38,7 @@ protected:
 	float height = 0;
 	BOOLEAN isUpward = false;
 	BOOLEAN isForward = false;
+	BOOLEAN isNearby = true;
 	CFireBullet* bullet = NULL;
 public:
 	CFireTrap(float x, float y) {
