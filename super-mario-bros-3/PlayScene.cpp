@@ -359,12 +359,12 @@ void CPlayScene::Update(DWORD dt)
 	if (dynamic_cast<CMario*>(player)->ShouldTurnOnCamY())
 	{
 		CGame::GetInstance()->SetCamPos(cx, cy + HUD_HEIGHT);
-		hud->SetPosition(cx + 160, cy + 219);
+		hud->SetPosition(cx + 131, cy + 219);
 	}
 	else
 	{
 		CGame::GetInstance()->SetCamPos(cx, HUD_HEIGHT);
-		hud->SetPosition(cx + 160, 219);
+		hud->SetPosition(cx + 131, 219);
 	}
 
 	hud->Update(dt, &coObjects);
