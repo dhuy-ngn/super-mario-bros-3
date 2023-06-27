@@ -1,4 +1,5 @@
 #include "Coin.h"
+#include "debug.h"
 
 void CCoin::Render()
 {
@@ -6,6 +7,27 @@ void CCoin::Render()
 	animations->Get(ID_ANI_COIN)->Render(x, y);
 
 	//RenderBoundingBox();
+}
+
+void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	CGameObject::Update(dt, coObjects);
+
+	vy += ay * dt;
+	y += vy * dt;
+
+	if (isFromQuestionBlock && GetTickCount64() - appear_time > COIN_EXIST_DURATION)
+	{
+		isDeleted = true;
+		return;
+	}
+}
+
+void CCoin::StartAppearing()
+{
+	this->appear_time = GetTickCount64();
+	vy = -COIN_SPEED;
+	ay = COIN_GRAVITY;
 }
 
 void CCoin::GetBoundingBox(float& l, float& t, float& r, float& b)

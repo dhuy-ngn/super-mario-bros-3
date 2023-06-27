@@ -64,6 +64,9 @@ void CQuestionBlock::ReleaseItem()
 	switch (contain)
 	{
 	case QUESTION_BLOCK_CONTAINS_COIN:
+		coin = new CCoin(x, y - QUESTION_BLOCK_BBOX_HEIGHT, true);
+		coin->StartAppearing();
+		current_scene->UnshiftObject(coin);
 		break;
 	case QUESTION_BLOCK_CONTAINS_MUSHROOM:
 		switch (mario->GetLevel())
