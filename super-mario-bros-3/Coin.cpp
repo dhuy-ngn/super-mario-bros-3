@@ -16,7 +16,7 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	y += vy * dt;
 
-	if (isFromQuestionBlock && GetTickCount64() - appear_time > COIN_EXIST_DURATION)
+	if (isFromQuestionBlock && GetTickCount64() - appear_time > COIN_EXIST_DURATION || y > start_y)
 	{
 		isDeleted = true;
 		return;

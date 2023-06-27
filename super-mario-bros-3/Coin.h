@@ -24,9 +24,12 @@ protected:
 	ULONGLONG appear_time;
 
 	float ay;
+	float start_y;
 public:
 	CCoin(float x, float y, BOOLEAN isFromQuestionBlock = false) : CGameObject(x, y)
 	{
+		this->start_y = y;
+		this->ay = 0;
 		this->isFromQuestionBlock = isFromQuestionBlock;
 		this->appear_time = -1;
 	}
