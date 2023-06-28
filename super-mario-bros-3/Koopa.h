@@ -2,14 +2,14 @@
 #include "GameObject.h"
 #include "Platform.h"
 
-#define KOOPA_GRAVITY 0.002f
-#define KOOPA_WALKING_SPEED 0.03f
+#define KOOPA_GRAVITY			0.001f
+#define KOOPA_WALKING_SPEED		0.03f
 #define KOOPA_SPINNING_SPEED	0.3f
 
 #define KOOPA_ACCEL_SPIN_X 0.12f
 
-#define KOOPA_BOUNCING_SPEED_X 0.7f
-#define KOOPA_BOUNCING_SPEED_Y	0.8f
+#define KOOPA_BOUNCING_SPEED_X	0.05f
+#define KOOPA_BOUNCING_SPEED_Y	0.35f
 
 #define KOOPA_BBOX_WIDTH 16
 #define KOOPA_BBOX_HEIGHT 26
@@ -17,8 +17,8 @@
 
 #define KOOPA_SHAKING_WIDTH	10
 
-#define KOOPA_LEVEL_NORMAL 1
-#define KOOPA_LEVEL_WINGS	0
+#define KOOPA_LEVEL_NORMAL	1
+#define KOOPA_LEVEL_PARA	0
 
 #define KOOPA_COLOR_GREEN	1
 #define KOOPA_COLOR_RED 0
@@ -31,8 +31,7 @@
 #define KOOPA_STATE_BOUNCING_RIGHT 201
 #define KOOPA_STATE_BOUNCING_LEFT 200
 
-#define	KOOPA_STATE_SKIPPING_RIGHT	211
-#define	KOOPA_STATE_SKIPPING_LEFT	210
+#define	KOOPA_STATE_SKIPPING 210
 
 #define KOOPA_STATE_SPINNING_RIGHT 301
 #define	KOOPA_STATE_SPINNING_LEFT 300
@@ -115,10 +114,8 @@ protected:
 	void OnCollisionWithPlatform(LPCOLLISIONEVENT e);
 	void OnCollisionWithFireTrap(LPCOLLISIONEVENT e);
 
-	int GetAniIdRedKoopaNormal();
-	int GetAniIdGreenKoopaNormal();
-	int GetAniIdRedKoopaWings();
-	int GetAniIdGreenKoopaWings();
+	int GetAniIdRedKoopa();
+	int GetAniIdGreenKoopa();
 
 public:
 	CKoopa(float x, float y, int level, int color);
@@ -127,10 +124,9 @@ public:
 	BOOLEAN IsSpinning() { return this->isSpinning; };
 
 	void SetState(int state);
-	void SetLevel(int l);
+	void SetLevel(int level) { this->level = level; }
 	int GetLevel() { return this->level; };
 	int GetColor() { return this->color; }
-	BOOLEAN IsRedKoopa() { return color == KOOPA_COLOR_RED; };
 	BOOLEAN IsBeingHeld() { return this->isBeingHeld; }
 	void SetIsBeingHeld(BOOLEAN value) { this->isBeingHeld = value; }
 };

@@ -66,7 +66,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
     if (e->ny != 0 && e->obj->IsBlocking())
     {
         vy = 0;
-        if (e->ny < 0) isOnPlatform = true;
+        if (e->ny < 0)
+            isOnPlatform = true;
     }
     else
         if (e->nx != 0 && e->obj->IsBlocking())
@@ -133,7 +134,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
     // jump on top
     if (e->ny < 0)
     {
-        if (koopa->GetState() == KOOPA_STATE_HIDING)
+        if (koopa->IsHiding())
         {
             if (nx >= 0)
                 koopa->SetState(KOOPA_STATE_SPINNING_RIGHT);
@@ -141,9 +142,15 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
                 koopa->SetState(KOOPA_STATE_SPINNING_LEFT);
         }
         else
-            koopa->SetState(KOOPA_STATE_HIDING);
+        {
+            if (koopa->GetState() == KOOPA_STATE_SKIPPING)
+            {
+                koopa->SetLevel(KOOPA_LEVEL_NORMAL);
+            }
+            else
+                koopa->SetState(KOOPA_STATE_HIDING);
+        }
         vy = -MARIO_JUMP_DEFLECT_SPEED;
-        isOnPlatform = false;
     }
     else // hit by Koopa
     {

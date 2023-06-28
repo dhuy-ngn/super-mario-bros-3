@@ -28,23 +28,24 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	if ((state == KOOPA_STATE_UPSIDE_DOWN) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))
+	if (state == KOOPA_STATE_UPSIDE_DOWN && GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT && die_start > 0)
 	{
 		isDeleted = true;
 		return;
 	}
-	if ((state == KOOPA_STATE_HIDING) && (GetTickCount64() - inactive_start > KOOPA_INACTIVE_DURATION))
+	if (state == KOOPA_STATE_HIDING && GetTickCount64() - inactive_start > KOOPA_INACTIVE_DURATION)
 	{
 		SetState(KOOPA_STATE_SHAKING);
 		return;
 	}
-	if (((state == KOOPA_STATE_SHAKING) || (state == KOOPA_STATE_SHAKING_UPSIDE_DOWN)) && (GetTickCount64() - inactive_start > KOOPA_WAKING_UP_DURATION))
+	if (state == KOOPA_STATE_SHAKING || state == KOOPA_STATE_SHAKING_UPSIDE_DOWN && GetTickCount64() - inactive_start > KOOPA_WAKING_UP_DURATION)
 	{
 		y -= (KOOPA_BBOX_HEIGHT - KOOPA_SHELL_BBOX_HEIGHT) / 2;
 		SetState(KOOPA_STATE_WALKING);
 		return;
 	}
-	if ((state == KOOPA_STATE_KNOCKED_OUT) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT)) {
+	if (state == KOOPA_STATE_KNOCKED_OUT && GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT && die_start > 0) 
+	{
 		isDeleted = true;
 		return;
 	}
@@ -58,21 +59,14 @@ void CKoopa::Render()
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = ID_ANI_KOOPA_GREEN_WALKING_LEFT;
 
-	if (IsRedKoopa())
-		aniId = ID_ANI_KOOPA_RED_WALKING_LEFT;
+	if (color == KOOPA_COLOR_GREEN)
+	{
+		aniId = GetAniIdGreenKoopa();
+	}
 	else
-		aniId = ID_ANI_KOOPA_GREEN_WALKING_LEFT;
-
-	if (level == KOOPA_LEVEL_NORMAL)
-		if (IsRedKoopa())
-			aniId = GetAniIdRedKoopaNormal();
-		else
-			aniId = GetAniIdGreenKoopaNormal();
-	else if (level == KOOPA_LEVEL_WINGS)
-		if (IsRedKoopa())
-			aniId = GetAniIdRedKoopaWings();
-		else
-			aniId = GetAniIdGreenKoopaWings();
+	{
+		aniId = GetAniIdRedKoopa();
+	}
 
 	animations->Get(aniId)->Render(x, y);
 
@@ -88,15 +82,20 @@ void CKoopa::OnNoCollision(DWORD dt)
 
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (e->ny != 0 && e->obj->IsBlocking())
+	if (!e->obj->IsBlocking()) return;
+
+	if (e->ny != 0)
 	{
-		vy = 0;
+		if (e->ny < 0 && level == KOOPA_LEVEL_PARA)
+			SetState(KOOPA_STATE_SKIPPING);
+		else
+			ay = KOOPA_GRAVITY;
 	}
-	else
-		if (e->nx != 0 && e->obj->IsBlocking())
-		{
-			vx = -vx;
-		}
+	else if (e->nx != 0)
+	{
+		vx = -vx;
+	}
+
 	if (dynamic_cast<CKoopa*>(e->obj))
 		OnCollisionWithKoopa(e);
 	if (dynamic_cast<CQuestionBlock*>(e->obj))
@@ -107,24 +106,35 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPlatform(e);
 }
 
-int CKoopa::GetAniIdGreenKoopaNormal() {
+int CKoopa::GetAniIdGreenKoopa() 
+{
 	int aniId = ID_ANI_KOOPA_GREEN_WALKING_LEFT;
-	if (isHiding)
-		aniId = ID_ANI_KOOPA_GREEN_SHELL;
-	else if (isSpinning)
+
+	if (level == KOOPA_LEVEL_PARA)
+	{
 		if (vx > 0)
-			aniId = ID_ANI_KOOPA_GREEN_SPINNING_RIGHT;
+			aniId = ID_ANI_KOOPA_GREEN_FLYING_RIGHT;
 		else
-			aniId = ID_ANI_KOOPA_GREEN_SPINNING_LEFT;
+			aniId = ID_ANI_KOOPA_GREEN_FLYING_LEFT;
+	}
 	else
-		if (vx >= 0)
-			aniId = ID_ANI_KOOPA_GREEN_WALKING_RIGHT;
+		if (isHiding)
+			aniId = ID_ANI_KOOPA_GREEN_SHELL;
 		else
-			aniId = ID_ANI_KOOPA_GREEN_WALKING_LEFT;
+			if (isSpinning)
+				if (vx > 0)
+					aniId = ID_ANI_KOOPA_GREEN_SPINNING_RIGHT;
+				else
+					aniId = ID_ANI_KOOPA_GREEN_SPINNING_LEFT;
+			else
+				if (vx >= 0)
+					aniId = ID_ANI_KOOPA_GREEN_WALKING_RIGHT;
+				else
+					aniId = ID_ANI_KOOPA_GREEN_WALKING_LEFT;
 	return aniId;
 }
 
-int CKoopa::GetAniIdRedKoopaNormal() {
+int CKoopa::GetAniIdRedKoopa() {
 	int aniId = ID_ANI_KOOPA_RED_WALKING_LEFT;
 	if (isHiding)
 		aniId = ID_ANI_KOOPA_RED_SHELL;
@@ -141,18 +151,6 @@ int CKoopa::GetAniIdRedKoopaNormal() {
 	return aniId;
 }
 
-int CKoopa::GetAniIdRedKoopaWings() {
-	int aniId = ID_ANI_KOOPA_RED_FLYING_LEFT;
-	if (vx >= 0)
-		aniId = ID_ANI_KOOPA_RED_FLYING_RIGHT;
-	return aniId;
-}
-int CKoopa::GetAniIdGreenKoopaWings() {
-	int aniId = ID_ANI_KOOPA_GREEN_FLYING_LEFT;
-	if (vx >= 0)
-		aniId = ID_ANI_KOOPA_GREEN_FLYING_RIGHT;
-	return aniId;
-}
 
 CKoopa::CKoopa(float x, float y, int level, int color) : CGameObject(x, y)
 {
@@ -163,38 +161,42 @@ CKoopa::CKoopa(float x, float y, int level, int color) : CGameObject(x, y)
 	inactive_start = -1;
 	die_start = -1;
 	isBeingHeld = false;
-	SetState(KOOPA_STATE_WALKING);
+	if (level == KOOPA_LEVEL_PARA)
+		SetState(KOOPA_STATE_SKIPPING);
+	else
+		SetState(KOOPA_STATE_WALKING);
 }
 
 
 void CKoopa::SetState(int state)
 {
-	if (this->state == KOOPA_STATE_UPSIDE_DOWN) return;
-
 	switch (state) {
 	case KOOPA_STATE_WALKING:
 		isHiding = false;
 		isSpinning = false;
-		wake_up_start = -1;
-		inactive_start = -1;	// Reset inactive counter for Koopa
 		isBeingHeld = false;
 		vx = -KOOPA_WALKING_SPEED;
+		vy = 0;
 		break;
+
 	case KOOPA_STATE_HIDING:
 		isHiding = true;
 		inactive_start = GetTickCount64();
 		vx = 0.0f;
 		break;
+
 	case KOOPA_STATE_SPINNING_LEFT:
 		isHiding = false;
 		isSpinning = true;
 		vx = -KOOPA_SPINNING_SPEED;
 		break;
+
 	case KOOPA_STATE_SPINNING_RIGHT:
 		isHiding = false;
 		isSpinning = true;
 		vx = KOOPA_SPINNING_SPEED;
 		break;
+
 	case KOOPA_STATE_SHAKING:
 		isHiding = true;
 		wake_up_start = GetTickCount64();
@@ -210,12 +212,14 @@ void CKoopa::SetState(int state)
 		break;
 
 		// Flying Koopas
-	case KOOPA_STATE_BOUNCING_LEFT:
+	case KOOPA_STATE_SKIPPING:
+		isHiding = false;
+		isSpinning = false;
+		isBeingHeld = false;
+		if (level == KOOPA_LEVEL_NORMAL)
+			SetState(KOOPA_STATE_WALKING);
 		vy = -KOOPA_BOUNCING_SPEED_Y;
 		vx = -KOOPA_BOUNCING_SPEED_X;
-		break;
-
-	case KOOPA_STATE_BOUNCING_RIGHT:
 		break;
 
 	case KOOPA_STATE_UPSIDE_DOWN:
@@ -228,10 +232,6 @@ void CKoopa::SetState(int state)
 	}
 
 	CGameObject::SetState(state);
-}
-
-void CKoopa::SetLevel(int l) {
-	level = l;
 }
 
 void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
@@ -265,7 +265,7 @@ void CKoopa::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 {
 	CPlatform* platform = dynamic_cast <CPlatform*>(e->obj);
 
-	if (state == KOOPA_STATE_WALKING && IsRedKoopa())
+	if (state == KOOPA_STATE_WALKING && color == KOOPA_COLOR_RED)
 	{
 		if (vx > 0 && x >= platform->GetX() + KOOPA_BBOX_WIDTH)
 			vx = -vx;
