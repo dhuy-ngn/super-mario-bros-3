@@ -12,17 +12,28 @@
 #define SCORE_SPRITE_8000_ID	50056
 #define SCORE_SPRITE_1UP_ID		50057
 
+#define SCORE_STACK_100     0
+#define SCORE_STACK_200     1
+#define SCORE_STACK_400     2
+#define SCORE_STACK_800     3
+#define SCORE_STACK_1000    4
+#define SCORE_STACK_2000    5
+#define SCORE_STACK_4000    6
+#define SCORE_STACK_8000    7
+
 #define SCORE_SPEED_Y 0.05f
 
 #define SCORE_EXIST_DURATION 500
 
 class CPoint : public CGameObject
 {
-    DWORD appear_time = 0;
+    ULONGLONG appear_time = 0;
+    int score_stack;
+
     virtual void Render();
     virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 public:
-    CPoint(int score = 100);
+    CPoint(int score_stack);
     virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
     int IsBlocking() { return 0; }
