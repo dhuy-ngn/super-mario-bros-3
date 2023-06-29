@@ -225,6 +225,7 @@ class CMario : public CGameObject
 	ULONGLONG attacking_start = 0;
 	BOOLEAN isOnPlatform;
 	int coin;
+	int score_stack;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
@@ -265,6 +266,7 @@ public:
 		isOnPlatform = false;
 		coin = 0;
 		fly_up_start = -1;
+		score_stack = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -286,6 +288,10 @@ public:
 		untouchable = 1;
 		untouchable_start = GetTickCount64();
 	}
+
+	void AddScore(float x, float y);
+	void AddScore1000(float x, float y);
+	void AddScore1Up(float, float y);
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	int GetLevel() { return this->level; }

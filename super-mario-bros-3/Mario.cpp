@@ -778,6 +778,38 @@ void CMario::SetState(int state)
     CGameObject::SetState(state);
 }
 
+void CMario::AddScore(float x, float y)
+{
+    CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+
+    CPoint* point = new CPoint(this->score_stack);
+
+    point->SetPosition(x, y);
+    currentScene->PushObject(point);
+
+    score_stack++;
+}
+
+void CMario::AddScore1000(float x, float y)
+{
+    CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+
+    CPoint* point = new CPoint(SCORE_STACK_1000);
+
+    point->SetPosition(x, y);
+    currentScene->PushObject(point);
+}
+
+void CMario::AddScore1Up(float x, float y)
+{
+    CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+
+    CPoint* point = new CPoint(-1);
+
+    point->SetPosition(x, y);
+    currentScene->PushObject(point);
+}
+
 void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
     if (level == MARIO_LEVEL_BIG)
