@@ -14,6 +14,7 @@
 #include "ColorBlock.h"
 #include "FireTrap.h"
 #include "PlayScene.h"
+#include "Point.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -23,6 +24,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     if (abs(vx) > abs(maxVx)) vx = maxVx;
     
     if (abs(vy) > abs(maxVy)) vy = maxVy;
+
+    if (isOnPlatform) score_stack = 0;
 
     if (abs(vx) == MARIO_RUNNING_SPEED)
     {
@@ -67,7 +70,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
     {
         vy = 0;
         if (e->ny < 0)
+        {
             isOnPlatform = true;
+        }
     }
     else
         if (e->nx != 0 && e->obj->IsBlocking())
@@ -116,6 +121,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
                 goomba->SetState(GOOMBA_STATE_DIE);
             vy = -MARIO_JUMP_DEFLECT_SPEED;
             isOnPlatform = false;
+            
+            AddScore(x, y);
         }
     }
     else // hit by Goomba
@@ -134,6 +141,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
     // jump on top
     if (e->ny < 0)
     {
+        AddScore(x, y);
         if (koopa->IsHiding())
         {
             if (nx >= 0)
@@ -185,6 +193,9 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 {
     CQuestionBlock* question_block = dynamic_cast<CQuestionBlock*>(e->obj);
 
+    if (e->ny < 0)
+        isOnPlatform = true;
+
     if ((question_block->GetState() != QUESTION_BLOCK_STATE_INACTIVE && e->ny > 0) || (IsAttacking() && e->nx != 0))
     {
         question_block->SetState(QUESTION_BLOCK_STATE_INACTIVE);
@@ -226,9 +237,9 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
     if (level == MARIO_LEVEL_SMALL)
     {
-        SetLevel(MARIO_LEVEL_BIG);
-        e->obj->Delete();
+        SetLevel(MARIO_LEVEL_BIG);   
     }
+    e->obj->Delete();
 }
 
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
@@ -236,6 +247,10 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
     if (level == MARIO_LEVEL_BIG)
     {
         SetLevel(MARIO_LEVEL_RACCOON);
+    }
+    if (level == MARIO_LEVEL_RACCOON)
+    {
+        AddScore1000(x, y);
     }
     e->obj->Delete();
 }
@@ -552,7 +567,7 @@ void CMario::Render()
 
     // RenderBoundingBox();
 
-    DebugOutTitle(L"Mario can fly: %d", canFly);
+    DebugOutTitle(L"Mario score stack: %d", score_stack);
 }
 
 void CMario::SetState(int state)

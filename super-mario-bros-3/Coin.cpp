@@ -1,5 +1,6 @@
 #include "Coin.h"
 #include "debug.h"
+#include "PlayScene.h"
 
 void CCoin::Render()
 {
@@ -19,6 +20,8 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (isFromQuestionBlock && GetTickCount64() - appear_time > COIN_EXIST_DURATION || y > start_y)
 	{
 		isDeleted = true;
+		CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+		mario->AddScore(x, start_y);
 		return;
 	}
 }
