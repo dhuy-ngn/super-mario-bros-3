@@ -146,6 +146,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
             if (koopa->GetState() == KOOPA_STATE_SKIPPING)
             {
                 koopa->SetLevel(KOOPA_LEVEL_NORMAL);
+                koopa->SetState(KOOPA_STATE_WALKING);
             }
             else
                 koopa->SetState(KOOPA_STATE_HIDING);
