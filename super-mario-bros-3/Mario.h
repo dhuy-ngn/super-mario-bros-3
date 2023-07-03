@@ -226,6 +226,7 @@ class CMario : public CGameObject
 	BOOLEAN isOnPlatform;
 	int coin;
 	int score_stack;
+	int score;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
@@ -267,6 +268,7 @@ public:
 		coin = 0;
 		fly_up_start = -1;
 		score_stack = 0;
+		score = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -308,4 +310,8 @@ public:
 	void StartFlying() { fly_up_start = GetTickCount64(); }
 	void StartAttacking() { attacking_start = GetTickCount64(); }
 	void LevelDown();
+	void GainScore();
+	void Gain1000Score() { this->score += 1000; }
+	void GainLife();
+	void GainCoin();
 };

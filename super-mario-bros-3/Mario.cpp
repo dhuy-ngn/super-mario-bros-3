@@ -250,7 +250,7 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
     }
     if (level == MARIO_LEVEL_RACCOON)
     {
-        AddScore1000(x, y);
+        AddScore1000(x, y - MARIO_RACCOON_BBOX_HEIGHT / 2);
     }
     e->obj->Delete();
 }
@@ -567,7 +567,7 @@ void CMario::Render()
 
     // RenderBoundingBox();
 
-    DebugOutTitle(L"Mario score stack: %d", score_stack);
+    DebugOutTitle(L"Mario score: %d", score);
 }
 
 void CMario::SetState(int state)
@@ -802,6 +802,8 @@ void CMario::AddScore(float x, float y)
     point->SetPosition(x, y);
     currentScene->PushObject(point);
 
+    GainScore();
+
     score_stack++;
 }
 
@@ -813,6 +815,8 @@ void CMario::AddScore1000(float x, float y)
 
     point->SetPosition(x, y);
     currentScene->PushObject(point);
+
+    Gain1000Score();
 }
 
 void CMario::AddScore1Up(float x, float y)
@@ -887,6 +891,37 @@ void CMario::LevelDown()
     default:
         DebugOut(L">>> Mario DIE >>> \n");
         SetState(MARIO_STATE_DIE);
+    }
+}
+
+void CMario::GainScore()
+{
+    switch (score_stack)
+    {
+    case SCORE_STACK_100:
+        score += 100;
+        break;
+    case SCORE_STACK_200:
+        score += 200;
+        break;
+    case SCORE_STACK_400:
+        score += 400;
+        break;
+    case SCORE_STACK_800:
+        score += 800;
+        break;
+    case SCORE_STACK_1000:
+        score += 1000;
+        break;
+    case SCORE_STACK_2000:
+        score += 2000;
+        break;
+    case SCORE_STACK_4000:
+        score += 4000;
+        break;
+    case SCORE_STACK_8000:
+        score += 8000;
+        break;
     }
 }
 
