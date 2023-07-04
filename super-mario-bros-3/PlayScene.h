@@ -9,6 +9,8 @@
 #include "HUD.h"
 //#include "Koopas.h"
 
+#define MAX_MAP_SIZE_X	2487
+
 
 class CPlayScene: public CScene
 {

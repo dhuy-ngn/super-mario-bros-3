@@ -354,6 +354,7 @@ void CPlayScene::Update(DWORD dt)
 	if (cx < 0) cx = 0;
 	if (cy > 0) cy = 0;
 
+	if (cx > MAX_MAP_SIZE_X) cx = MAX_MAP_SIZE_X;
 	if (cy < -400 /*max cam Y height*/) cy = -400;
 
 	if (dynamic_cast<CMario*>(player)->ShouldTurnOnCamY())
