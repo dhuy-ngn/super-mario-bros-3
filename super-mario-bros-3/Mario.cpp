@@ -152,29 +152,22 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
         else
         {
             if (koopa->GetState() == KOOPA_STATE_SKIPPING)
-            {
                 koopa->SetLevel(KOOPA_LEVEL_NORMAL);
-                koopa->SetState(KOOPA_STATE_WALKING);
-            }
             else
                 koopa->SetState(KOOPA_STATE_HIDING);
         }
         vy = -MARIO_JUMP_DEFLECT_SPEED;
+        isOnPlatform = false;
     }
     else // hit by Koopa
     {
-        if (koopa->GetState() == KOOPA_STATE_HIDING && koopa->GetState() != KOOPA_STATE_KNOCKED_OUT)
-            if (game->IsKeyDown(DIK_A))
+        if (koopa->GetState() == KOOPA_STATE_HIDING)
+            if (ax >= 0)
             {
-                SetState(MARIO_STATE_HOLD_KOOPA_SHELL);
-                isHoldingKoopaShell = true;
-                koopa->SetState(KOOPA_STATE_HELD_BY_MARIO);
+                koopa->SetState(KOOPA_STATE_SPINNING_RIGHT);
             }
             else
-                if (ax >= 0)
-                    koopa->SetState(KOOPA_STATE_SPINNING_RIGHT);
-                else
-                    koopa->SetState(KOOPA_STATE_SPINNING_LEFT);
+                koopa->SetState(KOOPA_STATE_SPINNING_LEFT);
         else
         {
             if (untouchable == 0)
@@ -244,10 +237,7 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
-    if (level == MARIO_LEVEL_BIG)
-    {
-        SetLevel(MARIO_LEVEL_RACCOON);
-    }
+    SetLevel(MARIO_LEVEL_RACCOON);
     if (level == MARIO_LEVEL_RACCOON)
     {
         AddScore1000(x, y - MARIO_RACCOON_BBOX_HEIGHT / 2);

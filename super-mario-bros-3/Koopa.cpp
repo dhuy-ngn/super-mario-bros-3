@@ -86,8 +86,10 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (e->ny != 0)
 	{
-		if (e->ny < 0 && level == KOOPA_LEVEL_PARA)
-			SetState(KOOPA_STATE_SKIPPING);
+		vy = 0;
+		if (e->ny < 0)
+			if (level == KOOPA_LEVEL_PARA)
+				SetState(KOOPA_STATE_SKIPPING);
 		else
 			ay = KOOPA_GRAVITY;
 	}
