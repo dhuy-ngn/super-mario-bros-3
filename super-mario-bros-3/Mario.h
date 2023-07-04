@@ -16,17 +16,16 @@
 
 #define MARIO_ACCEL_WALK_X	0.001f
 #define MARIO_ACCEL_RUN_X	0.0004f
-#define MARIO_ACCEL_FLYING_X	0.0012f
-#define MARIO_ACCEL_SPINNING_X	0.001f
+#define MARIO_ACCEL_FLYING_X	0.0008f
 
-#define MARIO_JUMP_SPEED_Y		0.4f
-#define MARIO_JUMP_RUN_SPEED_Y	0.6f
+#define MARIO_JUMP_SPEED_Y		0.35f
+#define MARIO_JUMP_RUN_SPEED_Y	0.5f
 #define MARIO_ACCEL_FLYING_Y 0.1f
 
-#define MARIO_GRAVITY		0.0012f
-#define MARIO_LANDING_SPEED	0.0007f
+#define MARIO_GRAVITY		0.0008f
+#define MARIO_LANDING_SPEED	0.0005f
 
-#define MARIO_JUMP_DEFLECT_SPEED  0.25f
+#define MARIO_JUMP_DEFLECT_SPEED  0.2f
 
 #define MARIO_MAX_FLY_TIME	5000
 
@@ -227,6 +226,7 @@ class CMario : public CGameObject
 	int coin;
 	int score_stack;
 	int score;
+	int life;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
@@ -269,6 +269,7 @@ public:
 		fly_up_start = -1;
 		score_stack = 0;
 		score = 0;
+		life = 4;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -305,7 +306,7 @@ public:
 	BOOLEAN IsHoldingKoopaShell() { return this->isHoldingKoopaShell; }
 	BOOLEAN ShouldTurnOnCamY()
 	{
-		return (this->isFlying || this->isLanding || y < 0);
+		return (this->isFlying || this->isLanding || y < 60 );
 	}
 	void StartFlying() { fly_up_start = GetTickCount64(); }
 	void StartAttacking() { attacking_start = GetTickCount64(); }
