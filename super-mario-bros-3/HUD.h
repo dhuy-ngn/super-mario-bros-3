@@ -9,6 +9,9 @@
 
 #define SPRITE_HUD_ID						99999
 #define SPRITE_ICONMARIO_ID					99998
+#define SPRITE_ICONLUIGI_ID					50004
+#define SPRITE_FILLARROW_ID					50005
+#define ANI_P_ID							5006
 
 #define SPRITE_FONT_0_ID				50013
 #define SPRITE_FONT_1_ID				50014
@@ -67,7 +70,6 @@
 class CHud : public CGameObject
 {
 public:
-	CMario* mario;
 	std::map<char, LPSPRITE> fonts;
 	int speedStack = 0;
 	int money = 0;
@@ -75,6 +77,7 @@ public:
 	int remainTime = DEFAULT_TIME;
 	int marioLife = 4;
 	int score = 0;
+	LPANIMATION PAni = NULL;
 
 	LPSPRITE playerSprite = NULL;
 	vector<LPSPRITE> moneySprites;
@@ -83,7 +86,7 @@ public:
 	vector<LPSPRITE> scoreSprites;
 	vector<LPSPRITE> powerMelterSprite;
 
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
+	virtual void Update(DWORD dt);
 	CHud();
 	virtual void Render();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) {};
@@ -92,7 +95,6 @@ public:
 	void AddLife();
 	void AddScore();
 	void initFonts();
-	void LoadBackUpHud();
 	LPSPRITE mappingFont(char c);
 	vector<LPSPRITE> StringToSprite(string str);
 };

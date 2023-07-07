@@ -301,6 +301,8 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	int GetLevel() { return this->level; }
 	int GetCoin() { return this->coin; }
+	int GetLife() { return this->life; }
+	int GetScore() { return this->score; }
 	BOOLEAN IsAttacking() { return this->isAttacking; }
 	BOOLEAN IsFlying() { return this->isFlying; }
 	BOOLEAN IsLanding() { return this->isLanding; }

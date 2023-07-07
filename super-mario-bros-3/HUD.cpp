@@ -3,70 +3,21 @@
 #include <string>
 #include "PlayScene.h"
 
-CHud::CHud()
-{
-	initFonts();
-	playerSprite = CSprites::GetInstance()->Get(SPRITE_ICONMARIO_ID);
-	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
-	this->marioLife = 4;
-	this->score = 0;
-	this->money = 0;
-	mariolifeSprites = StringToSprite(to_string(marioLife));
-	moneySprites = StringToSprite(to_string(money));
-	string score_str = to_string(score);
-	while (score_str.length() < HUD_SCORE_MAX) score_str = "0" + score_str;
-	scoreSprites = StringToSprite(score_str);
-	string time_str = to_string(DEFAULT_TIME);
-	while (time_str.length() < HUD_TIME_MAX) time_str = "0" + time_str;
-	remainTimeSprites = StringToSprite(time_str);
+#define HUD_DIFF_P				15
+#define HUD_DIFF_ROW			4	
+#define HUD_DIFF_METTER			68
+#define HUD_DIFF_FIRST_ROW		8
+#define HUD_DIFF_SECOND_ROW		16
+#define HUD_DIFF_PLAYER			110
+#define HUD_DIFF_TIME			5
+#define HUD_DIFF_MONEY			12
+#define HUD_DIFF_LIFE			93
+#define HUD_DIFF_SCORE			60
 
-}
+#define HUD_TIME_MAX	3
+#define HUD_SCORE_MAX	7
 
-void CHud::Render() {
-	CSprites::GetInstance()->Get(SPRITE_HUD_ID)->Draw(x, y);
-	// for coin
-	for (unsigned int i = 0; i < moneySprites.size(); i++) {
-		moneySprites[i]->Draw(x + FONT_BBOX_WIDTH * i + HUD_DIFF_MONEY, y - HUD_DIFF_ROW);
-	}
-
-	// for time
-	for (unsigned int i = 0; i < remainTimeSprites.size(); i++) {
-		remainTimeSprites[i]->Draw(x + FONT_BBOX_WIDTH * i + HUD_DIFF_TIME, y + HUD_DIFF_ROW);
-	}
-
-	// for mario life
-	for (unsigned int i = 0; i < mariolifeSprites.size(); i++)
-		mariolifeSprites[i]->Draw(x + FONT_BBOX_WIDTH * i - HUD_DIFF_LIFE, y + HUD_DIFF_ROW);
-
-	// for mario sprite
-	playerSprite->Draw(x - HUD_DIFF_PLAYER, y + 4);
-
-	// for score
-	for (unsigned int i = 0; i < scoreSprites.size(); i++) {
-		scoreSprites[i]->Draw(x + FONT_BBOX_WIDTH * i - HUD_DIFF_SCORE - 7, y + HUD_DIFF_ROW);
-	}
-}
-
-void CHud::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-		AddCoin();
-	// for mario life
-	mariolifeSprites = StringToSprite(to_string(marioLife));
-
-	// for coin
-	moneySprites = StringToSprite(to_string(money));
-
-	// for time
-	time += dt;
-	remainTime = DEFAULT_TIME - time / 1000;
-	string time_str = to_string(remainTime);
-	while (time_str.length() < HUD_TIME_MAX) time_str = "0" + time_str;
-	remainTimeSprites = StringToSprite(time_str);
-
-	// for score
-	string score_str = to_string(score);
-	while (score_str.length() < HUD_SCORE_MAX) score_str = "0" + score_str;
-	scoreSprites = StringToSprite(score_str);
-}
+#define HUD_HEIGHT 32
 
 void CHud::initFonts() {
 	CSprites* sprites = CSprites::GetInstance();
@@ -130,7 +81,118 @@ vector<LPSPRITE> CHud::StringToSprite(string str)
 	return sprites;
 }
 
-void CHud::AddCoin() {
+CHud::CHud() 
+{
+	initFonts();
+	playerSprite = CSprites::GetInstance()->Get(SPRITE_ICONMARIO_ID);
+	PAni = CAnimations::GetInstance()->Get(ANI_P_ID);
+	this->marioLife = 4;
+	this->score = 0;
+	this->money = 0;
+	mariolifeSprites = StringToSprite(to_string(marioLife));
+	moneySprites = StringToSprite(to_string(money));
+	string score_str = to_string(score);
+	while (score_str.length() < HUD_SCORE_MAX) score_str = "0" + score_str;
+	scoreSprites = StringToSprite(score_str);
+	string time_str = to_string(DEFAULT_TIME);
+	while (time_str.length() < HUD_TIME_MAX) time_str = "0" + time_str;
+	remainTimeSprites = StringToSprite(time_str);
+}
+
+void CHud::Render() {
+	CSprites::GetInstance()->Get(SPRITE_HUD_ID)->Draw(x, y);
+
+		//for (int i = 1; i <= speedStack; i++) {
+		//	if (i == MARIO_RUNNING_STACKS) {
+		//		if (PAni != nullptr)
+		//			PAni->Render(x - CHud_DIFF_P, y - CHud_DIFF_ROW);
+		//	}
+		//	else
+		//	{
+		//		powerMelterSprite[i - 1]->Draw(x + FONT_BBOX_WIDTH * (i - 1) - CHud_DIFF_METTER, y - 4);
+		//	}
+		//}
+	
+
+	// for coin
+	for (unsigned int i = 0; i < moneySprites.size(); i++) {
+		moneySprites[i]->Draw(x + FONT_BBOX_WIDTH * i + HUD_DIFF_MONEY, y - HUD_DIFF_ROW);
+	}
+
+	// for time
+	for (unsigned int i = 0; i < remainTimeSprites.size(); i++) {
+		remainTimeSprites[i]->Draw(x + FONT_BBOX_WIDTH * i + HUD_DIFF_TIME, y + HUD_DIFF_ROW);
+	}
+
+	// for mario life
+	for (unsigned int i = 0; i < mariolifeSprites.size(); i++)
+		mariolifeSprites[i]->Draw(x + FONT_BBOX_WIDTH * i - HUD_DIFF_LIFE, y + HUD_DIFF_ROW);
+
+	// for mario sprite
+	playerSprite->Draw(x - HUD_DIFF_PLAYER, y + 4);
+
+	// for score
+	for (unsigned int i = 0; i < scoreSprites.size(); i++) {
+		scoreSprites[i]->Draw(x + FONT_BBOX_WIDTH * i - HUD_DIFF_SCORE - 7, y + HUD_DIFF_ROW);
+	}
+}
+
+void CHud::Update(DWORD dt) 
+{
+	AddSpeedStack();
+	AddCoin();
+	AddLife();
+	AddScore();
+	// for mario life
+	//mariolifeSprites = StringToSprite(to_string(marioLife));
+
+	// for coin
+	moneySprites = StringToSprite(to_string(money));
+
+	// for time
+	time += dt;
+	remainTime = DEFAULT_TIME - time / 1000;
+	string time_str = to_string(remainTime);
+	while (time_str.length() < HUD_TIME_MAX) time_str = "0" + time_str;
+	remainTimeSprites = StringToSprite(time_str);
+
+	// for score
+	string score_str = to_string(score);
+	while (score_str.length() < HUD_SCORE_MAX) score_str = "0" + score_str;
+	scoreSprites = StringToSprite(score_str);
+
+	CGameObject::Update(dt);
+}
+
+void CHud::AddSpeedStack() {
+	/*CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	mario = currentScene->GetPlayer();
+	this->speedStack = mario->speedStack;*/
+}
+
+void CHud::AddCoin() 
+{
+	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
 	if (mario != NULL)
+	{
 		this->money = mario->GetCoin();
+	}
+}
+
+void CHud::AddLife() 
+{
+	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+	if (mario != NULL)
+	{
+		this->marioLife = mario->GetLife();
+	}
+}
+
+void CHud::AddScore() 
+{
+	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+	if (mario != NULL)
+	{
+		this->score = mario->GetScore();
+	}
 }

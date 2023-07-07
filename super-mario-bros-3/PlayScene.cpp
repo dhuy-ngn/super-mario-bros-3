@@ -373,7 +373,7 @@ void CPlayScene::Update(DWORD dt)
 		hud->SetPosition(cx + 131, 219);
 	}
 
-	hud->Update(dt, &coObjects);
+	hud->Update(dt);
 	PurgeDeletedObjects();
 }
 
