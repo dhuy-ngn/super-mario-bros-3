@@ -97,22 +97,27 @@ CHud::CHud()
 	string time_str = to_string(DEFAULT_TIME);
 	while (time_str.length() < HUD_TIME_MAX) time_str = "0" + time_str;
 	remainTimeSprites = StringToSprite(time_str);
+	for (unsigned int i = 0; i < MARIO_MAX_RUNNING_STACK - 1; i++)
+		powerMeterSprite.push_back((CSprites::GetInstance()->Get(SPRITE_FILLARROW_ID)));
 }
 
-void CHud::Render() {
+void CHud::Render()
+{
 	CSprites::GetInstance()->Get(SPRITE_HUD_ID)->Draw(x, y);
 
-		//for (int i = 1; i <= speedStack; i++) {
-		//	if (i == MARIO_RUNNING_STACKS) {
-		//		if (PAni != nullptr)
-		//			PAni->Render(x - CHud_DIFF_P, y - CHud_DIFF_ROW);
-		//	}
-		//	else
-		//	{
-		//		powerMelterSprite[i - 1]->Draw(x + FONT_BBOX_WIDTH * (i - 1) - CHud_DIFF_METTER, y - 4);
-		//	}
-		//}
-	
+	for (int i = 1; i <= speed_stack; i++)
+	{
+		if (i == MARIO_MAX_RUNNING_STACK)
+		{
+			if (PAni != nullptr)
+				PAni->Render(x - HUD_DIFF_P, y - HUD_DIFF_ROW);
+		}
+		else
+		{
+			powerMeterSprite[i - 1]->Draw(x + FONT_BBOX_WIDTH * (i - 1) - HUD_DIFF_METTER, y - 4);
+		}
+	}
+
 
 	// for coin
 	for (unsigned int i = 0; i < moneySprites.size(); i++) {
@@ -144,7 +149,7 @@ void CHud::Update(DWORD dt)
 	AddLife();
 	AddScore();
 	// for mario life
-	//mariolifeSprites = StringToSprite(to_string(marioLife));
+	mariolifeSprites = StringToSprite(to_string(marioLife));
 
 	// for coin
 	moneySprites = StringToSprite(to_string(money));
@@ -164,10 +169,13 @@ void CHud::Update(DWORD dt)
 	CGameObject::Update(dt);
 }
 
-void CHud::AddSpeedStack() {
-	/*CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
-	mario = currentScene->GetPlayer();
-	this->speedStack = mario->speedStack;*/
+void CHud::AddSpeedStack() 
+{
+	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+	if (mario != NULL)
+	{
+		this->speed_stack = mario->GetSpeedStack();
+	}
 }
 
 void CHud::AddCoin() 

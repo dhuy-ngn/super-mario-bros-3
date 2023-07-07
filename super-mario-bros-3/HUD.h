@@ -9,7 +9,6 @@
 
 #define SPRITE_HUD_ID						99999
 #define SPRITE_ICONMARIO_ID					99998
-#define SPRITE_ICONLUIGI_ID					50004
 #define SPRITE_FILLARROW_ID					50005
 #define ANI_P_ID							5006
 
@@ -71,7 +70,7 @@ class CHud : public CGameObject
 {
 public:
 	std::map<char, LPSPRITE> fonts;
-	int speedStack = 0;
+	int speed_stack = 0;
 	int money = 0;
 	int time = 0;
 	int remainTime = DEFAULT_TIME;
@@ -84,7 +83,7 @@ public:
 	vector<LPSPRITE> remainTimeSprites;
 	vector<LPSPRITE> mariolifeSprites;
 	vector<LPSPRITE> scoreSprites;
-	vector<LPSPRITE> powerMelterSprite;
+	vector<LPSPRITE> powerMeterSprite;
 
 	virtual void Update(DWORD dt);
 	CHud();

@@ -29,11 +29,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
     if (abs(vx) == MARIO_RUNNING_SPEED)
     {
-        canFly = true;
-    }
-    if (abs(vx) < MARIO_RUNNING_SPEED && !isFlying)
-    {
-        canFly = false;
+        isRunning = true;
     }
 
     // reset untouchable timer if untouchable time has passed
@@ -46,6 +42,28 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     if (GetTickCount64() - attacking_start > MARIO_ATTACKING_DURATION)
     {
         attacking_start = 0;
+    }
+
+    if (GetTickCount64() - running_start >= MARIO_RUNNING_STACK_DURATION && !isFlying && !isLanding && isOnPlatform && isRunning)
+    {
+        running_start = GetTickCount64();
+        speed_stack++;
+        if (speed_stack >= MARIO_MAX_RUNNING_STACK) 
+        {
+            speed_stack = MARIO_MAX_RUNNING_STACK;
+            canFly = true;
+        }
+    }
+    if (GetTickCount64() - running_start > MARIO_RUNNING_STACK_DURATION && vx == 0)
+    {
+        canFly = false;
+        isRunning = false;
+        running_start = GetTickCount64();
+        speed_stack--;
+        if (speed_stack < 0)
+        {
+            speed_stack = 0;
+        }
     }
 
     CGameObject::Update(dt, coObjects);

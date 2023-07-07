@@ -200,6 +200,8 @@
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_ATTACKING_DURATION 150
+#define MARIO_RUNNING_STACK_DURATION	200
+#define MARIO_MAX_RUNNING_STACK	7
 
 class CMario : public CGameObject
 {
@@ -209,6 +211,7 @@ class CMario : public CGameObject
 	BOOLEAN isAttacking;
 	BOOLEAN isLanding;
 	BOOLEAN isFlying;
+	BOOLEAN isRunning;
 	BOOLEAN isHoldingKoopaShell;
 	BOOLEAN canFly;
 
@@ -222,11 +225,14 @@ class CMario : public CGameObject
 	ULONGLONG untouchable_start = 0;
 	ULONGLONG fly_up_start = 0;
 	ULONGLONG attacking_start = 0;
+	ULONGLONG running_start = 0;
 	BOOLEAN isOnPlatform;
+
 	int coin;
 	int score_stack;
 	int score;
 	int life;
+	int speed_stack;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
@@ -272,6 +278,7 @@ public:
 		score_stack = 0;
 		score = 0;
 		life = 4;
+		speed_stack = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -303,9 +310,11 @@ public:
 	int GetCoin() { return this->coin; }
 	int GetLife() { return this->life; }
 	int GetScore() { return this->score; }
+	int GetSpeedStack() { return this->speed_stack; }
 	BOOLEAN IsAttacking() { return this->isAttacking; }
 	BOOLEAN IsFlying() { return this->isFlying; }
 	BOOLEAN IsLanding() { return this->isLanding; }
+	BOOLEAN IsRunning() { return this->isRunning; }
 	BOOLEAN CanFly() { return this->canFly; }
 	BOOLEAN IsHoldingKoopaShell() { return this->isHoldingKoopaShell; }
 	BOOLEAN ShouldTurnOnCamY()
@@ -314,6 +323,7 @@ public:
 	}
 	void StartFlying() { fly_up_start = GetTickCount64(); }
 	void StartAttacking() { attacking_start = GetTickCount64(); }
+	void StartRunning() { running_start = GetTickCount64(); }
 	void LevelDown();
 	void GainScore();
 	void Gain1000Score() { this->score += 1000; }
