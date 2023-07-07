@@ -101,6 +101,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
         OnCollisionWithMushroom(e);
     else if (dynamic_cast<CLeaf*>(e->obj))
         OnCollisionWithLeaf(e);
+    else if (dynamic_cast<CBrick*>(e->obj))
+        OnCollisionWithBrick(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -172,6 +174,18 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
         {
             if (untouchable == 0)
                 LevelDown();
+        }
+    }
+}
+
+void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
+{
+    CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+    if (e->ny > 0)
+    {
+        if (brick->GetItemType() == BRICK_ITEM_TYPE_MUSHROOM)
+        {
+
         }
     }
 }

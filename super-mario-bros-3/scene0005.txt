@@ -22,6 +22,7 @@ HUD.txt
 decoration.txt
 #
 powerup.txt
+brick.txt
 [OBJECTS]
 # type	x	y	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
@@ -38,8 +39,8 @@ powerup.txt
 4	1338	-113
 4	1353	-113
 4	1368	-113
-4	1458	-53
-4	1473	-53
+4	1473	-83
+4	1488	-83
 4	1518	-68
 4	1533	-68
 4	1548	-68
@@ -251,6 +252,9 @@ powerup.txt
 8	1324	99	1	16	111
 8	2107	147	1	16	48
 8	2139	51	1	16	48
+
+#Brick
+1	1443	-68
 
 #Portal 
 
