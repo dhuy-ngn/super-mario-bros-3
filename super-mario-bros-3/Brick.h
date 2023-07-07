@@ -16,6 +16,8 @@
 #define	BRICK_DEFLECT_SPEED 0.1f
 #define BRICK_DEFLECT_DURATION 25
 
+#define ID_ANI_BRICK_INACTIVE  7000 
+
 class CBrick : public CGameObject {
 protected:
 	int item;

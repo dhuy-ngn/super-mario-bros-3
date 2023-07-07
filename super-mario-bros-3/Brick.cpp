@@ -4,7 +4,10 @@
 void CBrick::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_BRICK)->Render(x, y);
+	if (state == BRICK_STATE_EXHAUSTED)
+		animations->Get(ID_ANI_BRICK_INACTIVE)->Render(x, y);
+	else
+		animations->Get(ID_ANI_BRICK)->Render(x, y);
 	//RenderBoundingBox();
 }
 
