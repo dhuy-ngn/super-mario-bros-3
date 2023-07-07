@@ -9,7 +9,7 @@
 #define MUSHROOM_STATE_MOVE 200
 #define MUSHROOM_STATE_DELETED 300
 
-#define MUSHROOM_MOVING_SPEED 0.08f
+#define MUSHROOM_MOVING_SPEED 0.06f
 #define MUSHROOM_GROWING_UP_SPEED -0.015f
 #define MUSHROOM_GRAVITY 0.2f
 
@@ -41,4 +41,5 @@ public:
 		this->type = type;
 	};
 	virtual void SetState(int state);
+	int GetType() { return this->type; }
 };

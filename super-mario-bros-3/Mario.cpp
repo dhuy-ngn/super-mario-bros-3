@@ -180,12 +180,18 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 {
+    CPlayScene* current_scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
     CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+    float bx, by;
+    brick->GetPosition(bx, by);
     if (e->ny > 0)
     {
-        if (brick->GetItemType() == BRICK_ITEM_TYPE_MUSHROOM)
+        if (brick->GetItemType() == BRICK_ITEM_TYPE_MUSHROOM && brick->GetState()!= BRICK_STATE_EXHAUSTED)
         {
-
+            brick->SetState(BRICK_STATE_EXHAUSTED);
+            CMushroom* mushroom = new CMushroom(bx, by, MUSHROOM_TYPE_GREEN);
+            current_scene->UnshiftObject(mushroom);
+            mushroom->SetState(MUSHROOM_STATE_IDLE);
         }
     }
 }
@@ -242,10 +248,14 @@ void CMario::OnCollisionWithFireBullet(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
-    if (level == MARIO_LEVEL_SMALL)
-    {
-        SetLevel(MARIO_LEVEL_BIG);   
-    }
+    CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
+    if (mushroom->GetType() == MUSHROOM_TYPE_RED)
+        if (level == MARIO_LEVEL_SMALL)
+            SetLevel(MARIO_LEVEL_BIG);
+        else
+            AddScore1000(x, y);
+    else
+        AddScore1Up(x, y);
     e->obj->Delete();
 }
 

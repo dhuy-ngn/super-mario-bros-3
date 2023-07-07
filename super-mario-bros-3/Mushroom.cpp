@@ -31,8 +31,12 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CMushroom::Render()
 {
-	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = ID_ANI_MUSHROOM_RED;
+	CAnimations* animations = CAnimations::GetInstance();
+	if (type == MUSHROOM_TYPE_RED)
+		aniId = ID_ANI_MUSHROOM_RED;
+	else 
+		aniId = ID_ANI_MUSHROOM_GREEN;
 
 	animations->Get(aniId)->Render(x, y);
 }
