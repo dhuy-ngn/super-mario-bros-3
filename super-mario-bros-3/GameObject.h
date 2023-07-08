@@ -41,7 +41,7 @@ public:
 	float GetY() { return this->y; }
 	virtual void Delete() { isDeleted = true;  }
 	bool IsDeleted() { return isDeleted; }
-	int GetNx() { return this->nx; }
+	int GetMarioDirection() { return this->nx; }
 
 	void RenderBoundingBox();
 

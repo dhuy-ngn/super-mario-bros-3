@@ -184,13 +184,22 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
     }
     else // hit by Koopa
     {
-        if (koopa->GetState() == KOOPA_STATE_HIDING)
-            if (ax >= 0)
+        if (koopa->IsHiding())
+            if (game->IsKeyDown(DIK_A)) 
             {
-                koopa->SetState(KOOPA_STATE_SPINNING_RIGHT);
+                if (koopa->CanBeHeld())
+                {
+                    koopa->SetState(KOOPA_STATE_HELD_BY_MARIO);
+                    isHoldingKoopaShell = true;
+                }
             }
             else
-                koopa->SetState(KOOPA_STATE_SPINNING_LEFT);
+                if (ax >= 0)
+                {
+                    koopa->SetState(KOOPA_STATE_SPINNING_RIGHT);
+                }
+                else
+                    koopa->SetState(KOOPA_STATE_SPINNING_LEFT);
         else
         {
             if (untouchable == 0)

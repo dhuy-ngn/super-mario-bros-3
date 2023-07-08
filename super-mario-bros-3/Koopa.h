@@ -93,6 +93,7 @@ protected:
 	ULONGLONG die_start;
 	ULONGLONG wake_up_start;
 
+	BOOLEAN canBeHeld;
 	BOOLEAN isBeingHeld;
 	BOOLEAN isHiding;
 	BOOLEAN isSpinning;
@@ -127,6 +128,7 @@ public:
 	void SetLevel(int level) { this->level = level; }
 	int GetLevel() { return this->level; };
 	int GetColor() { return this->color; }
+	BOOLEAN CanBeHeld() { return this->canBeHeld; }
 	BOOLEAN IsBeingHeld() { return this->isBeingHeld; }
 	void SetIsBeingHeld(BOOLEAN value) { this->isBeingHeld = value; }
 };

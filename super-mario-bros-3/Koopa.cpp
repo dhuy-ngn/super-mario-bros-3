@@ -49,6 +49,17 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isDeleted = true;
 		return;
 	}
+	if (isBeingHeld)
+	{
+		CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+		float mx, my;
+		mario->GetPosition(mx, my);
+
+		if (mario->GetLevel() != MARIO_LEVEL_RACCOON)
+			this->SetPosition(mx + 6 * mario->GetMarioDirection(), my + 2);
+		else
+			this->SetPosition(mx + 14 * mario->GetMarioDirection(), my + 2);
+	}
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -174,6 +185,7 @@ void CKoopa::SetState(int state)
 {
 	switch (state) {
 	case KOOPA_STATE_WALKING:
+		canBeHeld = true;
 		isHiding = false;
 		isSpinning = false;
 		isBeingHeld = false;
@@ -182,18 +194,21 @@ void CKoopa::SetState(int state)
 		break;
 
 	case KOOPA_STATE_HIDING:
+		canBeHeld = true;
 		isHiding = true;
 		inactive_start = GetTickCount64();
 		vx = 0.0f;
 		break;
 
 	case KOOPA_STATE_SPINNING_LEFT:
+		canBeHeld = false;
 		isHiding = false;
 		isSpinning = true;
 		vx = -KOOPA_SPINNING_SPEED;
 		break;
 
 	case KOOPA_STATE_SPINNING_RIGHT:
+		canBeHeld = false;
 		isHiding = false;
 		isSpinning = true;
 		vx = KOOPA_SPINNING_SPEED;
@@ -206,6 +221,7 @@ void CKoopa::SetState(int state)
 
 	case KOOPA_STATE_HELD_BY_MARIO:
 		isBeingHeld = true;
+		isHiding = true;
 		vx = 0;
 		vy = 0;
 		ax = 0;
@@ -215,6 +231,7 @@ void CKoopa::SetState(int state)
 
 		// Flying Koopas
 	case KOOPA_STATE_SKIPPING:
+		canBeHeld = false;
 		isHiding = false;
 		isSpinning = false;
 		isBeingHeld = false;
