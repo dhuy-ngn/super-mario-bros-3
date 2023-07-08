@@ -185,13 +185,10 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
     else // hit by Koopa
     {
         if (koopa->IsHiding())
-            if (game->IsKeyDown(DIK_A)) 
+            if (canHoldKoopaShell)
             {
-                if (koopa->CanBeHeld())
-                {
-                    koopa->SetState(KOOPA_STATE_HELD_BY_MARIO);
-                    isHoldingKoopaShell = true;
-                }
+                koopa->SetState(KOOPA_STATE_HELD_BY_MARIO);
+                isHoldingKoopaShell = true;
             }
             else
                 if (ax >= 0)
@@ -255,7 +252,6 @@ void CMario::OnCollisionWithColorBlock(LPCOLLISIONEVENT e)
     if (e->ny < 0)
     {
         isOnPlatform = true;
-        vy = 0;
     }
 }
 
@@ -611,7 +607,7 @@ void CMario::Render()
 
     // RenderBoundingBox();
 
-    DebugOutTitle(L"Mario score: %d", score);
+    DebugOutTitle(L"Mario holding koopa shell: %d", isHoldingKoopaShell);
 }
 
 void CMario::SetState(int state)
@@ -796,6 +792,7 @@ void CMario::SetState(int state)
 
     case MARIO_STATE_HOLD_WALK_KOOPA_SHELL_RIGHT:
         isRunning = false;
+        isHoldingKoopaShell = true;
         maxVx = MARIO_WALKING_SPEED;
         ax = MARIO_ACCEL_WALK_X;
         nx = 1;
@@ -804,6 +801,7 @@ void CMario::SetState(int state)
 
     case MARIO_STATE_HOLD_WALK_KOOPA_SHELL_LEFT:
         isRunning = false;
+        isHoldingKoopaShell = true;
         maxVx = -MARIO_WALKING_SPEED;
         ax = -MARIO_ACCEL_WALK_X;
         nx = -1;

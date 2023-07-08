@@ -55,10 +55,19 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float mx, my;
 		mario->GetPosition(mx, my);
 
-		if (mario->GetLevel() != MARIO_LEVEL_RACCOON)
-			this->SetPosition(mx + 6 * mario->GetMarioDirection(), my + 2);
-		else
-			this->SetPosition(mx + 14 * mario->GetMarioDirection(), my + 2);
+		if (mario->IsHoldingKoopaShell())
+			switch (mario->GetLevel())
+			{
+			case MARIO_LEVEL_SMALL:
+				SetPosition(mx + 8 * mario->GetMarioDirection(), my);
+				break;
+			case MARIO_LEVEL_BIG:
+				SetPosition(mx + 8 * mario->GetMarioDirection(), my + 2);
+				break;
+			case MARIO_LEVEL_RACCOON:
+				SetPosition(mx + 12 * mario->GetMarioDirection(), my + 2);
+				break;
+			}
 	}
 
 	CGameObject::Update(dt, coObjects);
@@ -221,6 +230,7 @@ void CKoopa::SetState(int state)
 
 	case KOOPA_STATE_HELD_BY_MARIO:
 		isBeingHeld = true;
+		canBeHeld = true;
 		isHiding = true;
 		vx = 0;
 		vy = 0;
