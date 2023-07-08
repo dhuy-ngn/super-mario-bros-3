@@ -318,7 +318,9 @@ public:
 	BOOLEAN IsLanding() { return this->isLanding; }
 	BOOLEAN IsRunning() { return this->isRunning; }
 	BOOLEAN CanFly() { return this->canFly; }
-	void CanHoldKoopaShell() { this->canHoldKoopaShell = true; }
+	void HoldKoopaShell() { this->canHoldKoopaShell = true; }
+	void ReleaseKoopaShell() { this->canHoldKoopaShell = false; }
+	BOOLEAN CanHoldKoopaShell() { return this->canHoldKoopaShell; }
 	BOOLEAN IsHoldingKoopaShell() { return this->isHoldingKoopaShell; }
 	BOOLEAN ShouldTurnOnCamY()
 	{

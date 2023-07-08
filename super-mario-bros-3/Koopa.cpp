@@ -59,7 +59,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			switch (mario->GetLevel())
 			{
 			case MARIO_LEVEL_SMALL:
-				SetPosition(mx + 8 * mario->GetMarioDirection(), my);
+				SetPosition(mx + 9 * mario->GetMarioDirection(), my - 2);
 				break;
 			case MARIO_LEVEL_BIG:
 				SetPosition(mx + 8 * mario->GetMarioDirection(), my + 2);
@@ -68,6 +68,18 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				SetPosition(mx + 12 * mario->GetMarioDirection(), my + 2);
 				break;
 			}
+		else
+		{
+			if (mario->GetMarioDirection() > 0)
+			{
+				SetState(KOOPA_STATE_SPINNING_RIGHT);
+			}
+			else
+			{
+				SetState(KOOPA_STATE_SPINNING_LEFT);
+			}
+			isBeingHeld = false;
+		}
 	}
 
 	CGameObject::Update(dt, coObjects);
@@ -221,6 +233,7 @@ void CKoopa::SetState(int state)
 		isHiding = false;
 		isSpinning = true;
 		vx = KOOPA_SPINNING_SPEED;
+		vy = 0;
 		break;
 
 	case KOOPA_STATE_SHAKING:
@@ -234,8 +247,6 @@ void CKoopa::SetState(int state)
 		isHiding = true;
 		vx = 0;
 		vy = 0;
-		ax = 0;
-		ay = 0;
 		inactive_start = GetTickCount64();
 		break;
 

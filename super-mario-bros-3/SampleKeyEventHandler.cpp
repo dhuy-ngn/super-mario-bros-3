@@ -56,7 +56,7 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_S:
 		mario->SetState(MARIO_STATE_RELEASE_JUMP);
 		if (game->IsKeyDown(DIK_A))
-			mario->CanHoldKoopaShell();
+			mario->HoldKoopaShell();
 		break;
 	case DIK_D:
 		mario->SetState(MARIO_STATE_ATTACK_RELEASE);
@@ -66,6 +66,11 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 		break;
 	case DIK_X:
 		mario->SetState(MARIO_STATE_LAND);
+		break;
+	case DIK_A:
+		if (mario->IsHoldingKoopaShell())
+			mario->ReleaseKoopaShell();
+		mario->SetState(MARIO_STATE_IDLE);
 		break;
 	}
 }
@@ -79,7 +84,7 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 	{
 		if (game->IsKeyDown(DIK_A))
 		{
-			mario->CanHoldKoopaShell();
+			mario->HoldKoopaShell();
 			mario->SetState(MARIO_STATE_RUNNING_RIGHT);
 		}
 		else
@@ -89,7 +94,7 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 	{
 		if (game->IsKeyDown(DIK_A))
 		{
-			mario->CanHoldKoopaShell();
+			mario->HoldKoopaShell();
 			mario->SetState(MARIO_STATE_RUNNING_LEFT);
 		}
 		else
@@ -115,12 +120,12 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 			if (game->IsKeyDown(DIK_RIGHT))
 				mario->SetState(MARIO_STATE_FLY_RIGHT);
 			if (game->IsKeyDown(DIK_A))
-				mario->CanHoldKoopaShell();
+				mario->HoldKoopaShell();
 		}
 	}
 	else if (game->IsKeyDown(DIK_A))
 	{
-		mario->CanHoldKoopaShell();
+		mario->HoldKoopaShell();
 		if (mario->IsHoldingKoopaShell())
 			mario->SetState(MARIO_STATE_HOLD_KOOPA_SHELL);
 	}
