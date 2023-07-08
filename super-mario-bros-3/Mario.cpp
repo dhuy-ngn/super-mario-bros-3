@@ -44,7 +44,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         attacking_start = 0;
     }
 
-    if (GetTickCount64() - running_start >= MARIO_RUNNING_STACK_DURATION && !isFlying && !isLanding && isOnPlatform && isRunning)
+    if (GetTickCount64() - running_start >= MARIO_RUNNING_STACK_DURATION && !isFlying && !isLanding && isRunning)
     {
         running_start = GetTickCount64();
         speed_stack++;
@@ -172,7 +172,10 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
         else
         {
             if (koopa->GetState() == KOOPA_STATE_SKIPPING)
+            {
                 koopa->SetLevel(KOOPA_LEVEL_NORMAL);
+                koopa->SetState(KOOPA_STATE_WALKING);
+            }
             else
                 koopa->SetState(KOOPA_STATE_HIDING);
         }
@@ -766,12 +769,14 @@ void CMario::SetState(int state)
     case MARIO_STATE_ATTACK_RELEASE:
         if (!isOnPlatform)  break;
         if (isSitting) break;
+        isRunning = false;
         isAttacking = false;
         state = MARIO_STATE_IDLE;
         break;
 
     case MARIO_STATE_HOLD_KOOPA_SHELL:
         if (isSitting) break;
+        isRunning = false;
         ax = 0.0f;
         vx = 0.0f;
         isHoldingKoopaShell = true;
@@ -781,6 +786,7 @@ void CMario::SetState(int state)
         break;
 
     case MARIO_STATE_HOLD_WALK_KOOPA_SHELL_RIGHT:
+        isRunning = false;
         maxVx = MARIO_WALKING_SPEED;
         ax = MARIO_ACCEL_WALK_X;
         nx = 1;
@@ -788,6 +794,7 @@ void CMario::SetState(int state)
         break;
 
     case MARIO_STATE_HOLD_WALK_KOOPA_SHELL_LEFT:
+        isRunning = false;
         maxVx = -MARIO_WALKING_SPEED;
         ax = -MARIO_ACCEL_WALK_X;
         nx = -1;
@@ -804,6 +811,7 @@ void CMario::SetState(int state)
         ax = 0.0f;
         vx = 0.0f;
         attacking_start = 0;
+        isRunning = false;
         isFlying = false;
         isLanding = false;
         isAttacking = false;
@@ -812,11 +820,13 @@ void CMario::SetState(int state)
 
     case MARIO_STATE_DIE:
         vy = -MARIO_JUMP_DEFLECT_SPEED;
+        isRunning = false;
         vx = 0;
         ax = 0;
         break;
 
     case MARIO_STATE_FALL_OFF:
+        isRunning = false;
         vx = 0;
         ax = 0;
         break;
@@ -978,9 +988,9 @@ void CMario::SetLevel(int l)
     else
     {
         // Clear the tail if Mario's level is set from Raccoon to Big
-        if (tail != NULL)
+        if (tail != nullptr)
             if (!tail->IsDeleted())
-                tail->Delete();
-            else return;
+            tail->Delete();
+        else return;
     }
 }
