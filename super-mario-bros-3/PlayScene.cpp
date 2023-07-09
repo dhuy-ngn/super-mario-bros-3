@@ -214,7 +214,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case OBJECT_TYPE_FIRETRAP:
 	{
-		obj = new CFireTrap(x, y);
+		int type = atoi(tokens[3].c_str());
+		obj = new CFireTrap(x, y, type);
 		break;
 	}
 
