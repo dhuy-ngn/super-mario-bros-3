@@ -21,13 +21,6 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		if (mario->CanFly())
 			mario->SetState(MARIO_STATE_FLY);
 		break;
-	case DIK_D:
-		if (mario->GetLevel() == MARIO_LEVEL_RACCOON)
-		{
-			mario->StartAttacking();
-			mario->SetState(MARIO_STATE_ATTACK);
-		}
-		break;
 	case DIK_1:
 		mario->SetLevel(MARIO_LEVEL_SMALL);
 		break;
@@ -44,7 +37,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		//Reload();
 		break;
 	case DIK_A:
-		if (mario->GetLevel() == MARIO_LEVEL_RACCOON)
+		if (mario->GetLevel() == MARIO_LEVEL_RACCOON && mario->IsIdle())
 			mario->SetState(MARIO_STATE_ATTACK);
 	}
 }

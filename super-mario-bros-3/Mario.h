@@ -323,7 +323,7 @@ public:
 	void AddScore(float x, float y);
 	void AddScore1000(float x, float y);
 	void AddScore1Up(float, float y);
-
+	int GetMarioHeight();
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	int GetLevel() { return this->level; }
 	int GetCoin() { return this->coin; }
@@ -335,6 +335,7 @@ public:
 	BOOLEAN IsLanding() { return this->isLanding; }
 	BOOLEAN IsRunning() { return this->isRunning; }
 	BOOLEAN CanFly() { return this->canFly; }
+	BOOLEAN IsIdle() { return vx == 0; }
 	void HoldKoopaShell() { this->canHoldKoopaShell = true; }
 	void ReleaseKoopaShell() { this->canHoldKoopaShell = false; }
 	BOOLEAN CanHoldKoopaShell() { return this->canHoldKoopaShell; }

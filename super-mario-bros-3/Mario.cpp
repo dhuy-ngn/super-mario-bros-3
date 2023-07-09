@@ -151,15 +151,18 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
                 goomba->SetState(GOOMBA_STATE_DIE);
             vy = -MARIO_JUMP_DEFLECT_SPEED;
             isOnPlatform = false;
-            
-            AddScore(x, y);
+
+            AddScore(x, y - GetMarioHeight() / 2);
         }
     }
     else // hit by Goomba
     {
-        if (untouchable == 0)
-            if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_KNOCKED_OUT)
-                LevelDown();
+        if (isAttacking)
+            goomba->SetState(GOOMBA_STATE_KNOCKED_OUT);
+        else
+            if (untouchable == 0)
+                if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_KNOCKED_OUT)
+                    LevelDown();
     }
 }
 
@@ -171,7 +174,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
     // jump on top
     if (e->ny < 0)
     {
-        AddScore(x, y);
+        AddScore(x, y - GetMarioHeight() / 2);
         if (koopa->IsHiding())
         {
             if (nx >= 0)
@@ -289,9 +292,9 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
         if (level == MARIO_LEVEL_SMALL)
             SetLevel(MARIO_LEVEL_BIG);
         else
-            AddScore1000(x, y);
+            AddScore1000(x, y- GetMarioHeight() / 2);
     else
-        AddScore1Up(x, y);
+        AddScore1Up(x, y - GetMarioHeight() / 2);
     e->obj->Delete();
 }
 
@@ -604,7 +607,24 @@ void CMario::Render()
     CAnimations* animations = CAnimations::GetInstance();
     int aniId = -1;
 
-    if (!isAttacking)
+    if (isAttacking && attack_ani_stack != 0)
+    {
+        if (nx > 0)
+        {
+            if (attack_ani_stack % 4 == 1) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_RIGHT_1)->Draw(x, y);
+            if (attack_ani_stack % 4 == 2) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_RIGHT_2)->Draw(x, y);
+            if (attack_ani_stack == 3) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_RIGHT_3)->Draw(x, y);
+            if (attack_ani_stack == 4) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_RIGHT_4)->Draw(x, y);
+        }
+        else
+        {
+            if (attack_ani_stack % 4 == 1) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_1)->Draw(x, y);
+            if (attack_ani_stack % 4 == 2) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_2)->Draw(x, y);
+            if (attack_ani_stack == 3) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_3)->Draw(x, y);
+            if (attack_ani_stack == 4) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_4)->Draw(x, y);
+        }
+    }
+    else
     {
         if (state == MARIO_STATE_DIE)
             aniId = ID_ANI_MARIO_DIE;
@@ -616,26 +636,6 @@ void CMario::Render()
             aniId = GetAniIdRaccoon();
 
         animations->Get(aniId)->Render(x, y);
-    }
-
-    else
-    {
-        if (nx > 0)
-        {
-            if (attack_ani_stack == 0) animations->Get(ID_ANI_MARIO_RACCOON_IDLE_RIGHT)->Render(x, y);
-            if (attack_ani_stack % 4 == 1) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_RIGHT_1)->Draw(x, y);
-            if (attack_ani_stack % 4 == 2) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_RIGHT_2)->Draw(x, y);
-            if (attack_ani_stack == 3) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_RIGHT_3)->Draw(x, y);
-            if (attack_ani_stack == 4) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_RIGHT_4)->Draw(x, y);
-        }
-        else
-        {
-            if (attack_ani_stack == 0) animations->Get(ID_ANI_MARIO_RACCOON_IDLE_LEFT)->Render(x, y);
-            if (attack_ani_stack % 4 == 1) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_1)->Draw(x, y);
-            if (attack_ani_stack % 4 == 2) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_2)->Draw(x, y);
-            if (attack_ani_stack == 3) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_3)->Draw(x, y);
-            if (attack_ani_stack == 4) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_4)->Draw(x, y);
-        }
     }
     // RenderBoundingBox();
 
@@ -651,12 +651,14 @@ void CMario::SetState(int state)
     {
     case MARIO_STATE_RUNNING_RIGHT:
         if (isSitting) break;
+        if (isAttacking) break;
         maxVx = MARIO_RUNNING_SPEED;
         ax = MARIO_ACCEL_RUN_X;
         nx = 1;
         break;
     case MARIO_STATE_RUNNING_LEFT:
         if (isSitting) break;
+        if (isAttacking) break;
         maxVx = -MARIO_RUNNING_SPEED;
         ax = -MARIO_ACCEL_RUN_X;
         nx = -1;
@@ -794,7 +796,6 @@ void CMario::SetState(int state)
 
     case MARIO_STATE_ATTACK:
         if (isSitting) break;
-        if (!isOnPlatform) break;
         if (level != MARIO_LEVEL_RACCOON) break;
         isAttacking = true;
         StartAttacking();
@@ -907,6 +908,23 @@ void CMario::AddScore1Up(float x, float y)
 
     point->SetPosition(x, y);
     currentScene->PushObject(point);
+}
+
+int CMario::GetMarioHeight()
+{
+    switch (level)
+    {
+    case MARIO_LEVEL_SMALL:
+        return MARIO_SMALL_BBOX_HEIGHT;
+        break;
+    case MARIO_LEVEL_BIG:
+        return MARIO_BIG_BBOX_HEIGHT;
+        break;
+    case MARIO_LEVEL_RACCOON:
+        return MARIO_RACCOON_BBOX_HEIGHT;
+        break;
+    }
+    return 0;
 }
 
 void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
