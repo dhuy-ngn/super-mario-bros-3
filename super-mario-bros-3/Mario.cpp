@@ -177,10 +177,13 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
         AddScore(x, y - GetMarioHeight() / 2);
         if (koopa->IsHiding())
         {
-            if (nx >= 0)
-                koopa->SetState(KOOPA_STATE_SPINNING_RIGHT);
+            if (isAttacking)
+                koopa->SetState(KOOPA_STATE_KNOCKED_OUT);
             else
-                koopa->SetState(KOOPA_STATE_SPINNING_LEFT);
+                if (nx >= 0)
+                    koopa->SetState(KOOPA_STATE_SPINNING_RIGHT);
+                else
+                    koopa->SetState(KOOPA_STATE_SPINNING_LEFT);
         }
         else
         {
@@ -212,8 +215,11 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
                     koopa->SetState(KOOPA_STATE_SPINNING_LEFT);
         else
         {
-            if (untouchable == 0)
-                LevelDown();
+            if (isAttacking)
+                koopa->SetState(KOOPA_STATE_KNOCKED_OUT);
+            else
+                if (untouchable == 0)
+                    LevelDown();
         }
     }
 }
@@ -652,6 +658,7 @@ void CMario::SetState(int state)
     case MARIO_STATE_RUNNING_RIGHT:
         if (isSitting) break;
         if (isAttacking) break;
+        isRunning = true;
         maxVx = MARIO_RUNNING_SPEED;
         ax = MARIO_ACCEL_RUN_X;
         nx = 1;
@@ -659,18 +666,21 @@ void CMario::SetState(int state)
     case MARIO_STATE_RUNNING_LEFT:
         if (isSitting) break;
         if (isAttacking) break;
+        isRunning = true;
         maxVx = -MARIO_RUNNING_SPEED;
         ax = -MARIO_ACCEL_RUN_X;
         nx = -1;
         break;
     case MARIO_STATE_WALKING_RIGHT:
         if (isSitting) break;
+        isRunning = false;
         maxVx = MARIO_WALKING_SPEED;
         ax = MARIO_ACCEL_WALK_X;
         nx = 1;
         break;
     case MARIO_STATE_WALKING_LEFT:
         if (isSitting) break;
+        isRunning = false;
         maxVx = -MARIO_WALKING_SPEED;
         ax = -MARIO_ACCEL_WALK_X;
         nx = -1;
@@ -693,6 +703,8 @@ void CMario::SetState(int state)
 
     case MARIO_STATE_RELEASE_JUMP:
         ay = MARIO_GRAVITY;
+        falling_start = GetTickCount64();
+        canLand = false;
         maxVy = 999.0f;
         break;
 
@@ -798,6 +810,7 @@ void CMario::SetState(int state)
         if (isSitting) break;
         if (level != MARIO_LEVEL_RACCOON) break;
         isAttacking = true;
+        vx = 0;
         StartAttacking();
         break;
 
@@ -850,6 +863,7 @@ void CMario::SetState(int state)
         vx = 0.0f;
         attack_start = 0;
         attack_stack_start = 0;
+        falling_start = 0;
         isRunning = false;
         isFlying = false;
         isLanding = false;

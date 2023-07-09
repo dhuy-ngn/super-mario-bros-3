@@ -212,7 +212,7 @@
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_RUNNING_STACK_DURATION	200
 #define MARIO_MAX_RUNNING_STACK	7
-#define MARIO_MAX_ATTACK_STACK_TIME 80
+#define MARIO_MAX_ATTACK_STACK_TIME 50
 #define MARIO_MAX_ATTACK_STACK	6
 
 class CMario : public CGameObject
@@ -226,6 +226,7 @@ class CMario : public CGameObject
 	BOOLEAN isRunning;
 	BOOLEAN isHoldingKoopaShell;
 	BOOLEAN canFly;
+	BOOLEAN canLand;
 	BOOLEAN canHoldKoopaShell;
 
 	float maxVx;
@@ -241,6 +242,7 @@ class CMario : public CGameObject
 	ULONGLONG attack_start = 0;
 	ULONGLONG attack_stack_start = 0;
 	ULONGLONG running_start = 0;
+	ULONGLONG falling_start = 0;
 	BOOLEAN isOnPlatform;
 
 	int coin;
@@ -335,6 +337,8 @@ public:
 	BOOLEAN IsLanding() { return this->isLanding; }
 	BOOLEAN IsRunning() { return this->isRunning; }
 	BOOLEAN CanFly() { return this->canFly; }
+	BOOLEAN CanLand() { return this->canLand; }
+	void SetCanLandToTrue() { this->canLand = true; }
 	BOOLEAN IsIdle() { return vx == 0; }
 	void HoldKoopaShell() { this->canHoldKoopaShell = true; }
 	void ReleaseKoopaShell() { this->canHoldKoopaShell = false; }

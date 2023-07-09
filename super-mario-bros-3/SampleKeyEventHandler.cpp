@@ -9,7 +9,8 @@
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
-	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	LPGAME game = CGame::GetInstance();
+	CMario* mario = (CMario*)((LPPLAYSCENE)game->GetCurrentScene())->GetPlayer();
 
 	switch (KeyCode)
 	{
@@ -18,6 +19,10 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_S:
 		mario->SetState(MARIO_STATE_JUMP);
+		float mvx, mvy;
+		mario->GetSpeed(mvx, mvy);
+		if (mvy > 0)
+			mario->SetCanLandToTrue();
 		if (mario->CanFly())
 			mario->SetState(MARIO_STATE_FLY);
 		break;
@@ -37,7 +42,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		//Reload();
 		break;
 	case DIK_A:
-		if (mario->GetLevel() == MARIO_LEVEL_RACCOON && mario->IsIdle())
+		if (mario->GetLevel() == MARIO_LEVEL_RACCOON && !mario->IsRunning())
 			mario->SetState(MARIO_STATE_ATTACK);
 	}
 }
@@ -98,14 +103,6 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 		else
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 	}
-	else if (game->IsKeyDown(DIK_X))
-	{
-		mario->SetState(MARIO_STATE_LAND);
-		if (game->IsKeyDown(DIK_LEFT))
-			mario->SetState(MARIO_STATE_LAND_LEFT);
-		if (game->IsKeyDown(DIK_RIGHT))
-			mario->SetState(MARIO_STATE_LAND_RIGHT);
-	}
 	else if (game->IsKeyDown(DIK_S))
 	{
 		if (mario->CanFly())
@@ -117,9 +114,19 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 				mario->SetState(MARIO_STATE_FLY_LEFT);
 			if (game->IsKeyDown(DIK_RIGHT))
 				mario->SetState(MARIO_STATE_FLY_RIGHT);
-			if (game->IsKeyDown(DIK_A))
-				mario->HoldKoopaShell();
 		}
+		float mvx, mvy;
+		mario->GetSpeed(mvx, mvy);
+		if (mario->GetLevel() == MARIO_LEVEL_RACCOON && mario->CanLand())
+		{
+			mario->SetState(MARIO_STATE_LAND);
+			if (game->IsKeyDown(DIK_LEFT))
+				mario->SetState(MARIO_STATE_LAND_LEFT);
+			if (game->IsKeyDown(DIK_RIGHT))
+				mario->SetState(MARIO_STATE_LAND_RIGHT);
+		}
+		if (game->IsKeyDown(DIK_A))
+			mario->HoldKoopaShell();
 	}
 	else if (game->IsKeyDown(DIK_A))
 	{
