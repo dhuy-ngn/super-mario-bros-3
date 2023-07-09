@@ -43,6 +43,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_R: // reset
 		//Reload();
 		break;
+	case DIK_A:
+		if (mario->GetLevel() == MARIO_LEVEL_RACCOON)
+			mario->SetState(MARIO_STATE_ATTACK);
 	}
 }
 
@@ -70,6 +73,8 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_A:
 		if (mario->IsHoldingKoopaShell())
 			mario->ReleaseKoopaShell();
+		else 
+			mario->SetState(MARIO_STATE_ATTACK_RELEASE);
 		mario->SetState(MARIO_STATE_IDLE);
 		break;
 	}
@@ -125,13 +130,11 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 	}
 	else if (game->IsKeyDown(DIK_A))
 	{
-		mario->HoldKoopaShell();
 		if (mario->IsHoldingKoopaShell())
 			mario->SetState(MARIO_STATE_HOLD_KOOPA_SHELL);
 	}
 	else
 	{
-		if (!mario->IsAttacking())
-			mario->SetState(MARIO_STATE_IDLE);
+		mario->SetState(MARIO_STATE_IDLE);
 	}
 }

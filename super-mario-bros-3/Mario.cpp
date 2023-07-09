@@ -39,11 +39,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         untouchable = 0;
     }
 
-    if (GetTickCount64() - attacking_start > MARIO_ATTACKING_DURATION)
-    {
-        attacking_start = 0;
-    }
-
     if (GetTickCount64() - running_start >= MARIO_RUNNING_STACK_DURATION && !isFlying && !isLanding && isRunning)
     {
         running_start = GetTickCount64();
@@ -63,6 +58,21 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         if (speed_stack < 0)
         {
             speed_stack = 0;
+        }
+    }
+    if (isAttacking)
+    {
+        if (GetTickCount64() - attack_stack_start >= MARIO_MAX_ATTACK_STACK_TIME) 
+        {
+            attack_stack_start = GetTickCount64();
+            attack_ani_stack++;
+        }
+        if (GetTickCount64() - attack_start > MARIO_MAX_ATTACK_STACK_TIME * MARIO_MAX_ATTACK_STACK) 
+        {
+            isAttacking = false;
+            attack_stack_start = 0;
+            attack_start = 0;
+            attack_ani_stack = 0;
         }
     }
 
@@ -594,20 +604,42 @@ void CMario::Render()
     CAnimations* animations = CAnimations::GetInstance();
     int aniId = -1;
 
-    if (state == MARIO_STATE_DIE)
-        aniId = ID_ANI_MARIO_DIE;
-    else if (level == MARIO_LEVEL_BIG)
-        aniId = GetAniIdBig();
-    else if (level == MARIO_LEVEL_SMALL)
-        aniId = GetAniIdSmall();
-    else if (level == MARIO_LEVEL_RACCOON)
-        aniId = GetAniIdRaccoon();
+    if (!isAttacking)
+    {
+        if (state == MARIO_STATE_DIE)
+            aniId = ID_ANI_MARIO_DIE;
+        else if (level == MARIO_LEVEL_BIG)
+            aniId = GetAniIdBig();
+        else if (level == MARIO_LEVEL_SMALL)
+            aniId = GetAniIdSmall();
+        else if (level == MARIO_LEVEL_RACCOON)
+            aniId = GetAniIdRaccoon();
 
-    animations->Get(aniId)->Render(x, y);
+        animations->Get(aniId)->Render(x, y);
+    }
 
+    else
+    {
+        if (nx > 0)
+        {
+            if (attack_ani_stack == 0) animations->Get(ID_ANI_MARIO_RACCOON_IDLE_RIGHT)->Render(x, y);
+            if (attack_ani_stack % 4 == 1) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_RIGHT_1)->Draw(x, y);
+            if (attack_ani_stack % 4 == 2) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_RIGHT_2)->Draw(x, y);
+            if (attack_ani_stack == 3) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_RIGHT_3)->Draw(x, y);
+            if (attack_ani_stack == 4) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_RIGHT_4)->Draw(x, y);
+        }
+        else
+        {
+            if (attack_ani_stack == 0) animations->Get(ID_ANI_MARIO_RACCOON_IDLE_LEFT)->Render(x, y);
+            if (attack_ani_stack % 4 == 1) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_1)->Draw(x, y);
+            if (attack_ani_stack % 4 == 2) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_2)->Draw(x, y);
+            if (attack_ani_stack == 3) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_3)->Draw(x, y);
+            if (attack_ani_stack == 4) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_4)->Draw(x, y);
+        }
+    }
     // RenderBoundingBox();
 
-    DebugOutTitle(L"Mario holding koopa shell: %d", isHoldingKoopaShell);
+    DebugOutTitle(L"Mario attack stack: %d", attack_ani_stack);
 }
 
 void CMario::SetState(int state)
@@ -765,10 +797,7 @@ void CMario::SetState(int state)
         if (!isOnPlatform) break;
         if (level != MARIO_LEVEL_RACCOON) break;
         isAttacking = true;
-        if (GetTickCount64() - attacking_start > MARIO_ATTACKING_DURATION)
-        {
-            state = MARIO_STATE_ATTACK_RELEASE;
-        }
+        StartAttacking();
         break;
 
     case MARIO_STATE_ATTACK_RELEASE:
@@ -776,6 +805,7 @@ void CMario::SetState(int state)
         if (isSitting) break;
         isRunning = false;
         isAttacking = false;
+        attack_ani_stack = 0;
         state = MARIO_STATE_IDLE;
         break;
 
@@ -817,7 +847,8 @@ void CMario::SetState(int state)
     case MARIO_STATE_IDLE:
         ax = 0.0f;
         vx = 0.0f;
-        attacking_start = 0;
+        attack_start = 0;
+        attack_stack_start = 0;
         isRunning = false;
         isFlying = false;
         isLanding = false;

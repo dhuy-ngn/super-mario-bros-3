@@ -18,7 +18,7 @@
 #define MARIO_ACCEL_RUN_X	0.0004f
 #define MARIO_ACCEL_FLYING_X	0.0008f
 
-#define MARIO_JUMP_SPEED_Y		0.35f
+#define MARIO_JUMP_SPEED_Y		0.33f
 #define MARIO_JUMP_RUN_SPEED_Y	0.5f
 #define MARIO_ACCEL_FLYING_Y 0.1f
 
@@ -174,6 +174,17 @@
 
 #define ID_ANI_MARIO_RACCOON_ATTACK 3300
 
+#define ID_SPRITE_MARIO_WHACK_LEFT_1	12813
+#define ID_SPRITE_MARIO_WHACK_LEFT_2	12814
+#define ID_SPRITE_MARIO_WHACK_LEFT_3	12815
+#define ID_SPRITE_MARIO_WHACK_LEFT_4	12816
+
+#define ID_SPRITE_MARIO_WHACK_RIGHT_1	12803
+#define ID_SPRITE_MARIO_WHACK_RIGHT_2	12804
+#define ID_SPRITE_MARIO_WHACK_RIGHT_3	12805
+#define ID_SPRITE_MARIO_WHACK_RIGHT_4	12806
+
+
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -199,9 +210,10 @@
 #define MARIO_RACCOON_SITTING_BBOX_HEIGHT 16
 
 #define MARIO_UNTOUCHABLE_TIME 2500
-#define MARIO_ATTACKING_DURATION 150
 #define MARIO_RUNNING_STACK_DURATION	200
 #define MARIO_MAX_RUNNING_STACK	7
+#define MARIO_MAX_ATTACK_STACK_TIME 80
+#define MARIO_MAX_ATTACK_STACK	6
 
 class CMario : public CGameObject
 {
@@ -223,9 +235,11 @@ class CMario : public CGameObject
 
 	int level;
 	int untouchable;
+	int attack_ani_stack;
 	ULONGLONG untouchable_start = 0;
 	ULONGLONG fly_up_start = 0;
-	ULONGLONG attacking_start = 0;
+	ULONGLONG attack_start = 0;
+	ULONGLONG attack_stack_start = 0;
 	ULONGLONG running_start = 0;
 	BOOLEAN isOnPlatform;
 
@@ -263,6 +277,9 @@ public:
 		isFlying = false;
 		canFly = false;
 		canHoldKoopaShell = false;
+		attack_ani_stack = 0;
+		attack_start = 0;
+		attack_stack_start =0;
 		maxVx = 0.0f;
 		maxVy = 999.0f;
 		ax = 0.0f;
@@ -324,10 +341,10 @@ public:
 	BOOLEAN IsHoldingKoopaShell() { return this->isHoldingKoopaShell; }
 	BOOLEAN ShouldTurnOnCamY()
 	{
-		return (this->isFlying || this->isLanding || y < -50 || y >= -50 && vy >= 0 );
+		return (this->isFlying || this->isLanding || y < -50 || y >= -50 && vy >= 0);
 	}
 	void StartFlying() { fly_up_start = GetTickCount64(); }
-	void StartAttacking() { attacking_start = GetTickCount64(); }
+	void StartAttacking() { attack_start = GetTickCount64(); attack_stack_start = GetTickCount64(); }
 	void StartRunning() { running_start = GetTickCount64(); }
 	void LevelDown();
 	void GainScore();
