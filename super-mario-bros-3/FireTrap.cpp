@@ -6,10 +6,20 @@
 
 void CFireTrap::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x - FIRETRAP_BBOX_WIDTH / 2;
-	top = y - FIRETRAP_BBOX_HEIGHT / 2;
-	right = left + FIRETRAP_BBOX_WIDTH;
-	bottom = top + FIRETRAP_BBOX_HEIGHT;
+	if (type == FIRETRAP_TYPE_RED)
+	{
+		left = x - FIRETRAP_BBOX_WIDTH / 2;
+		top = y - FIRETRAP_RED_BBOX_HEIGHT / 2;
+		right = left + FIRETRAP_BBOX_WIDTH;
+		bottom = top + FIRETRAP_RED_BBOX_HEIGHT;
+	}
+	else
+	{
+		left = x - FIRETRAP_BBOX_WIDTH / 2;
+		top = y - FIRETRAP_GREEN_BBOX_HEIGHT / 2;
+		right = left + FIRETRAP_BBOX_WIDTH;
+		bottom = top + FIRETRAP_GREEN_BBOX_HEIGHT;
+	}
 }
 
 void CFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -51,19 +61,31 @@ void CFireTrap::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 
-	int aniId = FIRETRAP_ANI_RIGHT_UP;
+	int aniId = FIRETRAP_RED_ANI_RIGHT_UP;
 	if (state != FIRETRAP_STATE_DEATH && dying_start == 0)
 	{
-		if (isUpward)
-			if (isForward)
-				aniId = FIRETRAP_ANI_RIGHT_UP;
+		if (type == FIRETRAP_TYPE_RED)
+			if (isUpward)
+				if (isForward)
+					aniId = FIRETRAP_RED_ANI_RIGHT_UP;
+				else
+					aniId = FIRETRAP_RED_ANI_LEFT_UP;
 			else
-				aniId = FIRETRAP_ANI_LEFT_UP;
+				if (isForward)
+					aniId = FIRETRAP_RED_ANI_RIGHT_DOWN;
+				else
+					aniId = FIRETRAP_RED_ANI_LEFT_DOWN;
 		else
-			if (isForward)
-				aniId = FIRETRAP_ANI_RIGHT_DOWN;
+			if (isUpward)
+				if (isForward)
+					aniId = FIRETRAP_GREEN_ANI_RIGHT_UP;
+				else
+					aniId = FIRETRAP_GREEN_ANI_LEFT_UP;
 			else
-				aniId = FIRETRAP_ANI_LEFT_DOWN;
+				if (isForward)
+					aniId = FIRETRAP_GREEN_ANI_RIGHT_DOWN;
+				else
+					aniId = FIRETRAP_GREEN_ANI_LEFT_DOWN;
 	}
 
 	animations->Get(aniId)->Render(x, y);
