@@ -27,7 +27,7 @@
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.2f
 
-#define MARIO_MAX_FLY_TIME	5000
+#define MARIO_MAX_FLY_TIME	8000
 
 #define MARIO_STATE_DIE				-10
 #define MARIO_STATE_FALL_OFF		-99
@@ -348,7 +348,7 @@ public:
 	{
 		return (this->isFlying || this->isLanding || y < -50 || y >= -50 && vy >= 0);
 	}
-	void StartFlying() { fly_up_start = GetTickCount64(); }
+	void StartFlying() { fly_up_start = GetTickCount64(); isFlying = true; }
 	void StartAttacking() { attack_start = GetTickCount64(); attack_stack_start = GetTickCount64(); }
 	void StartRunning() { running_start = GetTickCount64(); }
 	void LevelDown();

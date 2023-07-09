@@ -47,9 +47,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         {
             speed_stack = MARIO_MAX_RUNNING_STACK;
             canFly = true;
-        }
     }
-    if (GetTickCount64() - running_start > MARIO_RUNNING_STACK_DURATION && vx == 0)
+    }
+    if (GetTickCount64() - running_start > MARIO_RUNNING_STACK_DURATION && vx == 0 && !isFlying)
     {
         canFly = false;
         isRunning = false;
