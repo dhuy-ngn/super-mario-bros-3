@@ -75,6 +75,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
             attack_ani_stack = 0;
         }
     }
+    switch (attack_ani_stack)
+    {
+    case 0:
+    case 1:
+    case 5:
+    case 6:
+        tail_direction = 1;
+        break;
+    case 2:
+    case 4:
+        tail_direction = 0;
+        break;
+    case 3:
+        tail_direction = -1;
+        break;
+    }
 
     CGameObject::Update(dt, coObjects);
     CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -972,7 +988,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
         if (isSitting)
         {
             // shift the bbox left to the same direction of where mario is facing a bit so the tail has nothing to do with mario
-            left = x - MARIO_RACCOON_SITTING_BBOX_WIDTH / 2 + 4 * nx;
+            left = x - MARIO_RACCOON_SITTING_BBOX_WIDTH / 2 + 2 * nx;
             top = y - MARIO_RACCOON_SITTING_BBOX_HEIGHT / 2;
             right = left + MARIO_RACCOON_SITTING_BBOX_WIDTH;
             bottom = top + MARIO_RACCOON_SITTING_BBOX_HEIGHT;
@@ -980,7 +996,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
         else
         {
             // shift the bbox left to the same direction of where mario is facing a bit so the tail has nothing to do with mario
-            left = x - MARIO_RACCOON_BBOX_WIDTH / 2 + 4 * nx;
+            left = x - MARIO_RACCOON_BBOX_WIDTH / 2 + 2 * nx;
             top = y - MARIO_RACCOON_BBOX_HEIGHT / 2;
             right = left + MARIO_RACCOON_BBOX_WIDTH;
             bottom = top + MARIO_RACCOON_BBOX_HEIGHT;
@@ -1054,6 +1070,7 @@ void CMario::SetLevel(int l)
         CPlayScene* current_scene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
         this->tail = new CMarioTail(x - MARIO_TAIL_BBOX_WIDTH / 2 * nx, y + 6);
         current_scene->PushObject(this->tail);
+        tail_direction = 1;
     }
     else
     {

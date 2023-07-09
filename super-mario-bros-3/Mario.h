@@ -237,6 +237,7 @@ class CMario : public CGameObject
 	int level;
 	int untouchable;
 	int attack_ani_stack;
+	int tail_direction;
 	ULONGLONG untouchable_start = 0;
 	ULONGLONG fly_up_start = 0;
 	ULONGLONG attack_start = 0;
@@ -300,6 +301,7 @@ public:
 		score = 0;
 		life = 4;
 		speed_stack = 0;
+		tail_direction = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -331,6 +333,7 @@ public:
 	int GetCoin() { return this->coin; }
 	int GetLife() { return this->life; }
 	int GetScore() { return this->score; }
+	int GetTailDirection() { return this->tail_direction; }
 	int GetSpeedStack() { return this->speed_stack; }
 	BOOLEAN IsAttacking() { return this->isAttacking; }
 	BOOLEAN IsFlying() { return this->isFlying; }
