@@ -2,8 +2,8 @@
 
 #include "GameObject.h"
 
-#define SWITCH_BBOX_WIDTH			16
-#define SWITCH_BBOX_HEIGHT			16
+#define SWITCH_BBOX_WIDTH			15
+#define SWITCH_BBOX_HEIGHT			15
 #define SWITCH_BBOX_PRESSED_HEIGHT	7
 
 #define SWITCH_ANI_IDLE		8005

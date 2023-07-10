@@ -8,11 +8,12 @@
 #include "Koopa.h"
 #include "Coin.h"
 #include "Portal.h"
-
+#include "Switch.h"
 #include "Collision.h"
 #include "QuestionBlock.h"
 #include "ColorBlock.h"
 #include "FireTrap.h"
+#include "PiranhaPlant.h"
 #include "PlayScene.h"
 #include "Point.h"
 
@@ -135,7 +136,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
         OnCollisionWithQuestionBlock(e);
     else if (dynamic_cast<CColorBlock*>(e->obj))
         OnCollisionWithColorBlock(e);
-    // Collide with Piranha Plants
+    else if (dynamic_cast<CPiranhaPlant*>(e->obj))
+        OnCollisionWithPiranhaPlant(e);
     else if (dynamic_cast<CFireTrap*>(e->obj))
         OnCollisionWithFireTrap(e);
     else if (dynamic_cast<CFireBullet*>(e->obj))
@@ -249,12 +251,26 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
     brick->GetPosition(bx, by);
     if (e->ny > 0)
     {
-        if (brick->GetItemType() == BRICK_ITEM_TYPE_MUSHROOM && brick->GetState()!= BRICK_STATE_EXHAUSTED)
+        if (brick->GetState() != BRICK_STATE_EXHAUSTED)
         {
-            brick->SetState(BRICK_STATE_EXHAUSTED);
-            CMushroom* mushroom = new CMushroom(bx, by, MUSHROOM_TYPE_GREEN);
-            current_scene->UnshiftObject(mushroom);
-            mushroom->SetState(MUSHROOM_STATE_IDLE);
+            if (brick->GetItemType() == BRICK_ITEM_TYPE_MUSHROOM)
+            {
+                CMushroom* mushroom = new CMushroom(bx, by, MUSHROOM_TYPE_GREEN);
+                current_scene->UnshiftObject(mushroom);
+                mushroom->SetState(MUSHROOM_STATE_IDLE);
+                brick->SetState(BRICK_STATE_EXHAUSTED);
+            }
+            else if (brick->GetItemType() == BRICK_ITEM_TYPE_MUSHROOM)
+            {
+                CSwitch* pSwitch = new CSwitch(x, y);
+                current_scene->UnshiftObject(pSwitch);
+                pSwitch->SetState(SWITCH_STATE_IDLE);
+                brick->SetState(BRICK_STATE_EXHAUSTED);
+            }
+            else
+            {
+                brick->Delete();
+            }
         }
     }
 }
@@ -299,6 +315,17 @@ void CMario::OnCollisionWithFireTrap(LPCOLLISIONEVENT e)
     if (untouchable == 0)
     {
         if (fire_trap->GetState() != FIRETRAP_STATE_DEATH)
+            LevelDown();
+    }
+}
+
+void CMario::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
+{
+    CPiranhaPlant* piranha_plant = dynamic_cast<CPiranhaPlant*>(e->obj);
+
+    if (untouchable == 0)
+    {
+        if (piranha_plant->GetState() != PIRANHAPLANT_STATE_DEATH)
             LevelDown();
     }
 }

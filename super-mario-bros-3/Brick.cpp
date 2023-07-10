@@ -1,5 +1,7 @@
 #include "Brick.h"
 #include "Mushroom.h"
+#include "PlayScene.h"
+#include "Switch.h"
 
 void CBrick::Render()
 {
@@ -25,6 +27,38 @@ void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			y = start_y;
 			vy = 0;
+		}
+	}
+
+	CPlayScene* current_scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CMario* mario = dynamic_cast<CMario*>(current_scene->GetPlayer());
+	CMarioTail* tail = mario->GetMarioTail();
+	if (mario->GetLevel() == MARIO_LEVEL_RACCOON && mario->IsAttacking())
+	{
+		float tLeft, tTop, tRight, tBottom;
+		float oLeft, oTop, oRight, oBottom;
+
+		tail->GetBoundingBox(tLeft, tTop, tRight, tBottom);
+		GetBoundingBox(oLeft, oTop, oRight, oBottom);
+
+		if (tRight >= oLeft && tLeft <= oRight && tBottom >= oTop && tTop <= oBottom && state != BRICK_STATE_EXHAUSTED)
+		{
+			if (item == BRICK_ITEM_TYPE_MUSHROOM)
+			{
+				SetState(BRICK_STATE_EXHAUSTED);
+				CMushroom* mushroom = new CMushroom(x, y, MUSHROOM_TYPE_GREEN);
+				current_scene->UnshiftObject(mushroom);
+				mushroom->SetState(MUSHROOM_STATE_IDLE);
+			}
+			else if (item == BRICK_ITEM_TYPE_SWITCH)
+			{
+				SetState(BRICK_STATE_EXHAUSTED);
+				CSwitch* pSwitch = new CSwitch(x, y);
+				current_scene->UnshiftObject(pSwitch);
+				pSwitch->SetState(SWITCH_STATE_IDLE);
+			}
+			else
+				isDeleted = true;
 		}
 	}
 
