@@ -28,6 +28,10 @@ void CSwitch::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			SetState(SWITCH_STATE_IDLE);
 		}
 	}
+	else
+	{
+		y = start_y - SWITCH_BBOX_PRESSED_HEIGHT - 0.1f;
+	}
 }
 
 void CSwitch::SetState(int state) {
@@ -38,6 +42,21 @@ void CSwitch::SetState(int state) {
 		vy = -0.05f;
 		break;
 	case SWITCH_STATE_PRESSED:
+		switch_effect_start = GetTickCount64();
+		CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+		vector<LPGAMEOBJECT> objects = currentScene->GetAllObject();
+		for (size_t i = 0; i < objects.size(); i++)
+		{
+			if (dynamic_cast<CBrick*>(objects.at(i)) && !objects.at(i)->IsDeleted() && dynamic_cast<CBrick*>(objects.at(i))->GetItemType() == 0)
+			{
+				float bx, by;
+				CBrick* brick = dynamic_cast<CBrick*>(objects.at(i));
+				brick->GetPosition(bx, by);
+				CCoin* coin = new CCoin(bx, by);
+				currentScene->PushObject(coin);
+				brick->Delete();
+			}
+		}
 		break;
 	}
 }

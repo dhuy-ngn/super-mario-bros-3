@@ -12,13 +12,17 @@
 #define SWITCH_STATE_IDLE		0
 #define SWITCH_STATE_PRESSED	1
 
+#define SWITCH_MAX_INTERVAL	5000
+
 class CSwitch :public CGameObject
 {
 	float start_y;
+	ULONGLONG switch_effect_start;
 public:
 	CSwitch(float x, float y) : CGameObject(x, y)
 	{
 		this->start_y = y;
+		switch_effect_start = 0;
 	}
 	virtual void Render();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
