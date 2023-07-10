@@ -28,6 +28,26 @@ void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		}
 	}
 
+	CPlayScene* current_scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CMario* mario = dynamic_cast<CMario*>(current_scene->GetPlayer());
+	CMarioTail* tail = mario->GetMarioTail();
+	if (mario->GetLevel() == MARIO_LEVEL_RACCOON && mario->IsAttacking() && state != QUESTION_BLOCK_STATE_INACTIVE)
+	{
+		float tLeft, tTop, tRight, tBottom;
+		float oLeft, oTop, oRight, oBottom;
+
+		tail->GetBoundingBox(tLeft, tTop, tRight, tBottom);
+		GetBoundingBox(oLeft, oTop, oRight, oBottom);
+
+		if (tRight >= oLeft && tLeft <= oRight && tBottom >= oTop && tTop <= oBottom)
+		{
+			SetState(QUESTION_BLOCK_STATE_INACTIVE);
+			if (GetContain() == QUESTION_BLOCK_CONTAINS_COIN)
+				mario->GainCoin();
+			ReleaseItem();
+		}
+	}
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

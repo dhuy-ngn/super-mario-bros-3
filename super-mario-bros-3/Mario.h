@@ -358,7 +358,8 @@ public:
 	void GainScore();
 	void Gain1000Score() { this->score += 1000; }
 	void GainLife();
-	void GainCoin();
+	void GainCoin() { this->coin++; };
+	CMarioTail* GetMarioTail() { return this->tail; }
 
 	BOOLEAN IsTailCollidingWithObject(LPCOLLISIONEVENT e);
 };

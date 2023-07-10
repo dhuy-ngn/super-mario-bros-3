@@ -172,7 +172,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
     }
     else // hit by Goomba
     {
-        if (isAttacking && IsTailCollidingWithObject(e))
+        if (IsTailCollidingWithObject(e))
         {
             goomba->SetState(GOOMBA_STATE_KNOCKED_OUT);
         }
@@ -272,13 +272,14 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
     if (e->ny < 0)
         isOnPlatform = true;
 
-    if (question_block->GetState() != QUESTION_BLOCK_STATE_INACTIVE && (e->ny > 0 || (isAttacking && IsTailCollidingWithObject(e))))
-    {
-        question_block->SetState(QUESTION_BLOCK_STATE_INACTIVE);
-        if (question_block->GetContain() == QUESTION_BLOCK_CONTAINS_COIN)
-            coin++;
-        question_block->ReleaseItem();
-    }
+    if (e->ny > 0)
+        if (question_block->GetState() != QUESTION_BLOCK_STATE_INACTIVE)
+        {
+            question_block->SetState(QUESTION_BLOCK_STATE_INACTIVE);
+            if (question_block->GetContain() == QUESTION_BLOCK_CONTAINS_COIN)
+                coin++;
+            question_block->ReleaseItem();
+        }
 }
 
 void CMario::OnCollisionWithColorBlock(LPCOLLISIONEVENT e)
@@ -323,10 +324,13 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
-    SetLevel(MARIO_LEVEL_RACCOON);
     if (level == MARIO_LEVEL_RACCOON)
     {
         AddScore1000(x, y - MARIO_RACCOON_BBOX_HEIGHT / 2);
+    }
+    else
+    {
+        SetLevel(MARIO_LEVEL_RACCOON);
     }
     e->obj->Delete();
 }
@@ -660,7 +664,6 @@ void CMario::Render()
 
         animations->Get(aniId)->Render(x, y);
     }
-    // RenderBoundingBox();
 
     DebugOutTitle(L"Mario attack stack: %d", attack_ani_stack);
 }
@@ -989,7 +992,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
         if (isSitting)
         {
             // shift the bbox left to the same direction of where mario is facing a bit so the tail has nothing to do with mario
-            left = x - MARIO_RACCOON_SITTING_BBOX_WIDTH / 2 + 2 * nx * tail_direction;
+            left = x - MARIO_RACCOON_SITTING_BBOX_WIDTH / 2 + 2 * nx;
             top = y - MARIO_RACCOON_SITTING_BBOX_HEIGHT / 2;
             right = left + MARIO_RACCOON_SITTING_BBOX_WIDTH;
             bottom = top + MARIO_RACCOON_SITTING_BBOX_HEIGHT;
@@ -997,7 +1000,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
         else
         {
             // shift the bbox left to the same direction of where mario is facing a bit so the tail has nothing to do with mario
-            left = x - MARIO_RACCOON_BBOX_WIDTH / 2 + 2 * nx * tail_direction;
+            left = x - MARIO_RACCOON_BBOX_WIDTH / 2 + 2 * nx;
             top = y - MARIO_RACCOON_BBOX_HEIGHT / 2;
             right = left + MARIO_RACCOON_BBOX_WIDTH;
             bottom = top + MARIO_RACCOON_BBOX_HEIGHT;
@@ -1084,7 +1087,7 @@ void CMario::SetLevel(int l)
 
 BOOLEAN CMario::IsTailCollidingWithObject(LPCOLLISIONEVENT e)
 {
-    if (level == MARIO_LEVEL_RACCOON)
+    if (level == MARIO_LEVEL_RACCOON && isAttacking)
     {
         float tLeft, tTop, tRight, tBottom;
         float oLeft, oTop, oRight, oBottom;
@@ -1093,7 +1096,7 @@ BOOLEAN CMario::IsTailCollidingWithObject(LPCOLLISIONEVENT e)
         DebugOut(L"%d", tLeft);
         e->obj->GetBoundingBox(oLeft, oTop, oRight, oBottom);
 
-        return ((tRight >= oLeft || tLeft <= oRight) && (tBottom >= oTop || tTop <= oBottom));
+        return (tRight >= oLeft && tLeft <= oRight && tBottom >= oTop && tTop <= oBottom);
     }
     else
         return NULL;
