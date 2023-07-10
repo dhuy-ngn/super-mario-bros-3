@@ -114,6 +114,8 @@ protected:
 	void OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e);
 	void OnCollisionWithPlatform(LPCOLLISIONEVENT e);
 	void OnCollisionWithFireTrap(LPCOLLISIONEVENT e);
+	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e);
 
 	int GetAniIdRedKoopa();
 	int GetAniIdGreenKoopa();
