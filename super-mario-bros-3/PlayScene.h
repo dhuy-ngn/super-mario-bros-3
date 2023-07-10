@@ -36,6 +36,7 @@ public:
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
+	vector<LPGAMEOBJECT> GetAllObject() { return this->objects; }
 
 	LPGAMEOBJECT GetPlayer() { return player; }
 

@@ -148,6 +148,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
         OnCollisionWithLeaf(e);
     else if (dynamic_cast<CBrick*>(e->obj))
         OnCollisionWithBrick(e);
+    else if (dynamic_cast<CSwitch*>(e->obj))
+        OnCollisionWithSwitch(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -272,6 +274,14 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
                 brick->Delete();
             }
         }
+    }
+}
+
+void CMario::OnCollisionWithSwitch(LPCOLLISIONEVENT e)
+{
+    if (e->ny < 0)
+    {
+        e->obj->SetState(SWITCH_STATE_PRESSED);
     }
 }
 
