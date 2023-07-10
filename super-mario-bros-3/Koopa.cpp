@@ -82,6 +82,23 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
+	CPlayScene* current_scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CMario* mario = dynamic_cast<CMario*>(current_scene->GetPlayer());
+	CMarioTail* tail = mario->GetMarioTail();
+	if (mario->GetLevel() == MARIO_LEVEL_RACCOON && mario->IsAttacking())
+	{
+		float tLeft, tTop, tRight, tBottom;
+		float oLeft, oTop, oRight, oBottom;
+
+		tail->GetBoundingBox(tLeft, tTop, tRight, tBottom);
+		GetBoundingBox(oLeft, oTop, oRight, oBottom);
+
+		if (tRight >= oLeft && tLeft <= oRight && tBottom >= oTop && tTop <= oBottom && state != KOOPA_STATE_KNOCKED_OUT)
+		{
+			SetState(KOOPA_STATE_KNOCKED_OUT);
+		}
+	}
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -138,6 +155,8 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFireTrap(e);
 	if (dynamic_cast<CPlatform*>(e->obj))
 		OnCollisionWithPlatform(e);
+	if (dynamic_cast<CBrick*>(e->obj))
+		OnCollisionWithBrick(e);
 }
 
 int CKoopa::GetAniIdGreenKoopa() 
@@ -267,7 +286,7 @@ void CKoopa::SetState(int state)
 
 	case KOOPA_STATE_KNOCKED_OUT:
 		die_start = GetTickCount64();
-		vy = -0.7f;
+		vy = -0.5f;
 		break;
 	}
 
@@ -316,7 +335,15 @@ void CKoopa::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 
 void CKoopa::OnCollisionWithFireTrap(LPCOLLISIONEVENT e)
 {
-	if (state == KOOPA_STATE_SPINNING_LEFT || state == KOOPA_STATE_SPINNING_RIGHT || state == KOOPA_STATE_HIDING)
+	if (state == KOOPA_STATE_SPINNING_LEFT || state == KOOPA_STATE_SPINNING_RIGHT)
+	{
+		e->obj->Delete();
+	}
+}
+
+void CKoopa::OnCollisionWithBrick(LPCOLLISIONEVENT e)
+{
+	if (state == KOOPA_STATE_SPINNING_LEFT || state == KOOPA_STATE_SPINNING_RIGHT)
 	{
 		e->obj->Delete();
 	}
