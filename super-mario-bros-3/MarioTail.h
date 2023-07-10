@@ -7,7 +7,6 @@
 
 class CMarioTail : public CGameObject
 {
-	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 
@@ -16,5 +15,6 @@ class CMarioTail : public CGameObject
 
 public:
 	CMarioTail(float x, float y) : CGameObject(x, y) {};
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };
 

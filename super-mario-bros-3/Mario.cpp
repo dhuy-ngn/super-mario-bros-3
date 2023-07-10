@@ -80,7 +80,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     case 0:
     case 1:
     case 5:
-    case 6:
         tail_direction = 1;
         break;
     case 2:
@@ -173,8 +172,10 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
     }
     else // hit by Goomba
     {
-        if (isAttacking)
+        if (isAttacking && IsTailCollidingWithObject(e))
+        {
             goomba->SetState(GOOMBA_STATE_KNOCKED_OUT);
+        }
         else
             if (untouchable == 0)
                 if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_KNOCKED_OUT)
@@ -271,7 +272,7 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
     if (e->ny < 0)
         isOnPlatform = true;
 
-    if ((question_block->GetState() != QUESTION_BLOCK_STATE_INACTIVE && e->ny > 0) || (IsAttacking() && e->nx != 0))
+    if (question_block->GetState() != QUESTION_BLOCK_STATE_INACTIVE && (e->ny > 0 || (isAttacking && IsTailCollidingWithObject(e))))
     {
         question_block->SetState(QUESTION_BLOCK_STATE_INACTIVE);
         if (question_block->GetContain() == QUESTION_BLOCK_CONTAINS_COIN)
@@ -634,14 +635,14 @@ void CMario::Render()
         if (nx > 0)
         {
             if (attack_ani_stack % 4 == 1) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_RIGHT_1)->Draw(x, y);
-            if (attack_ani_stack % 4 == 2) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_RIGHT_2)->Draw(x, y);
+            if (attack_ani_stack == 2) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_RIGHT_2)->Draw(x, y);
             if (attack_ani_stack == 3) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_RIGHT_3)->Draw(x, y);
             if (attack_ani_stack == 4) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_RIGHT_4)->Draw(x, y);
         }
         else
         {
             if (attack_ani_stack % 4 == 1) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_1)->Draw(x, y);
-            if (attack_ani_stack % 4 == 2) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_2)->Draw(x, y);
+            if (attack_ani_stack == 2) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_2)->Draw(x, y);
             if (attack_ani_stack == 3) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_3)->Draw(x, y);
             if (attack_ani_stack == 4) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_4)->Draw(x, y);
         }
@@ -988,7 +989,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
         if (isSitting)
         {
             // shift the bbox left to the same direction of where mario is facing a bit so the tail has nothing to do with mario
-            left = x - MARIO_RACCOON_SITTING_BBOX_WIDTH / 2 + 2 * nx;
+            left = x - MARIO_RACCOON_SITTING_BBOX_WIDTH / 2 + 2 * nx * tail_direction;
             top = y - MARIO_RACCOON_SITTING_BBOX_HEIGHT / 2;
             right = left + MARIO_RACCOON_SITTING_BBOX_WIDTH;
             bottom = top + MARIO_RACCOON_SITTING_BBOX_HEIGHT;
@@ -996,7 +997,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
         else
         {
             // shift the bbox left to the same direction of where mario is facing a bit so the tail has nothing to do with mario
-            left = x - MARIO_RACCOON_BBOX_WIDTH / 2 + 2 * nx;
+            left = x - MARIO_RACCOON_BBOX_WIDTH / 2 + 2 * nx * tail_direction;
             top = y - MARIO_RACCOON_BBOX_HEIGHT / 2;
             right = left + MARIO_RACCOON_BBOX_WIDTH;
             bottom = top + MARIO_RACCOON_BBOX_HEIGHT;
@@ -1068,9 +1069,8 @@ void CMario::SetLevel(int l)
     if (level == MARIO_LEVEL_RACCOON)
     {
         CPlayScene* current_scene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-        this->tail = new CMarioTail(x - MARIO_TAIL_BBOX_WIDTH / 2 * nx, y + 6);
+        this->tail = new CMarioTail(x - MARIO_TAIL_BBOX_WIDTH / 2 * nx * tail_direction, y + 5);
         current_scene->PushObject(this->tail);
-        tail_direction = 1;
     }
     else
     {
@@ -1079,5 +1079,22 @@ void CMario::SetLevel(int l)
             if (!tail->IsDeleted())
             tail->Delete();
         else return;
+    }  
+}
+
+BOOLEAN CMario::IsTailCollidingWithObject(LPCOLLISIONEVENT e)
+{
+    if (level == MARIO_LEVEL_RACCOON)
+    {
+        float tLeft, tTop, tRight, tBottom;
+        float oLeft, oTop, oRight, oBottom;
+
+        tail->GetBoundingBox(tLeft, tTop, tRight, tBottom);
+        DebugOut(L"%d", tLeft);
+        e->obj->GetBoundingBox(oLeft, oTop, oRight, oBottom);
+
+        return ((tRight >= oLeft || tLeft <= oRight) && (tBottom >= oTop || tTop <= oBottom));
     }
+    else
+        return NULL;
 }

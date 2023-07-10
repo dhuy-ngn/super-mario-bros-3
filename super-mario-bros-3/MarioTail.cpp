@@ -18,9 +18,9 @@ void CMarioTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	float mx, my;
 	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
-	
+
 	mario->GetPosition(mx, my);
-	this->SetPosition(mx - 5 * mario->GetMarioDirection()*mario->GetTailDirection(), my + 6);
+	this->SetPosition(mx - MARIO_TAIL_BBOX_WIDTH / 2 * mario->GetMarioDirection() * mario->GetTailDirection(), my + 6);
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
