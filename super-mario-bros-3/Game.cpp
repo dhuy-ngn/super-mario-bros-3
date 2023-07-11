@@ -542,13 +542,12 @@ void CGame::SwitchMarioToScene(int current_scene_id, int next_scene_id, float st
 	CSprites::GetInstance()->Clear();
 	CAnimations::GetInstance()->Clear();
 
-	current_scene = next_scene
+	current_scene = next_scene;
 	LPSCENE s = scenes[current_scene];
 
 	dynamic_cast<CPlayScene*>(s)->SetPlayer((CMario*)player);
-	DebugOut(L"Get Mario info successfully!\n");
+	DebugOut(L"[INFO] Successfully set player to scene!\n");
 	player->SetPosition(start_x, start_y);
-	start_x = start_y = NULL;
 	this->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
 }

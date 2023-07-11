@@ -15,7 +15,6 @@ brick.txt
 # type	x	y	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # See OBJECT_TYPE constants in AssetIDs.h
-
 #ENEMIES
 
 #COIN
@@ -312,7 +311,7 @@ brick.txt
 1	2103	163	0
 
 #Portal 
-50	2267	-99	2297	-69	2	200	100
+50	2267	-99	2297	-69	2	100	170
 
 #KOOPA
 3	576	140	1	0

@@ -419,7 +419,8 @@ void CPlayScene::Clear()
 void CPlayScene::Unload()
 {
 	for (unsigned i = 0; i < objects.size(); i++)
-		delete objects[i];
+		if(!dynamic_cast<CMario*>(objects[i]))
+			delete objects[i];
 
 	objects.clear();
 	player = NULL;
