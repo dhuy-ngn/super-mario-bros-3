@@ -155,6 +155,8 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFireTrap(e);
 	if (dynamic_cast<CPlatform*>(e->obj))
 		OnCollisionWithPlatform(e);
+	if (dynamic_cast<CColorBlock*>(e->obj))
+		OnCollisionWithColorBlock(e);
 	if (dynamic_cast<CBrick*>(e->obj))
 		OnCollisionWithBrick(e);
 }
@@ -313,11 +315,24 @@ void CKoopa::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 	CQuestionBlock* question_block = dynamic_cast<CQuestionBlock*>(e->obj);
 	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
 
-	if (question_block->GetState() != QUESTION_BLOCK_STATE_INACTIVE && IsSpinning())
-	{
-		question_block->SetState(QUESTION_BLOCK_STATE_INACTIVE);
-		question_block->ReleaseItem();
-	}
+	if (e->nx != 0)
+		if (question_block->GetState() != QUESTION_BLOCK_STATE_INACTIVE && IsSpinning())
+		{
+			question_block->SetState(QUESTION_BLOCK_STATE_INACTIVE);
+			question_block->ReleaseItem();
+		}
+		else if (e->ny > 0)
+			if (state == KOOPA_STATE_WALKING && color == KOOPA_COLOR_RED)
+			{
+				float bx, by;
+				e->obj->GetPosition(bx, by);
+				if (vx > 0 && x >= bx + 4)
+					if (ShouldTurnAround(e->obj))
+						vx = -vx;
+				if (vx < 0 && x <= bx - 4)
+					if (ShouldTurnAround(e->obj))
+						vx = -vx;
+			}
 }
 
 void CKoopa::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
@@ -326,10 +341,27 @@ void CKoopa::OnCollisionWithPlatform(LPCOLLISIONEVENT e)
 
 	if (state == KOOPA_STATE_WALKING && color == KOOPA_COLOR_RED)
 	{
-		if (vx > 0 && x >= platform->GetX() + KOOPA_BBOX_WIDTH)
-			vx = -vx;
-		if (vx < 0 && x <= platform->GetMaxX() - KOOPA_BBOX_WIDTH)
-			vx = -vx;
+		if (vx > 0 && x >= platform->GetX() + 4)
+			if (ShouldTurnAround(e->obj))
+				vx = -vx;
+		if (vx < 0 && x <= platform->GetX() - 4)
+			if (ShouldTurnAround(e->obj))
+				vx = -vx;
+	}
+}
+
+void CKoopa::OnCollisionWithColorBlock(LPCOLLISIONEVENT e)
+{
+	CColorBlock* color_block = dynamic_cast<CColorBlock*>(e->obj);
+	 
+	if (state == KOOPA_STATE_WALKING && color == KOOPA_COLOR_RED)
+	{
+		if (vx > 0 && x >= color_block->GetX() + 4)
+			if (ShouldTurnAround(e->obj))
+				vx = -vx;
+		if (vx < 0 && x <= color_block->GetX() - 4)
+			if (ShouldTurnAround(e->obj))
+				vx = -vx;
 	}
 }
 
@@ -343,8 +375,57 @@ void CKoopa::OnCollisionWithFireTrap(LPCOLLISIONEVENT e)
 
 void CKoopa::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 {
+	if (e->nx != 0)
+		if (state == KOOPA_STATE_SPINNING_LEFT || state == KOOPA_STATE_SPINNING_RIGHT)
+		{
+			e->obj->Delete();
+		}
+		else if (e->ny > 0)
+			if (state == KOOPA_STATE_WALKING && color == KOOPA_COLOR_RED)
+			{
+				float bx, by;
+				e->obj->GetPosition(bx, by);
+				if (vx > 0 && x >= bx + 4)
+					if (ShouldTurnAround(e->obj))
+						vx = -vx;
+				if (vx < 0 && x <= bx - 4)
+					if (ShouldTurnAround(e->obj))
+						vx = -vx;
+			}
+}
+
+void CKoopa::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
+{
 	if (state == KOOPA_STATE_SPINNING_LEFT || state == KOOPA_STATE_SPINNING_RIGHT)
 	{
 		e->obj->Delete();
 	}
+}
+
+BOOLEAN CKoopa::ShouldTurnAround(LPGAMEOBJECT obj)
+{
+	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	vector<LPGAMEOBJECT> coObjects = currentScene->GetAllObject();
+	for (UINT i = 0; i < coObjects.size(); i++)
+	{
+		float cox, coy;
+		float ox, oy;
+		coObjects[i]->GetPosition(cox, coy);
+		obj->GetPosition(ox, oy);
+		if (dynamic_cast<CPlatform*>(coObjects[i]) || dynamic_cast<CQuestionBlock*>(coObjects[i]))
+			if (abs(coy == oy))
+			{
+				if (vx > 0)
+					if (cox > x && cox - 16 < ox + 16)
+					{
+						return false;
+					}
+				if (vx < 0)
+					if (cox + 16 > ox - 16 && cox < ox)
+					{
+						return false;
+					}
+			}
+	}
+	return true;
 }

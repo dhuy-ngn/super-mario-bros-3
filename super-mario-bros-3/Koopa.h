@@ -112,6 +112,7 @@ protected:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e);
+	void OnCollisionWithColorBlock(LPCOLLISIONEVENT e);
 	void OnCollisionWithPlatform(LPCOLLISIONEVENT e);
 	void OnCollisionWithFireTrap(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
@@ -133,4 +134,6 @@ public:
 	BOOLEAN CanBeHeld() { return this->canBeHeld; }
 	BOOLEAN IsBeingHeld() { return this->isBeingHeld; }
 	void SetIsBeingHeld(BOOLEAN value) { this->isBeingHeld = value; }
+
+	BOOLEAN ShouldTurnAround(LPGAMEOBJECT obj);
 };
