@@ -50,7 +50,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
             canFly = true;
     }
     }
-    if (GetTickCount64() - running_start > MARIO_RUNNING_STACK_DURATION && vx == 0 && !isFlying)
+    if (GetTickCount64() - running_start > MARIO_RUNNING_STACK_DURATION && !isFlying)
     {
         canFly = false;
         isRunning = false;
@@ -375,7 +375,7 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
     CPortal* p = (CPortal*)e->obj;
-    CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+    CGame::GetInstance()->SwitchMarioToScene(5, p->GetSceneId(), p->GetSceneStartX(), p->GetSceneStartY());
 }
 
 //

@@ -349,7 +349,8 @@ public:
 	BOOLEAN IsHoldingKoopaShell() { return this->isHoldingKoopaShell; }
 	BOOLEAN ShouldTurnOnCamY()
 	{
-		return (this->isFlying || this->isLanding || y < -50 || y >= -50 && vy >= 0);
+		//return (this->isFlying || this->isLanding || y < -50 || y >= -50 && vy >= 0);
+		return true;
 	}
 	void StartFlying() { fly_up_start = GetTickCount64(); isFlying = true; }
 	void StartAttacking() { attack_start = GetTickCount64(); attack_stack_start = GetTickCount64(); }

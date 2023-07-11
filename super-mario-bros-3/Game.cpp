@@ -484,11 +484,11 @@ void CGame::Load(LPCWSTR gameFile)
 		if (line == "[SETTINGS]") { section = GAME_FILE_SECTION_SETTINGS; continue; }
 		if (line == "[TEXTURES]") { section = GAME_FILE_SECTION_TEXTURES; continue; }
 		if (line == "[SCENES]") { section = GAME_FILE_SECTION_SCENES; continue; }
-		if (line[0] == '[') 
-		{ 
-			section = GAME_FILE_SECTION_UNKNOWN; 
+		if (line[0] == '[')
+		{
+			section = GAME_FILE_SECTION_UNKNOWN;
 			DebugOut(L"[ERROR] Unknown section: %s\n", ToLPCWSTR(line));
-			continue; 
+			continue;
 		}
 
 		//
@@ -506,6 +506,7 @@ void CGame::Load(LPCWSTR gameFile)
 	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
 
 	SwitchScene();
+	SwitchMarioToScene(current_scene,next_scene, start_x, start_y);
 }
 
 void CGame::SwitchScene()
@@ -525,9 +526,43 @@ void CGame::SwitchScene()
 	s->Load();
 }
 
+void CGame::SwitchMarioToScene(int current_scene_id, int next_scene_id, float start_x, float start_y)
+{
+	next_scene = next_scene_id;
+
+	if (start_x == NULL || start_y == NULL) return;
+	if (next_scene < 0 || next_scene == current_scene) return;
+
+	DebugOut(L"[INFO] Switching to scene %d\n", next_scene_id);
+	LPGAMEOBJECT player = dynamic_cast<CPlayScene*>(scenes[current_scene_id])->GetPlayer();
+	DebugOut(L"[INFO] Successfully stored player info!\n");
+
+	scenes[current_scene]->Unload();
+
+	CSprites::GetInstance()->Clear();
+	CAnimations::GetInstance()->Clear();
+
+	current_scene = next_scene
+	LPSCENE s = scenes[current_scene];
+
+	dynamic_cast<CPlayScene*>(s)->SetPlayer((CMario*)player);
+	DebugOut(L"Get Mario info successfully!\n");
+	player->SetPosition(start_x, start_y);
+	start_x = start_y = NULL;
+	this->SetKeyHandler(s->GetKeyEventHandler());
+	s->Load();
+}
+
 void CGame::InitiateSwitchScene(int scene_id)
 {
 	next_scene = scene_id;
+}
+
+void CGame::InitiateSwitchMarioToScene(int scene_id, float start_x, float start_y)
+{
+	next_scene = scene_id;
+	this->start_x = start_x;
+	this->start_y = start_y;
 }
 
 

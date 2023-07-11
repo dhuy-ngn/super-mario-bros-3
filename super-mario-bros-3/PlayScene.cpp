@@ -132,12 +132,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		obj = new CMario(x, y);
-		player = (CMario*)obj;
+		else
+		{
+			obj = new CMario(x, y);
+			player = (CMario*)obj;
 
-		DebugOut(L"[INFO] Player object has been created!\n");
+			DebugOut(L"[INFO] Player object has been created!\n");
+		}
 		break;
-	case OBJECT_TYPE_GOOMBA: 
+	case OBJECT_TYPE_GOOMBA:
 	{
 		int level = atoi(tokens[3].c_str());
 		int color = atoi(tokens[4].c_str());
@@ -152,7 +155,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
-	case OBJECT_TYPE_BRICK: 
+	case OBJECT_TYPE_BRICK:
 	{
 		int item = atoi(tokens[3].c_str());
 		obj = new CBrick(x, y, item);
@@ -230,7 +233,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float r = (float)atof(tokens[3].c_str());
 		float b = (float)atof(tokens[4].c_str());
 		int scene_id = atoi(tokens[5].c_str());
-		obj = new CPortal(x, y, r, b, scene_id);
+		float start_x = (float)atof(tokens[6].c_str());
+		float start_y = (float)atof(tokens[7].c_str());
+		obj = new CPortal(x, y, r, b, scene_id, start_x, start_y);
 		break;
 	}
 
@@ -369,18 +374,19 @@ void CPlayScene::Update(DWORD dt)
 	if (cx > MAX_MAP_SIZE_X) cx = MAX_MAP_SIZE_X;
 	if (cy < -400 /*max cam Y height*/) cy = -400;
 
-	if (dynamic_cast<CMario*>(player)->ShouldTurnOnCamY())
-	{
-		CGame::GetInstance()->SetCamPos(cx, cy + HUD_HEIGHT);
-		hud->SetPosition(cx + 131, cy + 219);
-	}
-	else
-	{
-		CGame::GetInstance()->SetCamPos(cx, HUD_HEIGHT);
-		hud->SetPosition(cx + 131, 219);
-	}
+	if (player != NULL)
+		if (dynamic_cast<CMario*>(player)->ShouldTurnOnCamY())
+		{
+			CGame::GetInstance()->SetCamPos(cx, cy + HUD_HEIGHT);
+			hud->SetPosition(cx + 131, cy + 219);
+		}
+		else
+		{
+			CGame::GetInstance()->SetCamPos(cx, HUD_HEIGHT);
+			hud->SetPosition(cx + 131, 219);
+		}
 
-	hud->Update(dt);
+	if (player != NULL)hud->Update(dt);
 	PurgeDeletedObjects();
 }
 
