@@ -35,9 +35,6 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_3:
 		mario->SetLevel(MARIO_LEVEL_RACCOON);
 		break;
-	case DIK_4:
-		game->SwitchMarioToScene(2, 200, 100);
-		break;
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);
 		break;
@@ -61,9 +58,6 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 		mario->SetState(MARIO_STATE_RELEASE_JUMP);
 		if (game->IsKeyDown(DIK_A))
 			mario->HoldKoopaShell();
-		break;
-	case DIK_D:
-		mario->SetState(MARIO_STATE_ATTACK_RELEASE);
 		break;
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT_RELEASE);

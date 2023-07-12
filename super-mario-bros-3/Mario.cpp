@@ -132,8 +132,6 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
         OnCollisionWithKoopa(e);
     else if (dynamic_cast<CCoin*>(e->obj))
         OnCollisionWithCoin(e);
-    else if (dynamic_cast<CPortal*>(e->obj))
-        OnCollisionWithPortal(e);
     else if (dynamic_cast<CQuestionBlock*>(e->obj))
         OnCollisionWithQuestionBlock(e);
     else if (dynamic_cast<CColorBlock*>(e->obj))
@@ -178,14 +176,9 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
     }
     else // hit by Goomba
     {
-        if (IsTailCollidingWithObject(e))
-        {
-            goomba->SetState(GOOMBA_STATE_KNOCKED_OUT);
-        }
-        else
-            if (untouchable == 0)
-                if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_KNOCKED_OUT)
-                    LevelDown();
+        if (untouchable == 0)
+            if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_KNOCKED_OUT)
+                LevelDown();
     }
 }
 
@@ -372,14 +365,6 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
         SetLevel(MARIO_LEVEL_RACCOON);
     }
     e->obj->Delete();
-}
-
-void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
-{
-    CPortal* p = (CPortal*)e->obj;
-    DebugOut(L"%d\n", p->GetSceneStartX());
-    DebugOut(L"%d\n", p->GetSceneStartY());
-    CGame::GetInstance()->SwitchMarioToScene(p->GetSceneId(), p->GetSceneStartX(), p->GetSceneStartY());
 }
 
 //
@@ -706,7 +691,7 @@ void CMario::Render()
         animations->Get(aniId)->Render(x, y);
     }
 
-    DebugOutTitle(L"Mario attack stack: %d", attack_ani_stack);
+    DebugOutTitle(L"Is pipe down: %d", isPipeDown);
 }
 
 void CMario::SetState(int state)
@@ -918,6 +903,28 @@ void CMario::SetState(int state)
         state = MARIO_STATE_IDLE;
         break;
 
+    case MARIO_STATE_ENTERING_PIPE_UP:
+        isPipeUp = true;
+        isPipeDown = false;
+        vx = 0;
+        ay = 0;
+        vy = -MARIO_ENTER_PIPE_SPEED;
+        break;
+
+    case MARIO_STATE_ENTERING_PIPE_DOWN:
+        isPipeDown = true;
+        isPipeUp = false;
+        vx = 0;
+        ay = 0;
+        vy = MARIO_ENTER_PIPE_SPEED;
+        break;
+
+    case MARIO_STATE_EXIT_PIPE:
+        isPipeDown = false;
+        isPipeUp = false;
+        ay = MARIO_GRAVITY;
+        break;
+
         // IDLE
     case MARIO_STATE_IDLE:
         ax = 0.0f;
@@ -1124,21 +1131,4 @@ void CMario::SetLevel(int l)
             tail->Delete();
         else return;
     }  
-}
-
-BOOLEAN CMario::IsTailCollidingWithObject(LPCOLLISIONEVENT e)
-{
-    if (level == MARIO_LEVEL_RACCOON && isAttacking)
-    {
-        float tLeft, tTop, tRight, tBottom;
-        float oLeft, oTop, oRight, oBottom;
-
-        tail->GetBoundingBox(tLeft, tTop, tRight, tBottom);
-        DebugOut(L"%d", tLeft);
-        e->obj->GetBoundingBox(oLeft, oTop, oRight, oBottom);
-
-        return (tRight >= oLeft && tLeft <= oRight && tBottom >= oTop && tTop <= oBottom);
-    }
-    else
-        return NULL;
 }

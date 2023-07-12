@@ -1,8 +1,9 @@
 #include "Portal.h"
-#include "Game.h"
+#include "Mario.h"
 #include "Textures.h"
+#include "PlayScene.h"
 
-CPortal::CPortal(float l, float t, float r, float b, int scene_id, float start_x, float start_y )
+CPortal::CPortal(float l, float t, float r, float b, int scene_id, float start_x, float start_y, int isUpward )
 {
 	this->scene_id = scene_id;
 	x = l; 
@@ -11,6 +12,7 @@ CPortal::CPortal(float l, float t, float r, float b, int scene_id, float start_x
 	height = b - t;
 	this->start_x = start_x;
 	this->start_y = start_y;
+	this->isUpward = isUpward;
 }
 
 void CPortal::RenderBoundingBox()
@@ -45,4 +47,44 @@ void CPortal::GetBoundingBox(float &l, float &t, float &r, float &b)
 	t = y - height/2;
 	r = x + width/2;
 	b = y + height/2;
+}
+
+void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+	float mLeft, mTop, mRight, mBottom;
+	float oLeft, oTop, oRight, oBottom;
+
+	mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
+	GetBoundingBox(oLeft, oTop, oRight, oBottom);
+
+	if (mRight >= oLeft && mLeft <= oRight && mBottom >= oTop && mTop <= oBottom)
+	{
+		if (isUpward)
+		{
+			if (CGame::GetInstance()->IsKeyDown(DIK_UP))
+			{
+				mario->SetState(MARIO_STATE_ENTERING_PIPE_UP);
+				mario->StartEnteringPipe();
+			}
+		}
+		else
+		{
+			if (CGame::GetInstance()->IsKeyDown(DIK_DOWN))
+			{
+				mario->SetState(MARIO_STATE_ENTERING_PIPE_DOWN);
+				mario->StartEnteringPipe();
+			}
+		}
+
+		if (mario->IsPipeDown() || mario->IsPipeUp())
+		{
+			if (GetTickCount64() - mario->GetPipeEnterStartTime() > MARIO_ENTER_PIPE_INTERVAL)
+			{
+				CGame::GetInstance()->SwitchMarioToScene(scene_id, start_x, start_y);
+			}
+		}
+	}
+
+	CGameObject::Update(dt);
 }

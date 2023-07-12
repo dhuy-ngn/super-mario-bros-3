@@ -551,6 +551,7 @@ void CGame::SwitchMarioToScene(int next_scene_id, float x, float y)
 
 	s->Load();
 	player->SetPosition(x, y);
+	player->SetState(MARIO_STATE_EXIT_PIPE);
 }
 
 void CGame::InitiateSwitchScene(int scene_id)

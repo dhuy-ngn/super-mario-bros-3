@@ -232,7 +232,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int scene_id = atoi(tokens[5].c_str());
 		float start_x = (float)atof(tokens[6].c_str());
 		float start_y = (float)atof(tokens[7].c_str());
-		obj = new CPortal(x, y, r, b, scene_id, start_x, start_y);
+		int isUpward = (int)atoi(tokens[8].c_str());
+		obj = new CPortal(x, y, r, b, scene_id, start_x, start_y, isUpward);
 		break;
 	}
 

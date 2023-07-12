@@ -7,20 +7,20 @@
 #include "debug.h"
 #include "MarioTail.h"
 
-#define MARIO_WALKING_SPEED		0.1f
-#define MARIO_RUNNING_SPEED		0.25f
-#define MARIO_FLYING_SPEED	0.06f
-#define	MARIO_FALLING_SPEED	0.1f
+#define MARIO_WALKING_SPEED			0.1f
+#define MARIO_RUNNING_SPEED			0.25f
+#define MARIO_FLYING_SPEED			0.06f
+#define	MARIO_FALLING_SPEED			0.1f
 #define	MARIO_RACCOON_FALLING_SPEED	0.03f
-#define MARIO_SPINNING_SPEED	0.08f
+#define MARIO_ENTER_PIPE_SPEED		0.08f
 
-#define MARIO_ACCEL_WALK_X	0.001f
-#define MARIO_ACCEL_RUN_X	0.0004f
-#define MARIO_ACCEL_FLYING_X	0.0008f
+#define MARIO_ACCEL_WALK_X		0.001f
+#define MARIO_ACCEL_RUN_X		0.0004f
+#define MARIO_ACCEL_FLYING_X	0.0000f
 
 #define MARIO_JUMP_SPEED_Y		0.33f
 #define MARIO_JUMP_RUN_SPEED_Y	0.5f
-#define MARIO_ACCEL_FLYING_Y 0.1f
+#define MARIO_ACCEL_FLYING_Y	0.008f
 
 #define MARIO_GRAVITY		0.0008f
 #define MARIO_LANDING_SPEED	0.0005f
@@ -55,6 +55,10 @@
 
 #define MARIO_STATE_ATTACK 900
 #define MARIO_STATE_ATTACK_RELEASE 901
+
+#define MARIO_STATE_ENTERING_PIPE_UP	902
+#define MARIO_STATE_ENTERING_PIPE_DOWN	903
+#define MARIO_STATE_EXIT_PIPE			910
 
 #define MARIO_STATE_HOLD_KOOPA_SHELL 1000
 #define MARIO_STATE_HOLD_WALK_KOOPA_SHELL_RIGHT	1001
@@ -172,7 +176,7 @@
 #define ID_ANI_MARIO_RACCOON_KICK_KOOPA_RIGHT	3118
 #define ID_ANI_MARIO_RACCOON_KICK_KOOPA_LEFT	3119
 
-#define ID_ANI_MARIO_RACCOON_ATTACK 3300
+#define ID_ANI_MARIO_RACCOON_ATTACK		3300
 
 #define ID_SPRITE_MARIO_WHACK_LEFT_1	12813
 #define ID_SPRITE_MARIO_WHACK_LEFT_2	12814
@@ -244,7 +248,10 @@ class CMario : public CGameObject
 	ULONGLONG attack_stack_start = 0;
 	ULONGLONG running_start = 0;
 	ULONGLONG falling_start = 0;
+	ULONGLONG entering_pipe_start = 0;
 	BOOLEAN isOnPlatform;
+	BOOLEAN isPipeUp;
+	BOOLEAN isPipeDown;
 
 	int coin;
 	int score_stack;
@@ -258,7 +265,6 @@ class CMario : public CGameObject
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithColorBlock(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e);
-	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithFireTrap(LPCOLLISIONEVENT e);
 	void OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithFireBullet(LPCOLLISIONEVENT e);
@@ -308,14 +314,15 @@ public:
 		life = 4;
 		speed_stack = 0;
 		tail_direction = 0;
+		isPipeUp = isPipeDown = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void SetState(int state);
 
-	int IsCollidable() { return (state != MARIO_STATE_DIE); }
+	int IsCollidable() { return (state != MARIO_STATE_DIE && state != MARIO_STATE_ENTERING_PIPE_UP && state != MARIO_STATE_ENTERING_PIPE_DOWN); }
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
+	int IsBlocking() { return (state != MARIO_STATE_DIE && state != MARIO_STATE_ENTERING_PIPE_UP && state != MARIO_STATE_ENTERING_PIPE_DOWN && untouchable == 0); }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
@@ -340,6 +347,8 @@ public:
 	int GetSpeedStack() { return this->speed_stack; }
 	int GetElapsedTime() { return this->time_elapsed; }
 	int GetRemainingTime() { return 300 - this->time_elapsed / 1000; }
+	int IsPipeUp() { return isPipeUp; }
+	int IsPipeDown() { return isPipeDown; }
 	BOOLEAN IsAttacking() { return this->isAttacking; }
 	BOOLEAN IsFlying() { return this->isFlying; }
 	BOOLEAN IsLanding() { return this->isLanding; }
@@ -359,12 +368,12 @@ public:
 	void StartFlying() { fly_up_start = GetTickCount64(); isFlying = true; }
 	void StartAttacking() { attack_start = GetTickCount64(); attack_stack_start = GetTickCount64(); }
 	void StartRunning() { running_start = GetTickCount64(); }
+	void StartEnteringPipe() { entering_pipe_start = GetTickCount64(); }
+	ULONGLONG GetPipeEnterStartTime() { return entering_pipe_start; }
 	void LevelDown();
 	void GainScore();
 	void Gain1000Score() { this->score += 1000; }
 	void GainLife();
 	void GainCoin() { this->coin++; };
 	CMarioTail* GetMarioTail() { return this->tail; }
-
-	BOOLEAN IsTailCollidingWithObject(LPCOLLISIONEVENT e);
 };
