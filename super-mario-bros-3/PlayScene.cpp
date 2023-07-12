@@ -389,8 +389,9 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	for (unsigned i = 0; i < objects.size(); i++)
+	for (unsigned i = 1; i < objects.size(); i++)
 		objects[i]->Render();
+	player->Render();
 	hud->Render();
 }
 
