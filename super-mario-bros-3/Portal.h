@@ -22,7 +22,7 @@ public:
 	void RenderBoundingBox(void);
 	
 	int GetSceneId() { return scene_id;  }
-	float GetSceneStartX() { return start_x; }
-	float GetSceneStartY() { return start_y; }
+	float GetSceneStartX() { return this->start_x; }
+	float GetSceneStartY() { return this->start_y; }
 	int IsBlocking() { return 0; }
 };

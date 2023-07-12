@@ -35,6 +35,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_3:
 		mario->SetLevel(MARIO_LEVEL_RACCOON);
 		break;
+	case DIK_4:
+		game->SwitchMarioToScene(2, 200, 100);
+		break;
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);
 		break;
@@ -82,6 +85,7 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 {
 	LPGAME game = CGame::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+
 
 	if (game->IsKeyDown(DIK_RIGHT))
 	{

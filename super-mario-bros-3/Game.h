@@ -57,9 +57,6 @@ class CGame
 	int current_scene;
 	int next_scene = -1;
 
-	float start_x = NULL;
-	float start_y = NULL;
-
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
 
@@ -114,8 +111,7 @@ public:
 	void Load(LPCWSTR gameFile);
 	void SwitchScene();
 	void InitiateSwitchScene(int scene_id);
-	void InitiateSwitchMarioToScene(int scene_id, float start_x, float start_y);
-	void SwitchMarioToScene(int current_scene_id, int next_scene_id, float start_x, float start_y);
+	void SwitchMarioToScene(int next_scene_id, float start_x, float start_y);
 
 	void _ParseSection_TEXTURES(string line);
 

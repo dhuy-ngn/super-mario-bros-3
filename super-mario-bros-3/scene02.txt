@@ -1,14 +1,13 @@
 # list of object assets to load in this scene
 [ASSETS]
+HUD.txt
 mario.txt
 coin.txt
-#PLATFORM
 platform.txt
 goomba.txt
 koopa.txt
 piranha_and_firetrap.txt
 question_block.txt
-HUD.txt
 decoration.txt
 powerup.txt
 brick.txt

@@ -132,13 +132,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		else
-		{
-			obj = new CMario(x, y);
-			player = (CMario*)obj;
+		obj = new CMario(x, y);
+		player = (CMario*)obj;
 
-			DebugOut(L"[INFO] Player object has been created!\n");
-		}
+		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA:
 	{
@@ -419,11 +416,11 @@ void CPlayScene::Clear()
 void CPlayScene::Unload()
 {
 	for (unsigned i = 0; i < objects.size(); i++)
-		if(!dynamic_cast<CMario*>(objects[i]))
-			delete objects[i];
+		delete objects[i];
 
 	objects.clear();
-	player = NULL;
+	delete hud;
+	player = nullptr;
 
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }

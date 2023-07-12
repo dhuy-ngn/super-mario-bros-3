@@ -271,8 +271,10 @@ class CMario : public CGameObject
 	int GetAniIdRaccoon();
 
 public:
-	CMario(float x, float y) : CGameObject(x, y)
+	CMario(float x = 0, float y = 0) : CGameObject()
 	{
+		this->x = x;
+		this->y = y;
 		tail = NULL;
 		isHoldingKoopaShell = false;
 		isSitting = false;
@@ -285,6 +287,9 @@ public:
 		attack_stack_start =0;
 		maxVx = 0.0f;
 		maxVy = 999.0f;
+		canLand = false;
+		isLanding = false;
+		isRunning = false;
 		ax = 0.0f;
 		if (level != MARIO_LEVEL_RACCOON)
 			ay = MARIO_GRAVITY;
@@ -349,8 +354,7 @@ public:
 	BOOLEAN IsHoldingKoopaShell() { return this->isHoldingKoopaShell; }
 	BOOLEAN ShouldTurnOnCamY()
 	{
-		//return (this->isFlying || this->isLanding || y < -50 || y >= -50 && vy >= 0);
-		return true;
+		return (this->isFlying || this->isLanding || y < -50 || y >= -50 && vy >= 0);
 	}
 	void StartFlying() { fly_up_start = GetTickCount64(); isFlying = true; }
 	void StartAttacking() { attack_start = GetTickCount64(); attack_stack_start = GetTickCount64(); }

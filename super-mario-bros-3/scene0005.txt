@@ -1,5 +1,6 @@
 # list of object assets to load in this scene
 [ASSETS]
+HUD.txt
 mario.txt
 coin.txt
 platform.txt
@@ -7,7 +8,6 @@ goomba.txt
 koopa.txt
 piranha_and_firetrap.txt
 question_block.txt
-HUD.txt
 decoration.txt
 powerup.txt
 brick.txt
@@ -311,7 +311,7 @@ brick.txt
 1	2103	163	0
 
 #Portal 
-50	2267	-99	2297	-69	2	100	170
+50	2267	-99	2297	-69	2	600	-100
 
 #KOOPA
 3	576	140	1	0

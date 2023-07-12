@@ -375,7 +375,9 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
     CPortal* p = (CPortal*)e->obj;
-    CGame::GetInstance()->SwitchMarioToScene(5, p->GetSceneId(), p->GetSceneStartX(), p->GetSceneStartY());
+    DebugOut(L"%d\n", p->GetSceneStartX());
+    DebugOut(L"%d\n", p->GetSceneStartY());
+    CGame::GetInstance()->SwitchMarioToScene(p->GetSceneId(), p->GetSceneStartX(), p->GetSceneStartY());
 }
 
 //
