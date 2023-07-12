@@ -39,7 +39,7 @@ public:
 	vector<LPGAMEOBJECT> GetAllObject() { return this->objects; }
 
 	LPGAMEOBJECT GetPlayer() { return player; }
-	void SetPlayer(CMario* p) { player = p; objects.push_back(p); }
+	void SetPlayer(CMario* p) { player = p; objects.push_back(player); }
 
 	void Clear();
 	void PurgeDeletedObjects();

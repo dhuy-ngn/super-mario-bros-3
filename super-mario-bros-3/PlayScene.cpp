@@ -325,7 +325,7 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
 	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 0; i < objects.size() - 1; i++)
+	for (size_t i = 1; i < objects.size(); i++)
 	{
 		coObjects.push_back(objects[i]);
 	}
@@ -420,7 +420,7 @@ void CPlayScene::Unload()
 
 	objects.clear();
 	delete hud;
-	player = nullptr;
+	player = NULL;
 
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }
