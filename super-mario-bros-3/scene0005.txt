@@ -1,34 +1,27 @@
 # list of object assets to load in this scene
 [ASSETS]
-#
-#MARIO
+HUD.txt
 mario.txt
-#
-#ITEMS
 coin.txt
-#
-#PLATFORM
 platform.txt
-#
-#ENEMIES
 goomba.txt
 koopa.txt
 piranha_and_firetrap.txt
-#
 question_block.txt
-#
-HUD.txt
-#
 decoration.txt
-#
 powerup.txt
 brick.txt
 [OBJECTS]
 # type	x	y	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # See OBJECT_TYPE constants in AssetIDs.h
-
-#ENEMIES
+# MARIO
+#0	30	178
+#0	500	100
+#0	1420	-75
+#0	2000	100
+#0	1312	-230
+0	2260	-120
 
 #COIN
 4	1085	106
@@ -324,7 +317,7 @@ brick.txt
 1	2103	163	0
 
 #Portal 
-
+50	2267	-99	2297	-69	2	100	120
 
 #KOOPA
 3	576	140	1	0
@@ -339,10 +332,3 @@ brick.txt
 2	830	164	0	0
 2	880	164	0	0
 2	954	100	1	1
-
-# MARIO
-#0	30	178
-0	500	100
-#0	1420	-75
-#0	2000	100
-#0	1312	-230

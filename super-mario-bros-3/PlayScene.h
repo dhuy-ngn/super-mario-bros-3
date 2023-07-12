@@ -16,7 +16,7 @@ class CPlayScene: public CScene
 {
 protected: 
 	// A play scene has to have player, right? 
-	LPGAMEOBJECT player;		
+	CMario* player;		
 	CHud* hud;
 
 	vector<LPGAMEOBJECT> objects;
@@ -39,6 +39,7 @@ public:
 	vector<LPGAMEOBJECT> GetAllObject() { return this->objects; }
 
 	LPGAMEOBJECT GetPlayer() { return player; }
+	void SetPlayer(CMario* p) { player = p; objects.push_back(player); }
 
 	void Clear();
 	void PurgeDeletedObjects();

@@ -111,6 +111,7 @@ public:
 	void Load(LPCWSTR gameFile);
 	void SwitchScene();
 	void InitiateSwitchScene(int scene_id);
+	void SwitchMarioToScene(int next_scene_id, float start_x, float start_y);
 
 	void _ParseSection_TEXTURES(string line);
 

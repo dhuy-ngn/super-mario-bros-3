@@ -271,8 +271,10 @@ class CMario : public CGameObject
 	int GetAniIdRaccoon();
 
 public:
-	CMario(float x, float y) : CGameObject(x, y)
+	CMario(float x = 0, float y = 0) : CGameObject()
 	{
+		this->x = x;
+		this->y = y;
 		tail = NULL;
 		isHoldingKoopaShell = false;
 		isSitting = false;
@@ -285,6 +287,9 @@ public:
 		attack_stack_start =0;
 		maxVx = 0.0f;
 		maxVy = 999.0f;
+		canLand = false;
+		isLanding = false;
+		isRunning = false;
 		ax = 0.0f;
 		if (level != MARIO_LEVEL_RACCOON)
 			ay = MARIO_GRAVITY;
@@ -307,10 +312,7 @@ public:
 	void Render();
 	void SetState(int state);
 
-	int IsCollidable()
-	{
-		return (state != MARIO_STATE_DIE);
-	}
+	int IsCollidable() { return (state != MARIO_STATE_DIE); }
 
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 
