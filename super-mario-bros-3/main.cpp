@@ -24,7 +24,8 @@
 #define MAIN_WINDOW_TITLE L"Super Mario Bros 3"
 #define WINDOW_ICON_PATH L"mario.ico"
 
-#define BACKGROUND_COLOR D3DXCOLOR(156.0f/255, 252.0f/255, 240.0f/255, 0.0f)
+#define BACKGROUND_COLOR_1 D3DXCOLOR(156.0f/255, 252.0f/255, 240.0f/255, 0.0f)
+#define BACKGROUND_COLOR_2 D3DXCOLOR(0.0f/255, 0.0f/255, 0.0f/255, 0.0f)
 
 #define SCREEN_WIDTH 270
 #define SCREEN_HEIGHT 240
@@ -63,8 +64,10 @@ void Render()
 	ID3D10RenderTargetView* pRenderTargetView = g->GetRenderTargetView();
 	ID3DX10Sprite* spriteHandler = g->GetSpriteHandler();
 
-	pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR);
-
+	if (g->GetInstance()->GetCurrentSceneId() == 5)
+		pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR_1);
+	else
+		pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR_2);
 	spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE);
 
 	FLOAT NewBlendFactor[4] = { 0,0,0,0 };
