@@ -2,7 +2,6 @@
 
 #include "GameObject.h"
 
-#define MARIO_ENTER_PIPE_INTERVAL 1500
 /*
 	Object that triggers scene switching
 */

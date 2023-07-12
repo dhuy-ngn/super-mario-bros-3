@@ -542,7 +542,7 @@ void CGame::SwitchMarioToScene(int next_scene_id, float x, float y)
 	current_scene = next_scene_id;
 	LPSCENE s = scenes[current_scene];
 
-	
+
 	((CPlayScene*)(s))->SetPlayer(player);
 	DebugOut(L"[INFO] Successfully set player to scene!\n");
 	//DebugOut(L"%d", (((CMario*)player)->GetScore()));
@@ -551,7 +551,7 @@ void CGame::SwitchMarioToScene(int next_scene_id, float x, float y)
 
 	s->Load();
 	player->SetPosition(x, y);
-	player->SetState(MARIO_STATE_EXIT_PIPE);
+	player->StartExitingPipe();
 }
 
 void CGame::InitiateSwitchScene(int scene_id)

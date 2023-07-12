@@ -12,7 +12,7 @@
 #define MARIO_FLYING_SPEED			0.06f
 #define	MARIO_FALLING_SPEED			0.1f
 #define	MARIO_RACCOON_FALLING_SPEED	0.03f
-#define MARIO_ENTER_PIPE_SPEED		0.08f
+#define MARIO_ENTER_PIPE_SPEED		0.02f
 
 #define MARIO_ACCEL_WALK_X		0.001f
 #define MARIO_ACCEL_RUN_X		0.0004f
@@ -188,6 +188,10 @@
 #define ID_SPRITE_MARIO_WHACK_RIGHT_3	12805
 #define ID_SPRITE_MARIO_WHACK_RIGHT_4	12806
 
+#define ID_SPRITE_MARIO_BIG_ENTER_PIPE		11726
+#define ID_SPRITE_MARIO_SMALL_ENTER_PIPE	12716
+#define	ID_SPRITE_MARIO_RACCOON_ENTER_PIPE	12804
+
 
 #pragma endregion
 
@@ -214,6 +218,7 @@
 #define MARIO_RACCOON_SITTING_BBOX_HEIGHT 16
 
 #define MARIO_UNTOUCHABLE_TIME 2500
+#define MARIO_ENTER_PIPE_INTERVAL 1500
 #define MARIO_RUNNING_STACK_DURATION	200
 #define MARIO_MAX_RUNNING_STACK	7
 #define MARIO_MAX_ATTACK_STACK_TIME 70
@@ -249,6 +254,7 @@ class CMario : public CGameObject
 	ULONGLONG running_start = 0;
 	ULONGLONG falling_start = 0;
 	ULONGLONG entering_pipe_start = 0;
+	ULONGLONG exit_pipe_start = 0;
 	BOOLEAN isOnPlatform;
 	BOOLEAN isPipeUp;
 	BOOLEAN isPipeDown;
@@ -315,14 +321,15 @@ public:
 		speed_stack = 0;
 		tail_direction = 0;
 		isPipeUp = isPipeDown = 0;
+		exit_pipe_start = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void SetState(int state);
 
-	int IsCollidable() { return (state != MARIO_STATE_DIE && state != MARIO_STATE_ENTERING_PIPE_UP && state != MARIO_STATE_ENTERING_PIPE_DOWN); }
+	int IsCollidable() { return (state != MARIO_STATE_DIE && !isPipeUp && !isPipeDown); }
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && state != MARIO_STATE_ENTERING_PIPE_UP && state != MARIO_STATE_ENTERING_PIPE_DOWN && untouchable == 0); }
+	int IsBlocking() { return (state != MARIO_STATE_DIE && !isPipeUp && !isPipeDown && untouchable == 0); }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
@@ -369,6 +376,7 @@ public:
 	void StartAttacking() { attack_start = GetTickCount64(); attack_stack_start = GetTickCount64(); }
 	void StartRunning() { running_start = GetTickCount64(); }
 	void StartEnteringPipe() { entering_pipe_start = GetTickCount64(); }
+	void StartExitingPipe() { exit_pipe_start = GetTickCount64(); }
 	ULONGLONG GetPipeEnterStartTime() { return entering_pipe_start; }
 	void LevelDown();
 	void GainScore();

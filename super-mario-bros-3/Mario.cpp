@@ -63,6 +63,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
             speed_stack = 0;
         }
     }
+    if (GetTickCount64() - exit_pipe_start > MARIO_ENTER_PIPE_INTERVAL && exit_pipe_start != 0)
+    {
+        SetState(MARIO_STATE_EXIT_PIPE);
+        exit_pipe_start = 0;
+    }
     if (isAttacking)
     {
         if (GetTickCount64() - attack_stack_start >= MARIO_MAX_ATTACK_STACK_TIME) 
@@ -677,6 +682,21 @@ void CMario::Render()
             if (attack_ani_stack == 4) CSprites::GetInstance()->Get(ID_SPRITE_MARIO_WHACK_LEFT_4)->Draw(x, y);
         }
     }
+    else if (isPipeDown || isPipeUp)
+    {
+        switch (level)
+        {
+        case MARIO_LEVEL_SMALL:
+            CSprites::GetInstance()->Get(ID_SPRITE_MARIO_SMALL_ENTER_PIPE)->Draw(x, y);
+            break;
+        case MARIO_LEVEL_BIG:
+            CSprites::GetInstance()->Get(ID_SPRITE_MARIO_BIG_ENTER_PIPE)->Draw(x, y);
+            break;
+        case MARIO_LEVEL_RACCOON:
+            CSprites::GetInstance()->Get(ID_SPRITE_MARIO_RACCOON_ENTER_PIPE)->Draw(x, y);
+            break;
+        }
+    }
     else
     {
         if (state == MARIO_STATE_DIE)
@@ -923,6 +943,7 @@ void CMario::SetState(int state)
         isPipeDown = false;
         isPipeUp = false;
         ay = MARIO_GRAVITY;
+        nx = 1;
         break;
 
         // IDLE
