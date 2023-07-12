@@ -251,6 +251,7 @@ class CMario : public CGameObject
 	int score;
 	int life;
 	int speed_stack;
+	int time_elapsed;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
@@ -337,6 +338,8 @@ public:
 	int GetScore() { return this->score; }
 	int GetTailDirection() { return this->tail_direction; }
 	int GetSpeedStack() { return this->speed_stack; }
+	int GetElapsedTime() { return this->time_elapsed; }
+	int GetRemainingTime() { return 300 - this->time_elapsed / 1000; }
 	BOOLEAN IsAttacking() { return this->isAttacking; }
 	BOOLEAN IsFlying() { return this->isFlying; }
 	BOOLEAN IsLanding() { return this->isLanding; }

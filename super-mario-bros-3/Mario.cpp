@@ -22,6 +22,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     vy += ay * dt;
     vx += ax * dt;
 
+    time_elapsed += dt;
+
     if (abs(vx) > abs(maxVx)) vx = maxVx;
     
     if (abs(vy) > abs(maxVy)) vy = maxVy;

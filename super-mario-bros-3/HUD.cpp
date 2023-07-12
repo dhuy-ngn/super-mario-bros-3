@@ -144,10 +144,11 @@ void CHud::Render()
 
 void CHud::Update(DWORD dt) 
 {
-	AddSpeedStack();
-	AddCoin();
-	AddLife();
-	AddScore();
+	GetMarioSpeedStack();
+	GetMarioCoin();
+	GetMarioLife();
+	GetMarioScore();
+	GetMarioRemainingTime();
 	// for mario life
 	mariolifeSprites = StringToSprite(to_string(marioLife));
 
@@ -155,8 +156,6 @@ void CHud::Update(DWORD dt)
 	moneySprites = StringToSprite(to_string(money));
 
 	// for time
-	time += dt;
-	remainTime = DEFAULT_TIME - time / 1000;
 	string time_str = to_string(remainTime);
 	while (time_str.length() < HUD_TIME_MAX) time_str = "0" + time_str;
 	remainTimeSprites = StringToSprite(time_str);
@@ -169,7 +168,7 @@ void CHud::Update(DWORD dt)
 	CGameObject::Update(dt);
 }
 
-void CHud::AddSpeedStack() 
+void CHud::GetMarioSpeedStack() 
 {
 	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
 	if (mario != NULL)
@@ -178,7 +177,7 @@ void CHud::AddSpeedStack()
 	}
 }
 
-void CHud::AddCoin() 
+void CHud::GetMarioCoin() 
 {
 	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
 	if (mario != NULL)
@@ -187,7 +186,7 @@ void CHud::AddCoin()
 	}
 }
 
-void CHud::AddLife() 
+void CHud::GetMarioLife() 
 {
 	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
 	if (mario != NULL)
@@ -196,11 +195,20 @@ void CHud::AddLife()
 	}
 }
 
-void CHud::AddScore() 
+void CHud::GetMarioScore() 
 {
 	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
 	if (mario != NULL)
 	{
 		this->score = mario->GetScore();
+	}
+}
+
+void CHud::GetMarioRemainingTime()
+{
+	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+	if (mario != NULL)
+	{
+		this->remainTime = mario->GetRemainingTime();
 	}
 }

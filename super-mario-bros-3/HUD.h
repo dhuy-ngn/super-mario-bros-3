@@ -89,10 +89,11 @@ public:
 	CHud();
 	virtual void Render();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) {};
-	void AddSpeedStack();
-	void AddCoin();
-	void AddLife();
-	void AddScore();
+	void GetMarioSpeedStack();
+	void GetMarioCoin();
+	void GetMarioLife();
+	void GetMarioScore();
+	void GetMarioRemainingTime();
 	void initFonts();
 	LPSPRITE mappingFont(char c);
 	vector<LPSPRITE> StringToSprite(string str);
