@@ -32,9 +32,8 @@ void CSwitch::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		y = start_y - SWITCH_BBOX_PRESSED_HEIGHT - 0.1f;
 	}
-	if (GetTickCount64() - switch_effect_start > SWITCH_MAX_INTERVAL && switch_effect_start != 0)
+	if (GetTickCount64() - switch_effect_start > SWITCH_MAX_INTERVAL && state == SWITCH_STATE_PRESSED)
 	{
-		switch_effect_start = GetTickCount64();
 		CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
 		vector<LPGAMEOBJECT> objects = currentScene->GetAllObject();
 		for (size_t i = 0; i < objects.size(); i++)

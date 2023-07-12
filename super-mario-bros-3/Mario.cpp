@@ -260,14 +260,14 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
             if (brick->GetItemType() == BRICK_ITEM_TYPE_MUSHROOM)
             {
                 CMushroom* mushroom = new CMushroom(bx, by, MUSHROOM_TYPE_GREEN);
-                current_scene->UnshiftObject(mushroom);
+                current_scene->PushObject(mushroom);
                 mushroom->SetState(MUSHROOM_STATE_IDLE);
                 brick->SetState(BRICK_STATE_EXHAUSTED);
             }
             else if (brick->GetItemType() == BRICK_ITEM_TYPE_MUSHROOM)
             {
                 CSwitch* pSwitch = new CSwitch(x, y);
-                current_scene->UnshiftObject(pSwitch);
+                current_scene->PushObject(pSwitch);
                 pSwitch->SetState(SWITCH_STATE_IDLE);
                 brick->SetState(BRICK_STATE_EXHAUSTED);
             }

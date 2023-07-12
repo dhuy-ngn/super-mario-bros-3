@@ -31,6 +31,4 @@ public:
 
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 0; }
-
-	void ChangeBreakBrickToCoin();
 };

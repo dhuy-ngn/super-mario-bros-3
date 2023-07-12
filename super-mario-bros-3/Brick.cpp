@@ -47,14 +47,14 @@ void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				SetState(BRICK_STATE_EXHAUSTED);
 				CMushroom* mushroom = new CMushroom(x, y, MUSHROOM_TYPE_GREEN);
-				current_scene->UnshiftObject(mushroom);
+				current_scene->PushObject(mushroom);
 				mushroom->SetState(MUSHROOM_STATE_IDLE);
 			}
 			else if (item == BRICK_ITEM_TYPE_SWITCH)
 			{
 				SetState(BRICK_STATE_EXHAUSTED);
 				CSwitch* pSwitch = new CSwitch(x, y);
-				current_scene->UnshiftObject(pSwitch);
+				current_scene->PushObject(pSwitch);
 				pSwitch->SetState(SWITCH_STATE_IDLE);
 			}
 			else
