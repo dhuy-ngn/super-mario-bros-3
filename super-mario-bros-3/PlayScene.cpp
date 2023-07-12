@@ -417,7 +417,7 @@ void CPlayScene::Clear()
 */
 void CPlayScene::Unload()
 {
-	for (unsigned i = 0; i < objects.size(); i++)
+	for (unsigned i = 1; i < objects.size(); i++)
 		delete objects[i];
 
 	objects.clear();

@@ -39,7 +39,12 @@ public:
 	vector<LPGAMEOBJECT> GetAllObject() { return this->objects; }
 
 	LPGAMEOBJECT GetPlayer() { return player; }
-	void SetPlayer(CMario* p) { player = p; objects.push_back(player); }
+	void SetPlayer(CMario* p) {
+		player = p; 
+		objects.push_back(player); 
+		if (p->GetLevel() == MARIO_LEVEL_RACCOON)
+			p->SetLevel(MARIO_LEVEL_RACCOON);
+	}
 
 	void Clear();
 	void PurgeDeletedObjects();
@@ -47,6 +52,7 @@ public:
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
 
 	void PushObject(LPGAMEOBJECT obj) { this->objects.push_back(obj); }
+	void UnshiftObject(LPGAMEOBJECT obj) { this->objects.insert(objects.begin() + 1, obj); }
 };
 
 typedef CPlayScene* LPPLAYSCENE;

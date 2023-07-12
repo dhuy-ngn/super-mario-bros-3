@@ -534,7 +534,7 @@ void CGame::SwitchMarioToScene(int next_scene_id, float x, float y)
 	CMario* player = dynamic_cast<CMario*>(dynamic_cast<CPlayScene*>(scenes[current_scene])->GetPlayer());
 	DebugOut(L"[INFO] Switching to scene %d\n", next_scene_id);
 
-	// scenes[current_scene]->Unload();
+	scenes[current_scene]->Unload();
 
 	CSprites::GetInstance()->Clear();
 	CAnimations::GetInstance()->Clear();
