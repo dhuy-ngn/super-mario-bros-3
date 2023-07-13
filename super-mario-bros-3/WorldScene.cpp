@@ -9,13 +9,13 @@
 #include "debug.h"
 #include "Mario.h"
 #include "WorldMapMario.h"
+#include "WorldMapObject.h"
 
 #define SCENE_SECTION_UNKNOWN		-1
 #define SCENE_SECTION_ASSETS		1
 #define SCENE_SECTION_OBJECTS		2
 #define SCENE_SECTION_SPRITES		3
 #define SCENE_SECTION_ANIMATIONS	4
-#define SCENE_SECTION_OBJECTS		5
 
 
 #define ASSETS_SECTION_UNKNOWN		-1
@@ -26,9 +26,9 @@
 
 using namespace std;
 
-CWorldScene::CWorldScene(int id, LPCWSTR filePath) :
-	CScene(id, filePath)
+CWorldScene::CWorldScene(int id, LPCWSTR filePath) : CScene(id, filePath)
 {
+	player = NULL;
 	hud = NULL;
 	key_handler = new CWorldSceneKeyHandler(this);
 }
@@ -67,7 +67,7 @@ void CWorldScene::_ParseSection_ANIMATIONS(string line)
 	LPANIMATION ani = new CAnimation();
 
 	int ani_id = atoi(tokens[0].c_str());
-	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	for (unsigned int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i + 1].c_str());
@@ -76,6 +76,11 @@ void CWorldScene::_ParseSection_ANIMATIONS(string line)
 
 	CAnimations::GetInstance()->Add(ani_id, ani);
 }
+
+#define OBJECT_TYPE_PLAYER		0
+#define OBJECT_TYPE_GENERAL		1
+#define OBJECT_TYPE_NODE		2
+#define OBJECT_NODE_PORTAL		3
 
 /*
 	Parse a line in section [OBJECTS]
@@ -92,6 +97,47 @@ void CWorldScene::_ParseSection_OBJECTS(string line)
 	float y = (float)atof(tokens[2].c_str());
 
 	CGameObject* obj = NULL;
+
+	switch (object_type)
+	{
+	case OBJECT_TYPE_PLAYER:
+		if (player != NULL)
+		{
+			DebugOut(L"[ERROR] PLAYER object was created before!\n");
+			return;
+		}
+		obj = new CWorldMapMario(x, y);
+		player = (CWorldMapMario*)obj;
+		DebugOut(L"[INFO] Player object created! %f %f\n", x, y);
+		break;
+	case OBJECT_TYPE_NODE:
+	case OBJECT_TYPE_PORTAL:
+	{
+		bool cgLeft, cgRight, cgUp, cgDown;
+		cgLeft = atoi(tokens[3].c_str());
+		cgUp = atoi(tokens[4].c_str());
+		cgRight = atoi(tokens[5].c_str());
+		cgDown = atoi(tokens[6].c_str());
+		int scene_id = atoi(tokens[7].c_str());
+		int ani_id = atoi(tokens[8].c_str());
+		obj = new CWorldMapObject(OBJECT_TYPE_NODE, scene_id, ani_id);
+		((CWorldMapObject*)obj)->SetDirection(cgLeft, cgUp, cgRight, cgDown);
+		break;
+	}
+	case OBJECT_TYPE_GENERAL:
+	{
+		int object_type = atoi(tokens[3].c_str());
+		int ani_id = atoi(tokens[4].c_str());
+		obj = new CWorldMapObject(object_type, -1, ani_id);
+		if (object_type == OBJECT_TYPE_HAMMER)
+			obj->SetSpeed(MARIO_WALKING_SPEED_MIN / 2, 0);
+		break;
+	}
+	default:
+		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
+		return;
+	}
+
 	// General object setup
 	obj->SetPosition(x, y);
 
@@ -157,13 +203,13 @@ void CWorldScene::Update(DWORD dt)
 	for (size_t i = 0; i < objects.size(); i++)
 		objects[i]->Update(dt, &coObjects);
 
-	hud->Update(dt);
+//	hud->Update(dt);
 }
 void CWorldScene::Render()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (unsigned int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
-	hud->Render();
+	 //hud->Render();
 }
 
 /*
@@ -171,7 +217,7 @@ void CWorldScene::Render()
 */
 void CWorldScene::Unload()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (unsigned int i = 0; i < objects.size(); i++)
 		delete objects[i];
 	objects.clear();
 	delete hud;

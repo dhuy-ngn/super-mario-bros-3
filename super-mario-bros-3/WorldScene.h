@@ -5,26 +5,20 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "HUD.h"
-
-#define OBJECT_TYPE_PLAYER	0
-#define OBJECT_TYPE_NODE	2
-#define OBJECT_TYPE_PORTAL	3
+#include "WorldMapMario.h"
 
 #define MARIO_WALKING_SPEED_MIN		0.05f
 
 class CWorldScene : public CScene
 {
 protected:
+	CWorldMapMario* player;
 	CHud* hud;
 	vector<LPGAMEOBJECT> objects;
-	CWorldMapMario* player;
 
-	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
-	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
-	void _ParseSection_TILEMAP_DATA(string line);
 
 
 public:
