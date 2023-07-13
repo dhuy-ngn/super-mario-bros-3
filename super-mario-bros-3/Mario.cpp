@@ -25,7 +25,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     time_elapsed += dt;
 
     if (abs(vx) > abs(maxVx)) vx = maxVx;
-    
+
     if (abs(vy) > abs(maxVy)) vy = maxVy;
 
     if (isOnPlatform) score_stack = 0;
@@ -46,11 +46,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     {
         running_start = GetTickCount64();
         speed_stack++;
-        if (speed_stack >= MARIO_MAX_RUNNING_STACK) 
+        if (speed_stack >= MARIO_MAX_RUNNING_STACK)
         {
             speed_stack = MARIO_MAX_RUNNING_STACK;
             canFly = true;
-    }
+        }
     }
     if (GetTickCount64() - running_start > MARIO_RUNNING_STACK_DURATION && !isFlying)
     {
@@ -70,12 +70,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     }
     if (isAttacking)
     {
-        if (GetTickCount64() - attack_stack_start >= MARIO_MAX_ATTACK_STACK_TIME) 
+        if (GetTickCount64() - attack_stack_start >= MARIO_MAX_ATTACK_STACK_TIME)
         {
             attack_stack_start = GetTickCount64();
             attack_ani_stack++;
         }
-        if (GetTickCount64() - attack_start > MARIO_MAX_ATTACK_STACK_TIME * MARIO_MAX_ATTACK_STACK) 
+        if (GetTickCount64() - attack_start > MARIO_MAX_ATTACK_STACK_TIME * MARIO_MAX_ATTACK_STACK)
         {
             isAttacking = false;
             attack_stack_start = 0;
@@ -99,6 +99,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         break;
     }
 
+    if (y == 210)
+        StartDying();
+
+    if (GetTickCount64() - die_start > MARIO_DYING_TIME && die_start != 0)
+    {
+        CGame::GetInstance()->InitiateSwitchScene(WORLD_SCENE_ID);
+    }
+
     CGameObject::Update(dt, coObjects);
     CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -108,7 +116,7 @@ void CMario::OnNoCollision(DWORD dt)
     x += vx * dt;
     y += vy * dt;
 
-    if (y > 200)
+    if (y > 210)
         // TODO: De-hardcoding the 200
     {
         SetState(MARIO_STATE_FALL_OFF);
@@ -1089,9 +1097,10 @@ void CMario::LevelDown()
         SetLevel(MARIO_LEVEL_SMALL);
         StartUntouchable();
         break;
-    default:
-        DebugOut(L">>> Mario DIE >>> \n");
+    case MARIO_LEVEL_SMALL:
+        StartDying();
         SetState(MARIO_STATE_DIE);
+        break;
     }
 }
 

@@ -6,6 +6,7 @@
 
 #include "debug.h"
 #include "MarioTail.h"
+#include "WorldMapMario.h"
 
 #define MARIO_WALKING_SPEED			0.1f
 #define MARIO_RUNNING_SPEED			0.25f
@@ -223,6 +224,9 @@
 #define MARIO_MAX_RUNNING_STACK	7
 #define MARIO_MAX_ATTACK_STACK_TIME 70
 #define MARIO_MAX_ATTACK_STACK	5
+#define MARIO_DYING_TIME	1500
+
+#define WORLD_SCENE_ID	1
 
 class CMario : public CGameObject
 {
@@ -255,6 +259,7 @@ class CMario : public CGameObject
 	ULONGLONG falling_start = 0;
 	ULONGLONG entering_pipe_start = 0;
 	ULONGLONG exit_pipe_start = 0;
+	ULONGLONG die_start = 0;
 	BOOLEAN isOnPlatform;
 	BOOLEAN isPipeUp;
 	BOOLEAN isPipeDown;
@@ -377,6 +382,7 @@ public:
 	void StartRunning() { running_start = GetTickCount64(); }
 	void StartEnteringPipe() { entering_pipe_start = GetTickCount64(); }
 	void StartExitingPipe() { exit_pipe_start = GetTickCount64(); }
+	void StartDying() { die_start = GetTickCount64(); }
 	ULONGLONG GetPipeEnterStartTime() { return entering_pipe_start; }
 	void LevelDown();
 	void GainScore();

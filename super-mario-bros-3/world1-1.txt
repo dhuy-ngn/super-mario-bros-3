@@ -16,12 +16,12 @@ brick.txt
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # See OBJECT_TYPE constants in AssetIDs.h
 # MARIO
-#0	30	178
+0	30	178
 #0	500	100
 #0	1420	-75
 #0	2000	100
 #0	1312	-230
-0	2260	-120
+#0	2260	-120
 
 #Decoration
 7	18	178	15	15	90121
