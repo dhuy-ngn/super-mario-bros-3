@@ -177,7 +177,7 @@ void CIntroSceneKeyHandler::OnKeyDown(int KeyCode)
 		intro->SetState(INTRO_SCENE_STATE_ARROW_DOWN);
 		break;
 	case DIK_S:
-		DebugOut(L"Enter");
+		CGame::GetInstance()->InitiateSwitchScene(WORLD_SCENE_ID);
 		break;
 	default:
 		break;

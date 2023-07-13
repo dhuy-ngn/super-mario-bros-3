@@ -541,7 +541,6 @@ void CGame::SwitchScene()
 	current_scene = next_scene;
 	LPSCENE s = scenes[next_scene];
 	this->SetKeyHandler(s->GetKeyEventHandler());
-	DebugOut(L"KeyHandler is NULL: %d", s->GetKeyEventHandler() == nullptr);
 	s->Load();
 }
 
