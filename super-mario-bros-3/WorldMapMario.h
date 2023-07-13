@@ -6,7 +6,7 @@
 #include "Portal.h"
 
 
-#define PLAYER_SPEED	0.1f
+#define PLAYER_SPEED	0.2f
 
 #define PLAYER_STATE_IDLE			0
 #define PLAYER_STATE_RIGHT			100
@@ -23,14 +23,15 @@
 
 class CWorldMapMario : public CGameObject
 {
+protected:
 	int level;
 	float start_x;
 	float start_y;
+	BOOLEAN isReadyToSwitchScene = false;
 
 public:
 	bool cgLeft, cgRight, cgUp, cgDown;
 	int sceneId;
-	BOOLEAN readySwitchScene = false;
 	CWorldMapMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
@@ -48,7 +49,6 @@ public:
 
 	void GoToPlayScene()
 	{
-		// go to play scene
 		int scene_id = 5;
 		CGame::GetInstance()->InitiateSwitchScene(scene_id);
 	}
@@ -58,4 +58,5 @@ public:
 	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	virtual void OnCollisionWithNode(LPCOLLISIONEVENT e);
+	BOOLEAN IsReadyToSwitchScene() { return this->isReadyToSwitchScene; }
 };

@@ -27,6 +27,7 @@ public:
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
+	CWorldMapMario* GetPlayer() { return this->player; }
 };
 
 class CWorldSceneKeyHandler : public CSceneKeyHandler

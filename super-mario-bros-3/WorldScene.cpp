@@ -121,7 +121,7 @@ void CWorldScene::_ParseSection_OBJECTS(string line)
 		cgDown = atoi(tokens[6].c_str());
 		int scene_id = atoi(tokens[7].c_str());
 		int ani_id = atoi(tokens[8].c_str());
-		obj = new CWorldMapObject(OBJECT_TYPE_NODE, scene_id, ani_id);
+		obj = new CWorldMapObject(object_type, scene_id, ani_id);
 		((CWorldMapObject*)obj)->SetDirection(cgLeft, cgUp, cgRight, cgDown);
 		break;
 	}
@@ -229,5 +229,35 @@ void CWorldScene::Unload()
 }
 void CWorldSceneKeyHandler::OnKeyDown(int KeyCode)
 {
-	
+	LPGAME game = CGame::GetInstance();
+	CWorldMapMario* player = ((CWorldScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+
+	if (player != NULL)
+	{
+		switch (KeyCode)
+		{
+		case DIK_RIGHT:
+			if (player->cgRight)
+				player->SetState(PLAYER_STATE_RIGHT);
+			break;
+		case DIK_LEFT:
+			if (player->cgLeft)
+				player->SetState(PLAYER_STATE_LEFT);
+			break;
+		case DIK_UP:
+			if (player->cgUp)
+				player->SetState(PLAYER_STATE_UP);
+			break;
+		case DIK_DOWN:
+			if (player->cgDown)
+				player->SetState(PLAYER_STATE_DOWN);
+			break;
+		case DIK_S:
+			if (player->IsReadyToSwitchScene()) 
+			{
+				player->GoToPlayScene();
+			}
+			break;
+		}
+	}
 }

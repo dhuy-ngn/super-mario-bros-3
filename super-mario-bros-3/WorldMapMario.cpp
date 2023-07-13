@@ -57,9 +57,9 @@ void CWorldMapMario::OnCollisionWithNode(LPCOLLISIONEVENT e)
 	node->GetDirection(cgLeft, cgUp, cgRight, cgDown);
 	SetMove(cgLeft, cgUp, cgRight, cgDown);
 	if (node->GetType() == OBJECT_TYPE_PORTAL)
-		readySwitchScene = true;
+		isReadyToSwitchScene = true;
 	else
-		readySwitchScene = false;
+		isReadyToSwitchScene = false;
 }
 
 void CWorldMapMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
