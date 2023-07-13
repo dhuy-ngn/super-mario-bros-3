@@ -19,6 +19,9 @@ protected:
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
 	void _ParseSection_OBJECTS(string line);
+	void _ParseSection_ASSETS(string line);
+
+	void LoadAssets(LPCWSTR assetFile);
 
 
 public:
@@ -28,6 +31,7 @@ public:
 	virtual void Render();
 	virtual void Unload();
 	CWorldMapMario* GetPlayer() { return this->player; }
+	void SetPlayer(CWorldMapMario* player) { this->player = player; }
 };
 
 class CWorldSceneKeyHandler : public CSceneKeyHandler

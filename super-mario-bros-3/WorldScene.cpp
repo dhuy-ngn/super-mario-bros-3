@@ -171,6 +171,9 @@ void CWorldScene::Load()
 		if (line == "[OBJECTS]") {
 			section = SCENE_SECTION_OBJECTS; continue;
 		}
+		if (line == "[ASSETS]") {
+			section = SCENE_SECTION_ASSETS; continue;
+		}
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
 		//
 		// data section
@@ -180,12 +183,15 @@ void CWorldScene::Load()
 		case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
 		case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+		case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
 		}
 	}
 
 	f.close();
 
 	CGame::GetInstance()->SetCamPos(-5, 0);
+	hud = new CHud(HUD_TYPE_WORLDSCENE);
+	hud->SetPosition(126, 187);
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
@@ -204,13 +210,60 @@ void CWorldScene::Update(DWORD dt)
 	for (size_t i = 0; i < objects.size(); i++)
 		objects[i]->Update(dt, &coObjects);
 
-//	hud->Update(dt);
+	hud->Update(dt);
 }
+
 void CWorldScene::Render()
 {
 	for (unsigned int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
-	 //hud->Render();
+	 hud->Render();
+}
+
+void CWorldScene::_ParseSection_ASSETS(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 1) return;
+
+	wstring path = ToWSTR(tokens[0]);
+
+	LoadAssets(path.c_str());
+}
+
+void CWorldScene::LoadAssets(LPCWSTR assetFile)
+{
+	DebugOut(L"[INFO] Start loading assets from : %s \n", assetFile);
+
+	ifstream f;
+	f.open(assetFile);
+
+	int section = ASSETS_SECTION_UNKNOWN;
+
+	char str[MAX_SCENE_LINE];
+	while (f.getline(str, MAX_SCENE_LINE))
+	{
+		string line(str);
+
+		if (line[0] == '#') continue;	// skip comment lines	
+
+		if (line == "[SPRITES]") { section = ASSETS_SECTION_SPRITES; continue; };
+		if (line == "[ANIMATIONS]") { section = ASSETS_SECTION_ANIMATIONS; continue; };
+		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
+
+		//
+		// data section
+		//
+		switch (section)
+		{
+		case ASSETS_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
+		case ASSETS_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
+		}
+	}
+
+	f.close();
+
+	DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
 }
 
 /*
@@ -218,11 +271,11 @@ void CWorldScene::Render()
 */
 void CWorldScene::Unload()
 {
-	for (unsigned int i = 0; i < objects.size(); i++)
+	for (unsigned int i = 0; i < objects.size() - 1; i++)
 		delete objects[i];
 	objects.clear();
 	delete hud;
-	player = nullptr;
+	player = NULL;
 	hud = nullptr;
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);

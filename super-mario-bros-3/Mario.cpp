@@ -1135,6 +1135,16 @@ void CMario::GainScore()
     }
 }
 
+CMario* CMario::operator=(CWorldMapMario* const& wmMario)
+{
+    life = wmMario->GetLife();
+    coin = wmMario->GetCoin();
+    level = wmMario->GetLevel();
+    score = wmMario->GetScore();
+
+    return this;
+}
+
 void CMario::SetLevel(int l)
 {
     // Adjust position to avoid falling off platform

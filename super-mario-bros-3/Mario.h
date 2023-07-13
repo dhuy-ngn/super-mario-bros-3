@@ -355,6 +355,9 @@ public:
 	int GetCoin() { return this->coin; }
 	int GetLife() { return this->life; }
 	int GetScore() { return this->score; }
+	void SetCoin(int coin) { this->coin = coin; }
+	void SetLife(int life) { this->life = life; }
+	void SetScore(int score) { this->score = score; }
 	int GetTailDirection() { return this->tail_direction; }
 	int GetSpeedStack() { return this->speed_stack; }
 	int GetElapsedTime() { return this->time_elapsed; }
@@ -390,4 +393,5 @@ public:
 	void GainLife();
 	void GainCoin() { this->coin++; };
 	CMarioTail* GetMarioTail() { return this->tail; }
+	CMario* operator=(CWorldMapMario* const& wmMario);
 };

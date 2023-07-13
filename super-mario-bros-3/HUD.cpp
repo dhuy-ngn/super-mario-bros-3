@@ -2,6 +2,7 @@
 #include "Hud.h"
 #include <string>
 #include "PlayScene.h"
+#include "WorldScene.h"
 
 #define HUD_DIFF_P				15
 #define HUD_DIFF_ROW			4	
@@ -81,7 +82,7 @@ vector<LPSPRITE> CHud::StringToSprite(string str)
 	return sprites;
 }
 
-CHud::CHud() 
+CHud::CHud(int hudType)
 {
 	initFonts();
 	playerSprite = CSprites::GetInstance()->Get(SPRITE_ICONMARIO_ID);
@@ -97,26 +98,27 @@ CHud::CHud()
 	string time_str = to_string(DEFAULT_TIME);
 	while (time_str.length() < HUD_TIME_MAX) time_str = "0" + time_str;
 	remainTimeSprites = StringToSprite(time_str);
-	for (unsigned int i = 0; i < MARIO_MAX_RUNNING_STACK - 1; i++)
-		powerMeterSprite.push_back((CSprites::GetInstance()->Get(SPRITE_FILLARROW_ID)));
+	if (hudType == HUD_TYPE_WORLDSCENE)
+		for (unsigned int i = 0; i < MARIO_MAX_RUNNING_STACK - 1; i++)
+			powerMeterSprite.push_back((CSprites::GetInstance()->Get(SPRITE_FILLARROW_ID)));
 }
 
 void CHud::Render()
 {
 	CSprites::GetInstance()->Get(SPRITE_HUD_ID)->Draw(x, y);
 
-	for (int i = 1; i <= speed_stack; i++)
-	{
-		if (i == MARIO_MAX_RUNNING_STACK)
+		for (int i = 1; i <= speed_stack; i++)
 		{
-			if (PAni != nullptr)
-				PAni->Render(x - HUD_DIFF_P, y - HUD_DIFF_ROW);
+			if (i == MARIO_MAX_RUNNING_STACK)
+			{
+				if (PAni != nullptr)
+					PAni->Render(x - HUD_DIFF_P, y - HUD_DIFF_ROW);
+			}
+			else
+			{
+				powerMeterSprite[i - 1]->Draw(x + FONT_BBOX_WIDTH * (i - 1) - HUD_DIFF_METTER, y - 4);
+			}
 		}
-		else
-		{
-			powerMeterSprite[i - 1]->Draw(x + FONT_BBOX_WIDTH * (i - 1) - HUD_DIFF_METTER, y - 4);
-		}
-	}
 
 
 	// for coin
@@ -170,45 +172,92 @@ void CHud::Update(DWORD dt)
 
 void CHud::GetMarioSpeedStack() 
 {
-	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
-	if (mario != NULL)
+	if (hudType == HUD_TYPE_PLAYSCENE)
 	{
-		this->speed_stack = mario->GetSpeedStack();
+		CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+		if (mario != NULL)
+		{
+			this->speed_stack = mario->GetSpeedStack();
+		}
+	}
+	else
+	{
+		speed_stack = 0;
 	}
 }
 
 void CHud::GetMarioCoin() 
 {
-	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
-	if (mario != NULL)
+	if (hudType == HUD_TYPE_PLAYSCENE)
 	{
-		this->money = mario->GetCoin();
+		CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+		if (mario != NULL)
+		{
+			this->money = mario->GetCoin();
+		}
+	}
+	else
+	{
+		CWorldMapMario* wmMario = dynamic_cast<CWorldMapMario*>(((CWorldScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+		if (wmMario != NULL)
+		{
+			this->money = wmMario->GetCoin();
+		}
 	}
 }
 
 void CHud::GetMarioLife() 
 {
-	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
-	if (mario != NULL)
+	if (hudType == HUD_TYPE_PLAYSCENE)
 	{
-		this->marioLife = mario->GetLife();
+		CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+		if (mario != NULL)
+		{
+			this->marioLife = mario->GetLife();
+		}
+	}
+	else
+	{
+		CWorldMapMario* wmMario = dynamic_cast<CWorldMapMario*>(((CWorldScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+		if (wmMario != NULL)
+		{
+			this->marioLife = wmMario->GetLife();
+		}
 	}
 }
 
 void CHud::GetMarioScore() 
 {
-	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
-	if (mario != NULL)
+	if (hudType == HUD_TYPE_PLAYSCENE)
 	{
-		this->score = mario->GetScore();
+		CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+		if (mario != NULL)
+		{
+			this->score = mario->GetScore();
+		}
+	}
+	else
+	{
+		CWorldMapMario* wmMario = dynamic_cast<CWorldMapMario*>(((CWorldScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+		if (wmMario != NULL)
+		{
+			this->score = wmMario->GetScore();
+		}
 	}
 }
 
 void CHud::GetMarioRemainingTime()
 {
-	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
-	if (mario != NULL)
+	if (hudType == HUD_TYPE_PLAYSCENE)
 	{
-		this->remainTime = mario->GetRemainingTime();
+		CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+		if (mario != NULL)
+		{
+			this->remainTime = mario->GetRemainingTime();
+		}
+	}
+	else
+	{
+		this->remainTime = 0;
 	}
 }

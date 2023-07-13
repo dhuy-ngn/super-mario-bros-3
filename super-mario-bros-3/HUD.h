@@ -65,15 +65,19 @@
 
 #define HUD_HEIGHT 32
 
+#define HUD_TYPE_PLAYSCENE	0
+#define HUD_TYPE_WORLDSCENE	1
+
 #pragma once
 class CHud : public CGameObject
 {
 public:
 	std::map<char, LPSPRITE> fonts;
+	int hudType = 0;
 	int speed_stack = 0;
 	int money = 0;
 	int time = 0;
-	int remainTime = DEFAULT_TIME;
+	int remainTime = 0;
 	int marioLife = 4;
 	int score = 0;
 	LPANIMATION PAni = NULL;
@@ -86,7 +90,7 @@ public:
 	vector<LPSPRITE> powerMeterSprite;
 
 	virtual void Update(DWORD dt);
-	CHud();
+	CHud(int hudType = 0);
 	virtual void Render();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) {};
 	void GetMarioSpeedStack();
