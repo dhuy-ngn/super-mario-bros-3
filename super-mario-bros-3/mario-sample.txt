@@ -30,3 +30,6 @@ start	3
 60	resources\textures\HUD.png
 80	resources\textures\fonts.png
 90	resources\textures\card.png
+130	resources\textures\WorldMapOb.png
+140	resources\textures\WorldMap.png
+200	resources\textures\Panel.png
