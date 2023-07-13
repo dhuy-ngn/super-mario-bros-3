@@ -78,6 +78,19 @@ void CIntroScene::_ParseSection_OBJECTS(string line) {
 	objects.push_back(obj);
 }
 
+void CIntroScene::SetState(int state)
+{
+	switch (state)
+	{
+	case INTRO_SCENE_STATE_ARROW_UP:
+		isArrowUp = true;
+		break;
+	case INTRO_SCENE_STATE_ARROW_DOWN:
+		isArrowUp = false;
+		break;
+	}
+}
+
 void CIntroScene::Update(DWORD dt) {
 	if (switch_scene_start >= SWITCH_TIME && isSwitch) {
 		CGame* game = CGame::GetInstance();
@@ -123,7 +136,16 @@ void CIntroScene::Render() {
 	//BACKGROUND
 	CSprites::GetInstance()->Get(ID_SPRITE_BACKGROUND)->Draw(130, 107);
 	//3 SIGN
-	//CAnimations::GetInstance()->Get(ID_ANI_THREE)->Render(135, 113);
+	CAnimations::GetInstance()->Get(ID_ANI_THREE)->Render(THREE_X, THREE_Y);
+	//ARROW
+	if (isArrowUp)
+	{
+		CSprites::GetInstance()->Get(ID_SPRITE_ARROW)->Draw(ARROW_X, ARROW_Y);
+	}
+	else
+	{
+		CSprites::GetInstance()->Get(ID_SPRITE_ARROW)->Draw(ARROW_X, ARROW_Y + 16);
+	}
 	for (size_t i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 }
@@ -148,6 +170,12 @@ void CIntroSceneKeyHandler::OnKeyDown(int KeyCode)
 	CIntroScene* intro = ((CIntroScene*)CGame::GetInstance()->GetCurrentScene());
 	switch (KeyCode)
 	{
+	case DIK_UP:
+		intro->SetState(INTRO_SCENE_STATE_ARROW_UP);
+		break;
+	case DIK_DOWN:
+		intro->SetState(INTRO_SCENE_STATE_ARROW_DOWN);
+		break;
 	case DIK_S:
 		DebugOut(L"Enter");
 		break;

@@ -13,8 +13,9 @@ start	3
 # id	file 
 [TEXTURES]
 -100	resources\textures\bbox.png
-0	Resources\Textures\mario.png	
-2	Resources\Textures\title.png
+0	resources\textures\mario.png	
+2	resources\textures\title.png
+3	resources\textures\title_alpha.png
 100	resources\textures\mario-left.png
 110	resources\textures\mario-right.png
 10	resources\textures\enemies.png
