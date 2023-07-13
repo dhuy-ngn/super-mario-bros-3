@@ -26,6 +26,7 @@
 
 #define BACKGROUND_COLOR_1 D3DXCOLOR(156.0f/255, 252.0f/255, 240.0f/255, 0.0f)
 #define BACKGROUND_COLOR_2 D3DXCOLOR(0.0f/255, 0.0f/255, 0.0f/255, 0.0f)
+#define BACKGROUND_COLOR_3 D3DXCOLOR(255.0f/255, 218.0f/255, 121.0f/255, 0.0f)
 
 #define SCREEN_WIDTH 270
 #define SCREEN_HEIGHT 240
@@ -66,6 +67,8 @@ void Render()
 
 	if (g->GetInstance()->GetCurrentSceneId() == 5)
 		pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR_1);
+	else if (g->GetInstance()->GetCurrentSceneId() == 1)
+		pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR_3);
 	else
 		pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR_2);
 	spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE);

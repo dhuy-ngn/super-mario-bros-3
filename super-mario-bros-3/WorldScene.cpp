@@ -82,6 +82,7 @@ void CWorldScene::_ParseSection_ANIMATIONS(string line)
 #define OBJECT_TYPE_NODE		2
 #define OBJECT_NODE_PORTAL		3
 
+
 /*
 	Parse a line in section [OBJECTS]
 */
