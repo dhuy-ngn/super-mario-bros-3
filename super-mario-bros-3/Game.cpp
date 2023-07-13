@@ -7,6 +7,7 @@
 #include "Texture.h"
 #include "Animations.h"
 #include "PlayScene.h"
+#include "IntroScene.h"
 
 CGame * CGame::__instance = NULL;
 
@@ -401,7 +402,7 @@ void CGame::ProcessKeyboard()
 		}
 		else
 		{
-			//DebugOut(L"[ERROR] DINPUT::GetDeviceState failed. Error: %d\n", hr);
+			DebugOut(L"[ERROR] DINPUT::GetDeviceState failed. Error: %d\n", hr);
 			return;
 		}
 	}
@@ -432,10 +433,10 @@ void CGame::ProcessKeyboard()
 #define MAX_GAME_LINE 1024
 
 
-#define GAME_FILE_SECTION_UNKNOWN -1
-#define GAME_FILE_SECTION_SETTINGS 1
-#define GAME_FILE_SECTION_SCENES 2
-#define GAME_FILE_SECTION_TEXTURES 3
+#define GAME_FILE_SECTION_UNKNOWN	-1
+#define GAME_FILE_SECTION_SETTINGS	1
+#define GAME_FILE_SECTION_SCENES	2
+#define GAME_FILE_SECTION_TEXTURES	3
 
 
 void CGame::_ParseSection_SETTINGS(string line)
@@ -449,15 +450,29 @@ void CGame::_ParseSection_SETTINGS(string line)
 		DebugOut(L"[ERROR] Unknown game setting: %s\n", ToWSTR(tokens[0]).c_str());
 }
 
+#define SCENE_TYPE_INTRO		0
+#define SCENE_TYPE_WORLDMAP		1
+#define SCENE_TYPE_PLAYSCENE	2
+
 void CGame::_ParseSection_SCENES(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 2) return;
+	if (tokens.size() < 3) return;
 	int id = atoi(tokens[0].c_str());
-	LPCWSTR path = ToLPCWSTR(tokens[1]);   // file: ASCII format (single-byte char) => Wide Char
+	int scene_type = atoi(tokens[1].c_str());
+	LPCWSTR path = ToLPCWSTR(tokens[2]);   // file: ASCII format (single-byte char) => Wide Char
+	LPSCENE scene = NULL;
 
-	LPSCENE scene = new CPlayScene(id, path);
+	switch (scene_type)
+	{
+	case SCENE_TYPE_INTRO:
+		scene = new CIntroScene(id, path);
+		break;
+	case SCENE_TYPE_PLAYSCENE:
+		scene = new CPlayScene(id, path);
+		break;
+	}
 	scenes[id] = scene;
 }
 
@@ -522,6 +537,7 @@ void CGame::SwitchScene()
 	current_scene = next_scene;
 	LPSCENE s = scenes[next_scene];
 	this->SetKeyHandler(s->GetKeyEventHandler());
+	DebugOut(L"KeyHandler is NULL: %d", s->GetKeyEventHandler() == nullptr);
 	s->Load();
 }
 
