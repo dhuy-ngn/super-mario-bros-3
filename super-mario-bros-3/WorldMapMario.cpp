@@ -9,8 +9,7 @@
 
 CWorldMapMario::CWorldMapMario(float x, float y) : CGameObject()
 {
-	SetLevel(MARIO_LEVEL_SMALL);
-	SetState(MARIO_STATE_IDLE);
+	level = MARIO_LEVEL_SMALL;
 	start_x = x;
 	start_y = y;
 	this->x = x;

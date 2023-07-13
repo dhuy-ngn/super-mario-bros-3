@@ -98,7 +98,7 @@ CHud::CHud(int hudType)
 	string time_str = to_string(DEFAULT_TIME);
 	while (time_str.length() < HUD_TIME_MAX) time_str = "0" + time_str;
 	remainTimeSprites = StringToSprite(time_str);
-	if (hudType == HUD_TYPE_WORLDSCENE)
+	if (hudType == HUD_TYPE_PLAYSCENE)
 		for (unsigned int i = 0; i < MARIO_MAX_RUNNING_STACK - 1; i++)
 			powerMeterSprite.push_back((CSprites::GetInstance()->Get(SPRITE_FILLARROW_ID)));
 }
@@ -151,6 +151,7 @@ void CHud::Update(DWORD dt)
 	GetMarioLife();
 	GetMarioScore();
 	GetMarioRemainingTime();
+
 	// for mario life
 	mariolifeSprites = StringToSprite(to_string(marioLife));
 

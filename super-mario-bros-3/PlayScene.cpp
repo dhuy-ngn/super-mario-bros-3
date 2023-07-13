@@ -377,15 +377,15 @@ void CPlayScene::Update(DWORD dt)
 		if (dynamic_cast<CMario*>(player)->ShouldTurnOnCamY())
 		{
 			CGame::GetInstance()->SetCamPos(cx, cy + HUD_HEIGHT);
-			hud->SetPosition(cx + 126, cy + 219);
+			hud->SetPosition(cx + 131, cy + 219);
 		}
 		else
 		{
 			CGame::GetInstance()->SetCamPos(cx, HUD_HEIGHT);
-			hud->SetPosition(cx + 126, 219);
+			hud->SetPosition(cx + 131, 219);
 		}
 
-	if (player != NULL)hud->Update(dt);
+	if (player != NULL) hud->Update(dt);
 	PurgeDeletedObjects();
 }
 
@@ -424,6 +424,7 @@ void CPlayScene::Unload()
 	objects.clear();
 	delete hud;
 	player = NULL;
+	hud = NULL;
 
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }

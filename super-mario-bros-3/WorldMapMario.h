@@ -41,7 +41,7 @@ public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	void SetState(int state);
 
-	void SetLevel(int l) { level = l; };
+	void SetLevel(int l) { this->level = l; };
 	void SetCoin(int coin) { this->coin = coin; }
 	void SetLife(int life) { this->life = life; }
 	void SetScore(int score) { this->score = score; }

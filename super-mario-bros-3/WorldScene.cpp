@@ -109,7 +109,6 @@ void CWorldScene::_ParseSection_OBJECTS(string line)
 		}
 		obj = new CWorldMapMario(x, y);
 		player = (CWorldMapMario*)obj;
-		DebugOut(L"[INFO] Player object created! %f %f\n", x, y);
 		break;
 	case OBJECT_TYPE_NODE:
 	case OBJECT_TYPE_PORTAL:
@@ -201,9 +200,8 @@ void CWorldScene::Update(DWORD dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
+	for (size_t i = 0; i < objects.size() - 1; i++)
 	{
-
 		coObjects.push_back(objects[i]);
 	}
 
@@ -215,9 +213,10 @@ void CWorldScene::Update(DWORD dt)
 
 void CWorldScene::Render()
 {
-	for (unsigned int i = 0; i < objects.size(); i++)
+	for (unsigned int i = 0; i < objects.size() - 1; i++)
 		objects[i]->Render();
-	 hud->Render();
+	player->Render();
+	hud->Render();
 }
 
 void CWorldScene::_ParseSection_ASSETS(string line)
@@ -271,18 +270,19 @@ void CWorldScene::LoadAssets(LPCWSTR assetFile)
 */
 void CWorldScene::Unload()
 {
-	for (unsigned int i = 0; i < objects.size() - 1; i++)
+	for (unsigned int i = 0; i < objects.size(); i++)
 		delete objects[i];
 	objects.clear();
 	delete hud;
 	player = NULL;
-	hud = nullptr;
+	hud = NULL;
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
 void CWorldSceneKeyHandler::OnKeyDown(int KeyCode)
 {
 	LPGAME game = CGame::GetInstance();
+	CWorldScene* current_scene = dynamic_cast<CWorldScene*>(game->GetCurrentScene());
 	CWorldMapMario* player = ((CWorldScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
 	if (player != NULL)
@@ -306,10 +306,14 @@ void CWorldSceneKeyHandler::OnKeyDown(int KeyCode)
 				player->SetState(PLAYER_STATE_DOWN);
 			break;
 		case DIK_S:
-			if (player->IsReadyToSwitchScene()) 
+			if (player->IsReadyToSwitchScene())
 			{
 				player->GoToPlayScene();
 			}
+			break;
+		case DIK_1:
+			player->SetCoin(70);
+			DebugOut(L"Coin: %i\n", player->GetCoin());
 			break;
 		}
 	}

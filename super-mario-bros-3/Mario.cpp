@@ -104,7 +104,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
     if (GetTickCount64() - die_start > MARIO_DYING_TIME && die_start != 0)
     {
-        CGame::GetInstance()->InitiateSwitchScene(WORLD_SCENE_ID);
+        CGame::GetInstance()->SwitchMarioToWorldScene();
     }
 
     CGameObject::Update(dt, coObjects);
@@ -1099,6 +1099,7 @@ void CMario::LevelDown()
         break;
     case MARIO_LEVEL_SMALL:
         StartDying();
+        life--;
         SetState(MARIO_STATE_DIE);
         break;
     }

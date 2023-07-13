@@ -575,25 +575,21 @@ void CGame::SwitchMarioToScene(int next_scene_id, float x, float y)
 
 void CGame::SwitchMarioToWorldScene()
 {
-	if (current_scene == WORLD_SCENE_ID) return;
+	next_scene = WORLD_SCENE_ID;
+	if (next_scene < 0 || next_scene == current_scene) return;
 
 	CMario* player = dynamic_cast<CMario*>(dynamic_cast<CPlayScene*>(scenes[current_scene])->GetPlayer());
 
 	scenes[current_scene]->Unload();
+
 	CSprites::GetInstance()->Clear();
 	CAnimations::GetInstance()->Clear();
 
 	current_scene = WORLD_SCENE_ID;
 	LPSCENE s = scenes[current_scene];
 	this->SetKeyHandler(s->GetKeyEventHandler());
+
 	s->Load();
-
-	CWorldMapMario* wmPlayer = ((CWorldScene*)s)->GetPlayer();
-	wmPlayer->SetLevel(player->GetLevel());
-	wmPlayer->SetLife(player->GetLife());
-	wmPlayer->SetScore(player->GetScore());
-	wmPlayer->SetCoin(player->GetCoin());
-
 }
 
 void CGame::InitiateSwitchScene(int scene_id)
