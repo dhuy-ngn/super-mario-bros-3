@@ -1,6 +1,7 @@
 #include "Card.h"
 
-CCard::CCard() {
+CCard::CCard(float x, float y) : CGameObject(x, y) 
+{
 	vx = 0;
 	vy = 0;
 	card = CARD_STATE_RANDOM;
@@ -33,14 +34,13 @@ void CCard::Render()
 	}
 }
 
-void CCard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-
-	CGameObject::Update(dt);
+void CCard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) 
+{
 	if (start == 0) 
 	{
 		start = GetTickCount64();
 	}
-	if (GetTickCount64() - start > CARD_RANDOM_TIME) 
+	if (GetTickCount64() - start > CARD_RANDOM_TIME && !isPicked) 
 	{
 		card++;
 		if (card > 3) 
@@ -49,4 +49,6 @@ void CCard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		}
 		start = 0;
 	}
+
+	CGameObject::Update(dt);
 }

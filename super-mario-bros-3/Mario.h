@@ -231,6 +231,7 @@
 class CMario : public CGameObject
 {
 	CMarioTail* tail;
+	int card;
 
 	BOOLEAN isSitting;
 	BOOLEAN isAttacking;
@@ -260,6 +261,7 @@ class CMario : public CGameObject
 	ULONGLONG entering_pipe_start = 0;
 	ULONGLONG exit_pipe_start = 0;
 	ULONGLONG die_start = 0;
+	ULONGLONG stage_clear_start = 0;
 	BOOLEAN isOnPlatform;
 	BOOLEAN isPipeUp;
 	BOOLEAN isPipeDown;
@@ -283,6 +285,7 @@ class CMario : public CGameObject
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithSwitch(LPCOLLISIONEVENT e);
+	void OnCollisionWithCard(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -294,6 +297,7 @@ public:
 		this->x = x;
 		this->y = y;
 		tail = NULL;
+		card = NULL;
 		isHoldingKoopaShell = false;
 		isSitting = false;
 		isAttacking = false;
@@ -386,11 +390,12 @@ public:
 	void StartEnteringPipe() { entering_pipe_start = GetTickCount64(); }
 	void StartExitingPipe() { exit_pipe_start = GetTickCount64(); }
 	void StartDying() { die_start = GetTickCount64(); }
+	void StageClear() { stage_clear_start = GetTickCount64(); }
 	ULONGLONG GetPipeEnterStartTime() { return entering_pipe_start; }
 	void LevelDown();
 	void GainScore();
 	void Gain1000Score() { this->score += 1000; }
-	void GainLife();
+	void GainLife() { this->life++; };
 	void GainCoin() { this->coin++; };
 	CMarioTail* GetMarioTail() { return this->tail; }
 	CMario* operator=(CWorldMapMario* const& wmMario);

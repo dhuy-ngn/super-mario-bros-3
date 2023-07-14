@@ -16,6 +16,7 @@
 #include "PiranhaPlant.h"
 #include "PlayScene.h"
 #include "Point.h"
+#include "Card.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -163,6 +164,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
         OnCollisionWithBrick(e);
     else if (dynamic_cast<CSwitch*>(e->obj))
         OnCollisionWithSwitch(e);
+    else if (dynamic_cast<CCard*>(e->obj))
+        OnCollisionWithCard(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -290,6 +293,18 @@ void CMario::OnCollisionWithSwitch(LPCOLLISIONEVENT e)
     if (e->ny < 0)
     {
         e->obj->SetState(SWITCH_STATE_PRESSED);
+    }
+}
+
+void CMario::OnCollisionWithCard(LPCOLLISIONEVENT e)
+{
+    CCard* card = dynamic_cast<CCard*>(e->obj);
+
+    if (e->nx != 0 || e->ny != 0)
+    {
+        card->Delete();
+        this->card = card->GetCard();
+        StageClear();
     }
 }
 

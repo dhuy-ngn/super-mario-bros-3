@@ -15,6 +15,7 @@
 #include "Decoration.h"
 #include "Koopa.h"
 #include "HUD.h"
+#include "Card.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -48,6 +49,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_COLOR_BLOCK 8
 #define OBJECT_TYPE_PIRANHA_PLANT	9
 #define OBJECT_TYPE_FIRETRAP 10
+#define OBJECT_TYPE_CARD	11
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -234,6 +236,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float start_y = (float)atof(tokens[7].c_str());
 		int isUpward = (int)atoi(tokens[8].c_str());
 		obj = new CPortal(x, y, r, b, scene_id, start_x, start_y, isUpward);
+		break;
+	}
+	case OBJECT_TYPE_CARD:
+	{
+		obj = new CCard(x, y);
 		break;
 	}
 
