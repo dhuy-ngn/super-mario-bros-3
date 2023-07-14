@@ -10,6 +10,10 @@
 CWorldMapMario::CWorldMapMario(float x, float y) : CGameObject()
 {
 	level = MARIO_LEVEL_SMALL;
+	coin = 0;
+	life = 4;
+	score = 0;
+	card = 0;
 	start_x = x;
 	start_y = y;
 	this->x = x;

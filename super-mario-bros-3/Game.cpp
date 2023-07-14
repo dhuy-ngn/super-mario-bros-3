@@ -539,8 +539,9 @@ void CGame::SwitchScene()
 	CAnimations::GetInstance()->Clear();
 
 	current_scene = next_scene;
-	LPSCENE s = scenes[next_scene];
+	LPSCENE s = scenes[current_scene];
 	this->SetKeyHandler(s->GetKeyEventHandler());
+
 	s->Load();
 }
 
@@ -578,7 +579,13 @@ void CGame::SwitchMarioToWorldScene()
 	next_scene = WORLD_SCENE_ID;
 	if (next_scene < 0 || next_scene == current_scene) return;
 
-	CMario* player = dynamic_cast<CMario*>(dynamic_cast<CPlayScene*>(scenes[current_scene])->GetPlayer());
+	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+
+	int coin = mario->GetCoin();
+	int score = mario->GetScore();
+	int life = mario->GetLife();
+	int card = mario->GetCard();
+	int level = mario->GetLevel();
 
 	scenes[current_scene]->Unload();
 
@@ -590,6 +597,45 @@ void CGame::SwitchMarioToWorldScene()
 	this->SetKeyHandler(s->GetKeyEventHandler());
 
 	s->Load();
+
+	CWorldMapMario* wmMario = dynamic_cast<CWorldMapMario*>(((CWorldScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+	wmMario->SetCoin(coin);
+	wmMario->SetScore(score);
+	wmMario->SetLife(life);
+	wmMario->SetCard(card);
+	wmMario->SetLevel(level);
+}
+
+void CGame::SwitchMarioToPlayScene()
+{
+	next_scene = PLAY_SCENE_ID;
+	if (next_scene < 0 || next_scene == current_scene) return;
+
+	CWorldMapMario* wmMario = dynamic_cast<CWorldMapMario*>(((CWorldScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+
+	int coin = wmMario->GetCoin();
+	int score = wmMario->GetScore();
+	int life = wmMario->GetLife();
+	int card = wmMario->GetCard();
+	int level = wmMario->GetLevel();
+
+	scenes[current_scene]->Unload();
+
+	CSprites::GetInstance()->Clear();
+	CAnimations::GetInstance()->Clear();
+
+	current_scene = PLAY_SCENE_ID;
+	LPSCENE s = scenes[current_scene];
+	this->SetKeyHandler(s->GetKeyEventHandler());
+
+	s->Load();
+
+	CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+	mario->SetCoin(coin);
+	mario->SetScore(score);
+	mario->SetLife(life);
+	mario->SetCard(card);
+	mario->SetLevel(level);
 }
 
 void CGame::InitiateSwitchScene(int scene_id)

@@ -73,7 +73,7 @@ class CHud : public CGameObject
 {
 public:
 	std::map<char, LPSPRITE> fonts;
-	int hudType = 0;
+	int hudType;
 	int speed_stack = 0;
 	int money = 0;
 	int time = 0;
@@ -92,7 +92,7 @@ public:
 	vector<LPSPRITE> powerMeterSprite;
 
 	virtual void Update(DWORD dt);
-	CHud(int hudType = 0);
+	CHud(int hudType);
 	virtual void Render();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) {};
 	void GetMarioSpeedStack();
@@ -101,6 +101,7 @@ public:
 	void GetMarioScore();
 	void GetMarioRemainingTime();
 	void initFonts();
+	int GetHudType() { return this->hudType; }
 	void GetMarioCard();
 	LPSPRITE mappingFont(char c);
 	vector<LPSPRITE> StringToSprite(string str);

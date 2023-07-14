@@ -114,6 +114,7 @@ public:
 	void InitiateSwitchScene(int scene_id);
 	void SwitchMarioToScene(int next_scene_id, float start_x, float start_y);
 	void SwitchMarioToWorldScene();
+	void SwitchMarioToPlayScene();
 
 	void _ParseSection_TEXTURES(string line);
 

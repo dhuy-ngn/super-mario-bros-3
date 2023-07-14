@@ -308,7 +308,7 @@ void CWorldSceneKeyHandler::OnKeyDown(int KeyCode)
 		case DIK_S:
 			if (player->IsReadyToSwitchScene())
 			{
-				player->GoToPlayScene();
+				game->SwitchMarioToPlayScene();
 			}
 			break;
 		case DIK_1:

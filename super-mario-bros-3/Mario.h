@@ -363,6 +363,7 @@ public:
 	void SetCoin(int coin) { this->coin = coin; }
 	void SetLife(int life) { this->life = life; }
 	void SetScore(int score) { this->score = score; }
+	void SetCard(int card) { this->card = card; }
 	int GetTailDirection() { return this->tail_direction; }
 	int GetSpeedStack() { return this->speed_stack; }
 	int GetElapsedTime() { return this->time_elapsed; }

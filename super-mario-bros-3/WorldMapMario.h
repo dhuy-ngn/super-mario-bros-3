@@ -28,6 +28,7 @@ protected:
 	int coin;
 	int life;
 	int score;
+	int card;
 	float start_x;
 	float start_y;
 	BOOLEAN isReadyToSwitchScene = false;
@@ -45,6 +46,7 @@ public:
 	void SetCoin(int coin) { this->coin = coin; }
 	void SetLife(int life) { this->life = life; }
 	void SetScore(int score) { this->score = score; }
+	void SetCard(int card) { this->card = card; }
 	void SetMove(bool cLeft, bool cUp, bool cRight, bool cDown)
 	{
 		cgLeft = cLeft;
@@ -68,5 +70,6 @@ public:
 	int GetCoin() { return this->coin; }
 	int GetLife() { return this->life; }
 	int GetScore() { return this->score; }
+	int GetCard() { return this->card; }
 	BOOLEAN IsReadyToSwitchScene() { return this->isReadyToSwitchScene; }
 };

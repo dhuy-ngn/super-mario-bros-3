@@ -88,6 +88,7 @@ CHud::CHud(int hudType)
 	initFonts();
 	playerSprite = CSprites::GetInstance()->Get(SPRITE_ICONMARIO_ID);
 	PAni = CAnimations::GetInstance()->Get(ANI_P_ID);
+	this->hudType = hudType;
 	this->marioLife = 4;
 	this->score = 0;
 	this->money = 0;
@@ -287,6 +288,14 @@ void CHud::GetMarioCard()
 		if (mario != NULL)
 		{
 			this->card = mario->GetCard();
+		}
+	}
+	else
+	{
+		CWorldMapMario* wmMario = dynamic_cast<CWorldMapMario*>(((CWorldScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+		if (wmMario != NULL)
+		{
+			this->card = wmMario->GetCard();
 		}
 	}
 }
