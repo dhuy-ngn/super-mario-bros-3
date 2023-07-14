@@ -398,9 +398,12 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
+	if (player->IsPipeDown() || player->IsPipeUp())
+		player->Render();
 	for (unsigned i = 1; i < objects.size(); i++)
 		objects[i]->Render();
-	player->Render();
+	if (!player->IsPipeDown() && !player->IsPipeUp())
+		player->Render();
 	hud->Render();
 }
 
