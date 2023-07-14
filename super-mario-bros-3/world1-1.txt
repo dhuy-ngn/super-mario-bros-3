@@ -177,7 +177,7 @@ brick.txt
 10	1885	153	1
 
 #PIRANHA PLANT
-9	1825	171
+9	1825	173
 
 #Question block
 6	175	130	0
