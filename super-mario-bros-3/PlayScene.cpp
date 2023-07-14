@@ -16,6 +16,7 @@
 #include "Koopa.h"
 #include "HUD.h"
 #include "Card.h"
+#include "Switch.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -401,13 +402,13 @@ void CPlayScene::Render()
 	if (player->IsPipeDown() || player->IsPipeUp())
 		player->Render();
 	for (unsigned i = 1; i < objects.size(); i++)
-		if (IsPowerUp(objects[i]) && objects[i]->GetState() == LEAF_STATE_IDLE || objects[i]->GetState() == MUSHROOM_STATE_IDLE)
+		if (IsPowerUp(objects[i]) && objects[i]->GetState() == LEAF_STATE_IDLE || objects[i]->GetState() == MUSHROOM_STATE_IDLE || objects[i]->GetState() == SWITCH_STATE_IDLE)
 			objects[i]->Render();
 	for (unsigned i = 1; i < objects.size(); i++)
 		if (!IsPowerUp(objects[i]))
 			objects[i]->Render();
 	for (unsigned i = 1; i < objects.size(); i++)
-		if (IsPowerUp(objects[i]) && objects[i]->GetState() != LEAF_STATE_IDLE && objects[i]->GetState() != MUSHROOM_STATE_IDLE)
+		if (IsPowerUp(objects[i]) && objects[i]->GetState() != LEAF_STATE_IDLE && objects[i]->GetState() != MUSHROOM_STATE_IDLE && objects[i]->GetState() != SWITCH_STATE_IDLE)
 			objects[i]->Render();
 	if (!player->IsPipeDown() && !player->IsPipeUp())
 		player->Render();
