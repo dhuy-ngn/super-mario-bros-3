@@ -875,6 +875,7 @@ void CMario::SetState(int state)
         isLanding = false;
         isFlying = true;
         ay = -MARIO_ACCEL_FLYING_Y;
+        ax = 0;
         maxVy = -MARIO_FLYING_SPEED;
         break;
 
@@ -884,6 +885,7 @@ void CMario::SetState(int state)
         if (level != MARIO_LEVEL_RACCOON) break;
         isLanding = false;
         isFlying = true;
+        ax = 0;
         ay = -MARIO_ACCEL_FLYING_Y;
         maxVy = -MARIO_FLYING_SPEED;
         nx = -1;
@@ -895,6 +897,7 @@ void CMario::SetState(int state)
         if (level != MARIO_LEVEL_RACCOON) break;
         isLanding = false;
         isFlying = true;
+        ax = 0;
         ay = -MARIO_ACCEL_FLYING_Y;
         maxVy = -MARIO_FLYING_SPEED;
         nx = 1;
