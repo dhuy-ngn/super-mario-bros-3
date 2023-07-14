@@ -1185,7 +1185,7 @@ void CMario::SetLevel(int l)
     {
         CPlayScene* current_scene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
         this->tail = new CMarioTail(x - MARIO_TAIL_BBOX_WIDTH / 2 * nx * tail_direction, y + 5);
-        current_scene->UnshiftObject(this->tail);
+        current_scene->PushObject(this->tail);
     }
     else
     {

@@ -358,9 +358,9 @@ void CPlayScene::Update(DWORD dt)
 	{
 		float ox, oy;
 		objects[i]->GetPosition(ox, oy);
-		// TODO: apply this Update logic to Koopa, FireTrap, Piranha plant etc
 		if (dynamic_cast<CGoomba*>(objects[i])
 			|| dynamic_cast<CKoopa*>(objects[i])
+			|| dynamic_cast<CPiranhaPlant*>(objects[i])
 			|| dynamic_cast<CFireTrap*>(objects[i])
 			|| dynamic_cast<CFireBullet*>(objects[i]))
 		{
@@ -401,7 +401,14 @@ void CPlayScene::Render()
 	if (player->IsPipeDown() || player->IsPipeUp())
 		player->Render();
 	for (unsigned i = 1; i < objects.size(); i++)
-		objects[i]->Render();
+		if (IsPowerUp(objects[i]) && objects[i]->GetState() == LEAF_STATE_IDLE || objects[i]->GetState() == MUSHROOM_STATE_IDLE)
+			objects[i]->Render();
+	for (unsigned i = 1; i < objects.size(); i++)
+		if (!IsPowerUp(objects[i]))
+			objects[i]->Render();
+	for (unsigned i = 1; i < objects.size(); i++)
+		if (IsPowerUp(objects[i]) && objects[i]->GetState() != LEAF_STATE_IDLE && objects[i]->GetState() != MUSHROOM_STATE_IDLE)
+			objects[i]->Render();
 	if (!player->IsPipeDown() && !player->IsPipeUp())
 		player->Render();
 	hud->Render();

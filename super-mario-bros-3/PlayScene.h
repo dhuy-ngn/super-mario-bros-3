@@ -7,6 +7,11 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "HUD.h"
+#include "Koopa.h"
+#include "FireTrap.h"
+#include "PiranhaPlant.h"
+#include "ColorBlock.h"
+#include "QuestionBlock.h"
 //#include "Koopas.h"
 
 #define MAX_MAP_SIZE_X	2487
@@ -20,6 +25,10 @@ protected:
 	CHud* hud;
 
 	vector<LPGAMEOBJECT> objects;
+	vector<LPGAMEOBJECT> monsters; // koopas, goombas, firetraps, fire bullets, piranha fall into this category
+	vector<LPGAMEOBJECT> special_platforms; // color blocks, bricks and question blocks fall into this category
+	vector<LPGAMEOBJECT> power_ups; // mushrooms and leaves fall into this category
+	vector<LPGAMEOBJECT> general_items; // everything else, except mario
 
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
@@ -52,7 +61,25 @@ public:
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
 
 	void PushObject(LPGAMEOBJECT obj) { this->objects.push_back(obj); }
-	void UnshiftObject(LPGAMEOBJECT obj) { this->objects.insert(objects.begin() + 1, obj); }
+	BOOLEAN IsMonster(LPGAMEOBJECT obj) 
+	{
+		return (dynamic_cast<CGoomba*>(obj)
+			|| dynamic_cast<CKoopa*>(obj)
+			|| dynamic_cast<CFireTrap*>(obj)
+			|| dynamic_cast<CFireBullet*>(obj)
+			|| dynamic_cast<CPiranhaPlant*>(obj));
+	}
+	BOOLEAN IsSpecialPlatform(LPGAMEOBJECT obj)
+	{
+		return (dynamic_cast<CColorBlock*>(obj)
+			|| dynamic_cast<CQuestionBlock*>(obj)
+			|| dynamic_cast<CBrick*>(obj));
+	}
+	BOOLEAN IsPowerUp(LPGAMEOBJECT obj)
+	{
+		return (dynamic_cast<CLeaf*>(obj)
+			|| dynamic_cast<CMushroom*>(obj));
+	}
 };
 
 typedef CPlayScene* LPPLAYSCENE;
