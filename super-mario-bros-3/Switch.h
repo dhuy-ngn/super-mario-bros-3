@@ -27,6 +27,7 @@ public:
 	virtual void Render();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
+	void StartEffect() { switch_effect_start = GetTickCount64(); }
 	void SetState(int state);
 
 	virtual int IsCollidable() { return 1; };

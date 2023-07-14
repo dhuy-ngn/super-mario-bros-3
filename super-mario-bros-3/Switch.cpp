@@ -32,32 +32,6 @@ void CSwitch::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		y = start_y - SWITCH_BBOX_PRESSED_HEIGHT - 0.1f;
 	}
-	if (GetTickCount64() - switch_effect_start > SWITCH_MAX_INTERVAL && state == SWITCH_STATE_PRESSED)
-	{
-		CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
-		vector<LPGAMEOBJECT> objects = currentScene->GetAllObject();
-		for (size_t i = 0; i < objects.size(); i++)
-		{
-			if (dynamic_cast<CBrick*>(objects.at(i)) && !objects.at(i)->IsDeleted() && dynamic_cast<CBrick*>(objects.at(i))->GetItemType() == 0)
-			{
-				float bx, by;
-				CBrick* brick = dynamic_cast<CBrick*>(objects.at(i));
-				brick->GetPosition(bx, by);
-				CCoin* coin = new CCoin(bx, by);
-				currentScene->PushObject(coin);
-				brick->Delete();
-			}
-			else if (dynamic_cast<CCoin*>(objects.at(i)) && !objects.at(i)->IsDeleted())
-			{
-				float cx, cy;
-				CCoin* coin = dynamic_cast<CCoin*>(objects.at(i));
-				coin->GetPosition(cx, cy);
-				CBrick* brick = new CBrick(cx, cy);
-				currentScene->PushObject(brick);
-				coin->Delete();
-			}
-		}
-	}
 }
 
 void CSwitch::SetState(int state) {
@@ -68,30 +42,29 @@ void CSwitch::SetState(int state) {
 		vy = -0.05f;
 		break;
 	case SWITCH_STATE_PRESSED:
-		switch_effect_start = GetTickCount64();
 		CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
 		vector<LPGAMEOBJECT> objects = currentScene->GetAllObject();
-		for (size_t i = 0; i < objects.size(); i++)
-		{
-			if (dynamic_cast<CBrick*>(objects.at(i)) && !objects.at(i)->IsDeleted() && dynamic_cast<CBrick*>(objects.at(i))->GetItemType() == 0)
+			for (size_t i = 0; i < objects.size(); i++)
 			{
-				float bx, by;
-				CBrick* brick = dynamic_cast<CBrick*>(objects.at(i));
-				brick->GetPosition(bx, by);
-				CCoin* coin = new CCoin(bx, by);
-				currentScene->PushObject(coin);
-				brick->Delete();
+				if (dynamic_cast<CBrick*>(objects.at(i)) && !objects.at(i)->IsDeleted() && dynamic_cast<CBrick*>(objects.at(i))->GetItemType() == 0)
+				{
+					float bx, by;
+					CBrick* brick = dynamic_cast<CBrick*>(objects.at(i));
+					brick->GetPosition(bx, by);
+					CCoin* coin = new CCoin(bx, by);
+					currentScene->PushObject(coin);
+					brick->Delete();
+				}
+				else if (dynamic_cast<CCoin*>(objects.at(i)) && !objects.at(i)->IsDeleted())
+				{
+					float cx, cy;
+					CCoin* coin = dynamic_cast<CCoin*>(objects.at(i));
+					coin->GetPosition(cx, cy);
+					CBrick* brick = new CBrick(cx, cy);
+					currentScene->PushObject(brick);
+					coin->Delete();
+				}
 			}
-			else if (dynamic_cast<CCoin*>(objects.at(i)) && !objects.at(i)->IsDeleted())
-			{
-				float cx, cy;
-				CCoin* coin = dynamic_cast<CCoin*>(objects.at(i));
-				coin->GetPosition(cx, cy);
-				CBrick* brick = new CBrick(cx, cy);
-				currentScene->PushObject(brick);
-				coin->Delete();
-			}
-		}
 		break;
 	}
 }
