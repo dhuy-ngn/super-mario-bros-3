@@ -65,9 +65,6 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT_RELEASE);
 		break;
-	case DIK_X:
-		mario->SetState(MARIO_STATE_LAND);
-		break;
 	case DIK_A:
 		if (mario->IsHoldingKoopaShell())
 			mario->ReleaseKoopaShell();
@@ -115,9 +112,7 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 			if (game->IsKeyDown(DIK_RIGHT))
 				mario->SetState(MARIO_STATE_FLY_RIGHT);
 		}
-		float mvx, mvy;
-		mario->GetSpeed(mvx, mvy);
-		if (mario->GetLevel() == MARIO_LEVEL_RACCOON && mario->CanLand())
+		else if (mario->GetLevel() == MARIO_LEVEL_RACCOON && mario->CanLand())
 		{
 			mario->SetState(MARIO_STATE_LAND);
 			if (game->IsKeyDown(DIK_LEFT))
@@ -125,6 +120,7 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 			if (game->IsKeyDown(DIK_RIGHT))
 				mario->SetState(MARIO_STATE_LAND_RIGHT);
 		}
+		else mario->SetState(MARIO_STATE_IDLE);
 		if (game->IsKeyDown(DIK_A))
 			mario->HoldKoopaShell();
 	}
