@@ -753,9 +753,15 @@ void CMario::SetState(int state)
         if (isSitting) break;
         if (isAttacking) break;
         if (isFlying)
-            SetState(MARIO_STATE_FLY_RIGHT);
-        if (isLanding) 
-            SetState(MARIO_STATE_LAND_RIGHT);
+        {
+            vx = MARIO_FLYING_SPEED_X;
+            ax = 0;
+        }
+        if (isLanding)
+        {
+            vx = MARIO_FLYING_SPEED_X;
+            ax = 0;
+        }
         isRunning = true;
         maxVx = MARIO_RUNNING_SPEED;
         ax = MARIO_ACCEL_RUN_X;
@@ -764,10 +770,16 @@ void CMario::SetState(int state)
     case MARIO_STATE_RUNNING_LEFT:
         if (isSitting) break;
         if (isAttacking) break;
-        if (isFlying) 
-            SetState(MARIO_STATE_FLY_LEFT);
-        if (isLanding) 
-            SetState(MARIO_STATE_LAND_LEFT);
+        if (isFlying)
+        {
+            vx = -MARIO_FLYING_SPEED_X;
+            ax = 0;
+        }
+        if (isLanding)
+        {
+            vx = -MARIO_FLYING_SPEED_X;
+            ax = 0;
+        }
         isRunning = true;
         maxVx = -MARIO_RUNNING_SPEED;
         ax = -MARIO_ACCEL_RUN_X;
