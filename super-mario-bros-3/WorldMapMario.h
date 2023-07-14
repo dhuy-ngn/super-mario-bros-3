@@ -32,6 +32,7 @@ protected:
 	float start_x;
 	float start_y;
 	BOOLEAN isReadyToSwitchScene = false;
+	BOOLEAN isStageCleared = false;
 
 public:
 	bool cgLeft, cgRight, cgUp, cgDown;
@@ -47,6 +48,7 @@ public:
 	void SetLife(int life) { this->life = life; }
 	void SetScore(int score) { this->score = score; }
 	void SetCard(int card) { this->card = card; }
+	void SetIsStageClearedToTrue() { this->isStageCleared = true; }
 	void SetMove(bool cLeft, bool cUp, bool cRight, bool cDown)
 	{
 		cgLeft = cLeft;
@@ -72,4 +74,5 @@ public:
 	int GetScore() { return this->score; }
 	int GetCard() { return this->card; }
 	BOOLEAN IsReadyToSwitchScene() { return this->isReadyToSwitchScene; }
+	BOOLEAN IsStageCleared() { return this->isStageCleared; }
 };

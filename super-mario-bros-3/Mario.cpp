@@ -108,6 +108,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         CGame::GetInstance()->SwitchMarioToWorldScene();
     }
 
+    if (GetTickCount64() - stage_clear_start > MARIO_DYING_TIME && stage_clear_start != 0)
+    {
+        stage_clear_start = 0;
+        CGame::GetInstance()->SwitchMarioToWorldScene();
+    }
+
     CGameObject::Update(dt, coObjects);
     CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -300,13 +306,11 @@ void CMario::OnCollisionWithCard(LPCOLLISIONEVENT e)
 {
     CCard* card = dynamic_cast<CCard*>(e->obj);
 
-    if (e->nx != 0 || e->ny != 0)
-    {
-        card->Delete();
-        this->card = card->GetCard();
-        DebugOut(L"Mario got Card with ID: %i\n", this->card);
-        StageClear();
-    }
+    card->Delete();
+    this->card = card->GetCard();
+    isStageCleared = true;
+   
+    CGame::GetInstance()->SwitchMarioToWorldScene();
 }
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)

@@ -215,6 +215,8 @@ void CWorldScene::Render()
 {
 	for (unsigned int i = 0; i < objects.size() - 1; i++)
 		objects[i]->Render();
+	if (player->IsStageCleared())
+		CSprites::GetInstance()->Get(10011 /*stage clear sprite*/)->Draw(64, 17 /*stage 1 position*/);
 	player->Render();
 	hud->Render();
 }
@@ -270,7 +272,7 @@ void CWorldScene::LoadAssets(LPCWSTR assetFile)
 */
 void CWorldScene::Unload()
 {
-	for (unsigned int i = 0; i < objects.size(); i++)
+	for (unsigned int i = 0; i < objects.size() - 1; i++)
 		delete objects[i];
 	objects.clear();
 	delete hud;
@@ -307,13 +309,16 @@ void CWorldSceneKeyHandler::OnKeyDown(int KeyCode)
 			break;
 		case DIK_S:
 			if (player->IsReadyToSwitchScene())
-			{
 				game->SwitchMarioToPlayScene();
-			}
 			break;
 		case DIK_1:
-			player->SetCoin(70);
-			DebugOut(L"Coin: %i\n", player->GetCoin());
+			player->SetLevel(MARIO_LEVEL_SMALL);
+			break;
+		case DIK_2:
+			player->SetLevel(MARIO_LEVEL_BIG);
+			break;
+		case DIK_3:
+			player->SetLevel(MARIO_LEVEL_RACCOON);
 			break;
 		}
 	}

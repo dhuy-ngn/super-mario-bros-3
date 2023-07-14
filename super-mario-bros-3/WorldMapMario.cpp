@@ -23,10 +23,10 @@ CWorldMapMario::CWorldMapMario(float x, float y) : CGameObject()
 
 void CWorldMapMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x + 2;
-	top = y + 2;
-	right = left + PLAYER_BBOX_WIDTH - 4;
-	bottom = top + PLAYER_BBOX_WIDTH - 4;
+	left = x + 4;
+	top = y + 4;
+	right = left + PLAYER_BBOX_WIDTH - 6;
+	bottom = top + PLAYER_BBOX_WIDTH - 6;
 }
 
 void CWorldMapMario::OnNoCollision(DWORD dt)

@@ -265,6 +265,7 @@ class CMario : public CGameObject
 	BOOLEAN isOnPlatform;
 	BOOLEAN isPipeUp;
 	BOOLEAN isPipeDown;
+	BOOLEAN isStageCleared = false;
 
 	int coin;
 	int score_stack;
@@ -370,6 +371,7 @@ public:
 	int GetRemainingTime() { return 300 - this->time_elapsed / 1000; }
 	int IsPipeUp() { return isPipeUp; }
 	int IsPipeDown() { return isPipeDown; }
+	BOOLEAN IsStageCleared() { return isStageCleared; }
 	BOOLEAN IsAttacking() { return this->isAttacking; }
 	BOOLEAN IsFlying() { return this->isFlying; }
 	BOOLEAN IsLanding() { return this->isLanding; }

@@ -586,6 +586,7 @@ void CGame::SwitchMarioToWorldScene()
 	int life = mario->GetLife();
 	int card = mario->GetCard();
 	int level = mario->GetLevel();
+	int isStageCleared = mario->IsStageCleared();
 
 	scenes[current_scene]->Unload();
 
@@ -604,6 +605,11 @@ void CGame::SwitchMarioToWorldScene()
 	wmMario->SetLife(life);
 	wmMario->SetCard(card);
 	wmMario->SetLevel(level);
+	if (isStageCleared)
+	{
+		wmMario->SetIsStageClearedToTrue();
+		wmMario->SetPosition(64, 16);
+	}
 }
 
 void CGame::SwitchMarioToPlayScene()

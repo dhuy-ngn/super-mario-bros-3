@@ -14,7 +14,7 @@
 
 #define START_WALK_LIMIT	10000
 
-#define ID_ANI_BUSH	401
+#define ID_ANI_BUSH		401
 
 class CWorldMapObject : public CGameObject
 {
