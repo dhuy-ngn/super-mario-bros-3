@@ -10,7 +10,8 @@
 
 #define MARIO_WALKING_SPEED			0.1f
 #define MARIO_RUNNING_SPEED			0.25f
-#define MARIO_FLYING_SPEED			0.06f
+#define MARIO_FLYING_SPEED_X		0.02f
+#define MARIO_FLYING_SPEED_Y		0.045f
 #define	MARIO_FALLING_SPEED			0.1f
 #define	MARIO_RACCOON_FALLING_SPEED	0.03f
 #define MARIO_ENTER_PIPE_SPEED		0.02f
@@ -376,8 +377,8 @@ public:
 	BOOLEAN IsFlying() { return this->isFlying; }
 	BOOLEAN IsLanding() { return this->isLanding; }
 	BOOLEAN IsRunning() { return this->isRunning; }
-	BOOLEAN CanFly() { return this->canFly; }
-	BOOLEAN CanLand() { return this->canLand; }
+	BOOLEAN CanFly() { return level == MARIO_LEVEL_RACCOON && this->canFly; }
+	BOOLEAN CanLand() { return level == MARIO_LEVEL_RACCOON && this->canLand; }
 	void SetCanLandToTrue() { this->canLand = true; }
 	BOOLEAN IsIdle() { return vx == 0; }
 	void HoldKoopaShell() { this->canHoldKoopaShell = true; }
@@ -386,7 +387,7 @@ public:
 	BOOLEAN IsHoldingKoopaShell() { return this->isHoldingKoopaShell; }
 	BOOLEAN ShouldTurnOnCamY()
 	{
-		return (this->isFlying || this->isLanding || y < -50 || y >= -50 && vy >= 0);
+		return (this->isFlying || this->isLanding || level == MARIO_LEVEL_RACCOON && (y < -70 || y >= -60 && vy >= 0));
 	}
 	void StartFlying() { fly_up_start = GetTickCount64(); isFlying = true; }
 	void StartAttacking() { attack_start = GetTickCount64(); attack_stack_start = GetTickCount64(); }

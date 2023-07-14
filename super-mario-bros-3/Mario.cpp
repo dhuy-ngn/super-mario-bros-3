@@ -752,6 +752,10 @@ void CMario::SetState(int state)
     case MARIO_STATE_RUNNING_RIGHT:
         if (isSitting) break;
         if (isAttacking) break;
+        if (isFlying)
+            SetState(MARIO_STATE_FLY_RIGHT);
+        if (isLanding) 
+            SetState(MARIO_STATE_LAND_RIGHT);
         isRunning = true;
         maxVx = MARIO_RUNNING_SPEED;
         ax = MARIO_ACCEL_RUN_X;
@@ -760,6 +764,10 @@ void CMario::SetState(int state)
     case MARIO_STATE_RUNNING_LEFT:
         if (isSitting) break;
         if (isAttacking) break;
+        if (isFlying) 
+            SetState(MARIO_STATE_FLY_LEFT);
+        if (isLanding) 
+            SetState(MARIO_STATE_LAND_LEFT);
         isRunning = true;
         maxVx = -MARIO_RUNNING_SPEED;
         ax = -MARIO_ACCEL_RUN_X;
@@ -836,7 +844,7 @@ void CMario::SetState(int state)
     case MARIO_STATE_LAND:
         if (isSitting) break;
         if (isOnPlatform) break;
-        if (level != MARIO_LEVEL_RACCOON) break;
+        if (level != MARIO_LEVEL_RACCOON) ay = MARIO_GRAVITY;
         isLanding = true;
         isFlying = false;
         vy = MARIO_LANDING_SPEED;
@@ -847,59 +855,62 @@ void CMario::SetState(int state)
     case MARIO_STATE_LAND_RIGHT:
         if (isSitting) break;
         if (isOnPlatform) break;
-        if (level != MARIO_LEVEL_RACCOON) break;
+        if (level != MARIO_LEVEL_RACCOON) ay = MARIO_GRAVITY;
         isLanding = true;
         isFlying = false;
         vy = MARIO_LANDING_SPEED;
-        maxVx = MARIO_FLYING_SPEED;
-        ax = MARIO_ACCEL_FLYING_X;
+        maxVx = MARIO_FLYING_SPEED_X / 2;
+        ax = 0;
         nx = 1;
         break;
 
     case MARIO_STATE_LAND_LEFT:
         if (isSitting) break;
         if (isOnPlatform) break;
-        if (level != MARIO_LEVEL_RACCOON) break;
+        if (level != MARIO_LEVEL_RACCOON) ay = MARIO_GRAVITY;
         isLanding = true;
         isFlying = false;
         vy = MARIO_LANDING_SPEED;
-        maxVx = -MARIO_FLYING_SPEED;
-        ax = -MARIO_ACCEL_FLYING_X;
+        maxVx = -MARIO_FLYING_SPEED_X / 2;
+        ax = 0;
         nx = -1;
         break;
 
     case MARIO_STATE_FLY:
         if (isSitting) break;
         if (isOnPlatform) break;
-        if (level != MARIO_LEVEL_RACCOON) break;
+        if (level != MARIO_LEVEL_RACCOON) ay = MARIO_GRAVITY;
         isLanding = false;
         isFlying = true;
+        vx = 0;
         ay = -MARIO_ACCEL_FLYING_Y;
         ax = 0;
-        maxVy = -MARIO_FLYING_SPEED;
+        maxVy = -MARIO_FLYING_SPEED_Y;
         break;
 
     case MARIO_STATE_FLY_LEFT:
         if (isSitting) break;
         if (isOnPlatform) break;
-        if (level != MARIO_LEVEL_RACCOON) break;
+        if (level != MARIO_LEVEL_RACCOON) ay = MARIO_GRAVITY;
         isLanding = false;
         isFlying = true;
+        maxVx = -MARIO_FLYING_SPEED_X;
         ax = 0;
         ay = -MARIO_ACCEL_FLYING_Y;
-        maxVy = -MARIO_FLYING_SPEED;
+        maxVy = -MARIO_FLYING_SPEED_Y;
         nx = -1;
         break;
 
     case MARIO_STATE_FLY_RIGHT:
         if (isSitting) break;
         if (isOnPlatform) break;
-        if (level != MARIO_LEVEL_RACCOON) break;
+        if (level != MARIO_LEVEL_RACCOON) ay = MARIO_GRAVITY;
         isLanding = false;
         isFlying = true;
+        maxVx = MARIO_FLYING_SPEED_X;
         ax = 0;
         ay = -MARIO_ACCEL_FLYING_Y;
-        maxVy = -MARIO_FLYING_SPEED;
+        maxVy = -MARIO_FLYING_SPEED_Y;
         nx = 1;
         break;
 

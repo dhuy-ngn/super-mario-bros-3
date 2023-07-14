@@ -112,7 +112,7 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 			if (game->IsKeyDown(DIK_RIGHT))
 				mario->SetState(MARIO_STATE_FLY_RIGHT);
 		}
-		else if (mario->GetLevel() == MARIO_LEVEL_RACCOON && mario->CanLand())
+		else if (mario->CanLand())
 		{
 			mario->SetState(MARIO_STATE_LAND);
 			if (game->IsKeyDown(DIK_LEFT))
@@ -120,7 +120,6 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 			if (game->IsKeyDown(DIK_RIGHT))
 				mario->SetState(MARIO_STATE_LAND_RIGHT);
 		}
-		else mario->SetState(MARIO_STATE_IDLE);
 		if (game->IsKeyDown(DIK_A))
 			mario->HoldKoopaShell();
 	}
