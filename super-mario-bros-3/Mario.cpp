@@ -304,6 +304,7 @@ void CMario::OnCollisionWithCard(LPCOLLISIONEVENT e)
     {
         card->Delete();
         this->card = card->GetCard();
+        DebugOut(L"Mario got Card with ID: %i\n", this->card);
         StageClear();
     }
 }

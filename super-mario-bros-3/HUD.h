@@ -80,9 +80,11 @@ public:
 	int remainTime = 0;
 	int marioLife = 4;
 	int score = 0;
+	int card = 0;
 	LPANIMATION PAni = NULL;
 
 	LPSPRITE playerSprite = NULL;
+	LPSPRITE cardSprite = NULL;
 	vector<LPSPRITE> moneySprites;
 	vector<LPSPRITE> remainTimeSprites;
 	vector<LPSPRITE> mariolifeSprites;
@@ -99,6 +101,7 @@ public:
 	void GetMarioScore();
 	void GetMarioRemainingTime();
 	void initFonts();
+	void GetMarioCard();
 	LPSPRITE mappingFont(char c);
 	vector<LPSPRITE> StringToSprite(string str);
 };

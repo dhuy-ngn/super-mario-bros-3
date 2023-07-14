@@ -3,6 +3,7 @@
 #include <string>
 #include "PlayScene.h"
 #include "WorldScene.h"
+#include "Card.h"
 
 #define HUD_DIFF_P				15
 #define HUD_DIFF_ROW			4	
@@ -107,19 +108,20 @@ void CHud::Render()
 {
 	CSprites::GetInstance()->Get(SPRITE_HUD_ID)->Draw(x, y);
 
-		for (int i = 1; i <= speed_stack; i++)
+	for (int i = 1; i <= speed_stack; i++)
+	{
+		if (i == MARIO_MAX_RUNNING_STACK)
 		{
-			if (i == MARIO_MAX_RUNNING_STACK)
-			{
-				if (PAni != nullptr)
-					PAni->Render(x - HUD_DIFF_P, y - HUD_DIFF_ROW);
-			}
-			else
-			{
-				powerMeterSprite[i - 1]->Draw(x + FONT_BBOX_WIDTH * (i - 1) - HUD_DIFF_METTER, y - 4);
-			}
+			if (PAni != nullptr)
+				PAni->Render(x - HUD_DIFF_P, y - HUD_DIFF_ROW);
 		}
+		else
+		{
+			powerMeterSprite[i - 1]->Draw(x + FONT_BBOX_WIDTH * (i - 1) - HUD_DIFF_METTER, y - 4);
+		}
+	}
 
+	if (cardSprite != NULL) cardSprite->Draw(x + 48, y - 1);
 
 	// for coin
 	for (unsigned int i = 0; i < moneySprites.size(); i++) {
@@ -151,6 +153,20 @@ void CHud::Update(DWORD dt)
 	GetMarioLife();
 	GetMarioScore();
 	GetMarioRemainingTime();
+	GetMarioCard();
+
+	switch (card)
+	{
+	case 1:
+		cardSprite = CSprites::GetInstance()->Get(ID_SPRITE_CARD_MUSHROOM);
+		break;
+	case 2:
+		cardSprite = CSprites::GetInstance()->Get(ID_SPRITE_CARD_FIREFLOWER);
+		break;
+	case 3:
+		cardSprite = CSprites::GetInstance()->Get(ID_SPRITE_CARD_STAR);
+		break;
+	}
 
 	// for mario life
 	mariolifeSprites = StringToSprite(to_string(marioLife));
@@ -260,5 +276,17 @@ void CHud::GetMarioRemainingTime()
 	else
 	{
 		this->remainTime = 0;
+	}
+}
+
+void CHud::GetMarioCard()
+{
+	if (hudType == HUD_TYPE_PLAYSCENE)
+	{
+		CMario* mario = dynamic_cast<CMario*>(((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer());
+		if (mario != NULL)
+		{
+			this->card = mario->GetCard();
+		}
 	}
 }

@@ -297,7 +297,7 @@ public:
 		this->x = x;
 		this->y = y;
 		tail = NULL;
-		card = NULL;
+		card = 0;
 		isHoldingKoopaShell = false;
 		isSitting = false;
 		isAttacking = false;
@@ -359,6 +359,7 @@ public:
 	int GetCoin() { return this->coin; }
 	int GetLife() { return this->life; }
 	int GetScore() { return this->score; }
+	int GetCard() { return this->card; }
 	void SetCoin(int coin) { this->coin = coin; }
 	void SetLife(int life) { this->life = life; }
 	void SetScore(int score) { this->score = score; }
