@@ -177,7 +177,7 @@ HUD.txt
 1	234	80	4	10032
 1	120	158	4	10033
 #====HAMMER-BROTHER====
-#3	64	81	5	421
+1	192	113	5	421
 #objID	X	Y	left	top	right	bottom	sceneID
 #PORTAL								
 3	32	49	0	0	1	0	0	10010

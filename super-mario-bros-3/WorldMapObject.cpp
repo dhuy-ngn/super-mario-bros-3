@@ -13,7 +13,14 @@ CWorldMapObject::CWorldMapObject(int object_type, int scene_id, int ani_id)
 void CWorldMapObject::Render()
 {
 	//RenderBoundingBox();
-	if (ani_id < 10000)
+	if (object_type == OBJECT_TYPE_HAMMER)
+	{
+		if (vx > 0)
+			CAnimations::GetInstance()->Get(420)->Render(x, y);
+		else
+			CAnimations::GetInstance()->Get(421)->Render(x, y);
+	}
+	else if (ani_id < 10000)
 		CAnimations::GetInstance()->Get(ani_id)->Render(x, y);
 	else
 		CSprites::GetInstance()->Get(ani_id)->Draw(x, y);
